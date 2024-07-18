@@ -1,10 +1,11 @@
-import { Button } from "./components/ui/button";
+import Hero from "./components/Hero";
 
 function App() {
 
 	return (
-		<div>
-			<Button>Click me</Button>
+		<div className="min-w-[100dvw] min-h-[100dvh] app">
+			<Hero />
+			<p className="">footer</p>
 		</div>
 	);
 }
