@@ -10,14 +10,14 @@ import { NavLink } from "react-router-dom";
 
 export default function NavBar() {
 	return (
-		<div className="absolute top-0 z-10 flex items-center justify-between w-full p-3 backdrop-blur-md">
+		<div className="absolute top-0 z-10 flex items-center justify-between w-full p-3 backdrop-blur-md sm:backdrop-blur-none">
 			<NavLink
 				to={"/"}
 				className={"p-1 sm:text-3xl text-xl font-bold flex items-center"}
 				style={{ fontFamily: "Caveat Brush" }}>
 				<Avatar>
 					<AvatarImage src="logo.png" />
-					<AvatarFallback>Logo</AvatarFallback>
+					<AvatarFallback></AvatarFallback>
 				</Avatar>
 				Dalo
 			</NavLink>

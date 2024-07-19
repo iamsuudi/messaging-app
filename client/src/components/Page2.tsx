@@ -36,8 +36,11 @@ export default function Page2() {
 					</svg>
 				</p>
 				<p className="max-w-screen-md sm:text-4xl text-2xl sm:leading-[3rem] leading-10 tracking-wide text-center">
-					Even if your operator is reluctant to appear on camera, our
-					AI expresses engagement through text or facial expressions
+					Even if your operator is reluctant to appear on camera,
+					<span className="px-3 rounded-full bg-rose-300">
+						Our AI expresses engagement
+					</span>
+					through text or facial expressions
 				</p>
 			</div>
 		</div>
