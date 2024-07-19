@@ -1,10 +1,12 @@
 import Hero from "./components/Hero";
+import Page2 from "./components/Page2";
 
 function App() {
 
 	return (
-		<div className="min-w-[100dvw] min-h-[100dvh] app">
+		<div className="max-w-[100dvw] max-h-[100dvh] overflow-scroll app">
 			<Hero />
+			<Page2 />
 			<p className="">footer</p>
 		</div>
 	);

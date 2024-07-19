@@ -71,12 +71,17 @@ module.exports = {
 					from: { transform: "translateY(0)" },
 					to: { transform: "translateY(-100%)" },
 				},
+				"infinite-scrollx": {
+					from: { transform: "translateX(0)" },
+					to: { transform: "translateX(-100%)" },
+				},
 			},
 			animation: {
 				"accordion-down": "accordion-down 0.2s ease-out",
 				"accordion-up": "accordion-up 0.2s ease-out",
 				"scroll-one": "infinite-scroll 5s ease infinite",
 				"scroll-two": "infinite-scroll 5s cubic-bezier(0.39,1.52,0.67,0.22) infinite",
+				"scroll-x": "infinite-scrollx 5s linear infinite",
 			},
 		},
 	},

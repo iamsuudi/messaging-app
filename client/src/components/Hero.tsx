@@ -6,17 +6,17 @@ export default function Hero() {
 	return (
 		<div className="flex">
 			<NavBar />
-			<div className="flex flex-wrap items-center justify-center w-full gap-x-10 gap-y-40 hero">
-				<div className="flex flex-col items-center w-full h-full max-w-2xl">
-					<div className="flex items-center w-full h-full max-h-[700px]">
+			<div className="flex flex-wrap items-center justify-center w-full px-5 gap-x-10 gap-y-40">
+				<div className="flex flex-col items-center w-full h-screen max-w-2xl pb-10">
+					<div className="flex items-center w-full h-full">
 						<div className="flex flex-col gap-7 max-w-96">
-							<p className="text-6xl">
+							<p className="text-5xl sm:text-6xl">
 								Empower connection viva DaloChat
 							</p>
-							<p className="text-sm text-opacity-30 max-w-[22rem]">
-								<span>Instant, real-time</span> communication,
-								providing both <span>visual connection</span>{" "}
-								and <span>immedaite answers</span> to users
+							<p className="text-sm  max-w-[22rem] text-black/50">
+								<span className="text-black">Instant, real-time</span> communication,
+								providing both <span className="text-black">visual connection</span>{" "}
+								and <span className="text-black">immedaite answers</span> to users
 								chats
 							</p>
 							<div className="flex gap-5">
@@ -60,9 +60,9 @@ export default function Hero() {
 						</div>
 					</div>
 
-					<div className="flex items-center w-full gap-3 text-xs">
+					<div className="flex items-center w-full gap-5 overflow-scroll text-sm app">
 						<span className="px-3 py-1 bg-gray-100 rounded-full">
-							High Performace
+							Performant
 						</span>
 						<span className="px-3 py-1 rounded-full from-rose-400 via-rose-300 to-sky-300 bg-gradient-to-r">
 							Revolutionary
@@ -70,7 +70,7 @@ export default function Hero() {
 						<span className="px-3 py-1 bg-gray-100 rounded-full">
 							Progressive
 						</span>
-						<span className="flex items-center gap-2 ml-auto">
+						<span className="flex items-center gap-2 ml-32 sm:ml-auto">
 							DaloChat.com
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -89,28 +89,28 @@ export default function Hero() {
 					</div>
 				</div>
 
-				<div className="hidden items-center h-full gap-10 md:flex w-[40rem]">
+				<div className="hidden items-center gap-10 xl:flex w-[40rem]">
 					<div className="flex flex-col justify-center h-full gap-5">
-						<Avatar className="p-1 from-rose-400 via-rose-300 to-sky-300 bg-gradient-to-br">
+						<Avatar className="p-1 size-14 from-rose-400 via-rose-300 to-sky-300 bg-gradient-to-br">
 							<AvatarImage src="love.png" />
 							<AvatarFallback>Message</AvatarFallback>
 						</Avatar>
-						<Avatar className="p-1 from-rose-400 via-rose-300 to-sky-300 bg-gradient-to-br">
+						<Avatar className="p-1 size-14 from-rose-400 via-rose-300 to-sky-300 bg-gradient-to-br">
 							<AvatarImage src="headset.png" />
 							<AvatarFallback>Headphone</AvatarFallback>
 						</Avatar>
-						<Avatar className="p-2 from-rose-400 via-rose-300 to-sky-300 bg-gradient-to-br">
+						<Avatar className="p-2 size-14 from-rose-400 via-rose-300 to-sky-300 bg-gradient-to-br">
 							<AvatarImage src="cable.png" />
 							<AvatarFallback>Connect</AvatarFallback>
 						</Avatar>
 					</div>
 
-					<div className="h-[900px] flex justify-between w-full">
-						<div className="flex flex-col overflow-hidden">
+					<div className="flex justify-between w-full h-screen">
+						<div className="flex flex-col gap-5 overflow-hidden">
 							<ScrollPanelOne />
 							<ScrollPanelOne />
 						</div>
-						<div className="flex flex-col overflow-hidden">
+						<div className="flex flex-col gap-5 overflow-hidden">
 							<ScrollPanelTwo />
 							<ScrollPanelTwo />
 						</div>
@@ -230,7 +230,7 @@ function ScrollPanelOne() {
 
 function ScrollPanelTwo() {
 	return (
-		<div className="flex flex-col gap-5 animate-scroll-two">
+		<div className="flex flex-col-reverse gap-5 animate-scroll-two">
 			<ScrollItem />
 			<ScrollItem />
 			<ScrollItem />

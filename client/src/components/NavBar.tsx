@@ -10,7 +10,7 @@ import { NavLink } from "react-router-dom";
 
 export default function NavBar() {
 	return (
-		<div className="absolute top-0 z-10 flex items-center justify-between w-full p-3">
+		<div className="absolute top-0 z-10 flex items-center justify-between w-full p-3 backdrop-blur-md">
 			<NavLink
 				to={"/"}
 				className={"p-1 sm:text-3xl text-xl font-bold flex items-center"}
