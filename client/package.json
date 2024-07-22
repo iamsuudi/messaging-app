@@ -31,7 +31,8 @@
     "react-router-dom": "^6.25.1",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
-    "zod": "link:@hookform/resolvers/zod"
+    "zod": "link:@hookform/resolvers/zod",
+    "zustand": "^4.5.4"
   },
   "devDependencies": {
     "@types/node": "^20.14.11",

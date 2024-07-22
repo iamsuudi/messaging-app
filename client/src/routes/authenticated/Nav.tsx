@@ -11,10 +11,12 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
 import { useRef } from "react";
+import { useUserStore } from "@/store";
 gsap.registerPlugin(ScrollTrigger);
 
 export default function HomeNav() {
 	const homenav = useRef(null);
+	const user = useUserStore(({ user }) => user);
 
 	useGSAP(
 		() => {
@@ -107,7 +109,7 @@ export default function HomeNav() {
 								<AvatarImage src="logo.png" />
 								<AvatarFallback>P</AvatarFallback>
 							</Avatar>
-                            Abdulfetah Suudi
+							{user?.email ?? 'not found'}
 						</MenubarItem>
 						<MenubarItem>
 							<NavLink to={"/home/profile"}>Profile</NavLink>

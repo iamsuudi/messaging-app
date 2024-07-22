@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -20,10 +19,27 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 
+import { useUserStore } from "@/store";
+
 type FormFields = z.infer<typeof formSchema>;
 
 export default function Signin() {
 	const navigate = useNavigate();
+	const { setUser, fetchUser, user } = useUserStore((state) => state);
+
+	useEffect(() => {
+		if (!user) {
+			fetchUser()
+				.then(() => {
+					navigate("/home");
+				})
+				.catch(() => {
+					//
+				});
+		} else {
+			navigate("/home");
+		}
+	}, []);
 
 	const form = useForm<FormFields>({
 		defaultValues: {
@@ -36,6 +52,7 @@ export default function Signin() {
 		try {
 			const response = await signin(data);
 			console.log(response);
+			setUser(response);
 			navigate("/home");
 		} catch (error) {
 			form.setError("root", {
@@ -46,7 +63,9 @@ export default function Signin() {
 
 	useEffect(() => {
 		const timer = setTimeout(() => {
-			form.setError("root", null);
+			form.setError("root", {
+				message: undefined,
+			});
 		}, 3000);
 
 		return () => clearTimeout(timer);

@@ -4,3 +4,8 @@ export const formSchema = z.object({
 	email: z.string().email(),
 	password: z.string(),
 });
+
+export interface UserType {
+	email: string;
+	passwordHash?: string;
+}
