@@ -3,7 +3,7 @@ import NavBar from "./components/NavBar";
 
 function App() {
 	return (
-		<div className="max-w-[100dvw] max-h-[100dvh] overflow-scroll app">
+		<div className="">
 			<NavBar />
 			<Outlet />
 		</div>

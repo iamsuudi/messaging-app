@@ -68,11 +68,19 @@
 	}
 }
 
-.app::-webkit-scrollbar {
+.app::-webkit-scrollbar,
+:root::-webkit-scrollbar {
 	display: hidden;
 }
 
-.app {
+.app,
+:root {
 	-ms-overflow-style: none; /* IE and Edge */
 	scrollbar-width: none; /* Firefox */
+}
+
+.ai-span {
+	background-image: linear-gradient(rgb(253 164 175), rgb(253 164 175));
+	background-repeat: no-repeat;
+	background-size: 0% 100%;
 }

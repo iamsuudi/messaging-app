@@ -12,6 +12,7 @@
   "dependencies": {
     "@fontsource/caveat-brush": "^5.0.13",
     "@fontsource/roboto": "^5.0.13",
+    "@gsap/react": "^2.1.1",
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-label": "^2.1.0",

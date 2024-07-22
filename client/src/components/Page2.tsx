@@ -1,6 +1,44 @@
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { useRef } from "react";
+import { ScrollTrigger } from "gsap/all";
+gsap.registerPlugin(ScrollTrigger);
+
 export default function Page2() {
+	const page2 = useRef<HTMLDivElement>(null);
+	gsap.defaults({ duration: 3 });
+
+	useGSAP(() => {
+		gsap.to(".ai-span", {
+			scrollTrigger: {
+				trigger: ".page2",
+				start: "top 40%",
+				end: "+=40%",
+				scrub: 2,
+			},
+			duration: 4,
+			ease: "power2.inOut",
+			backgroundSize: "100% 100%",
+		});
+		gsap.from(".page2", {
+			scrollTrigger: {
+				trigger: ".page2",
+				start: "top bottom",
+				end: "+=40%",
+				scrub: 2,
+			},
+			ease: "power1.in",
+			duration: 1,
+			y: "-10%",
+			scale: 0.8,
+			opacity: 0.8,
+		});
+	}, {});
+
 	return (
-		<div className="flex items-center justify-center w-full h-screen px-5 text-gray-800 bg-gray-100">
+		<div
+			ref={page2}
+			className="flex items-center justify-center w-full h-screen px-5 text-gray-800 bg-gray-100 page2 ">
 			<div className="flex flex-col items-center justify-center gap-5">
 				<p className="flex gap-2">
 					<svg
@@ -36,11 +74,12 @@ export default function Page2() {
 					</svg>
 				</p>
 				<p className="max-w-screen-md sm:text-4xl text-2xl sm:leading-[3rem] leading-10 tracking-wide text-center">
-					Even if your operator is reluctant to appear on camera,
-					<span className="px-3 rounded-full bg-rose-300">
-						Our AI expresses engagement
+					Your world, your chat - empowered by Dalo. Enjoy a
+					personalized messaging experience
+					<span style={{}} className="px-3 rounded-full ai-span">
+						that keeps you connected with the people
 					</span>
-					through text or facial expressions
+					who matter most.
 				</p>
 			</div>
 		</div>

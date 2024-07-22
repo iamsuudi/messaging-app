@@ -7,13 +7,49 @@ import {
 } from "@/components/ui/menubar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { NavLink } from "react-router-dom";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/all";
+import { useRef } from "react";
+gsap.registerPlugin(ScrollTrigger);
 
 export default function NavBar() {
+	const nav = useRef(null);
+
+	useGSAP(
+		() => {
+			const t1 = gsap.timeline({ defaults: { duration: 1 } });
+
+			t1.from(".logo", {
+				x: "-50%",
+				opacity: 0,
+				scale: 0,
+			}).from(".nav", {
+				width: 0,
+				ease: "elastic.in",
+				// duration: 2.5,
+			});
+
+			gsap.from(".nav-link", {
+				stagger: 0.5,
+				opacity: 0,
+				x: "-100",
+				duration: 0.5,
+				delay: 1,
+			});
+		},
+		{ scope: nav }
+	);
+
 	return (
-		<div className="absolute top-0 z-10 flex items-center justify-between w-full p-3 backdrop-blur-md sm:backdrop-blur-none">
+		<div
+			ref={nav}
+			className="absolute top-0 z-10 flex items-center justify-between w-full p-3 backdrop-blur-md sm:backdrop-blur-none">
 			<NavLink
 				to={"/"}
-				className={"p-1 sm:text-3xl text-xl font-bold flex items-center"}
+				className={
+					"p-1 sm:text-3xl text-xl font-bold flex items-center logo"
+				}
 				style={{ fontFamily: "Caveat Brush" }}>
 				<Avatar>
 					<AvatarImage src="logo.png" />
@@ -21,35 +57,37 @@ export default function NavBar() {
 				</Avatar>
 				Dalo
 			</NavLink>
-			<ul className="hidden px-5 text-sm rounded-full sm:flex backdrop-blur-md bg-black/5">
-				<NavLink
-					to={"/"}
-					className={({ isActive }) =>
-						`${
-							isActive && " bg-black text-white"
-						} py-2 px-10 rounded-3xl`
-					}>
-					Home
-				</NavLink>
-				<NavLink
-					to={"/features"}
-					className={({ isActive }) =>
-						`${
-							isActive && " bg-black text-white"
-						} py-2 px-10 rounded-3xl`
-					}>
-					Features
-				</NavLink>
-				<NavLink
-					to={"/blog"}
-					className={({ isActive }) =>
-						`${
-							isActive && " bg-black text-white"
-						} py-2 px-10 rounded-3xl`
-					}>
-					Blog
-				</NavLink>
-			</ul>
+			<div className="hidden sm:flex w-[400px]">
+				<ul className="flex px-5 text-sm rounded-full backdrop-blur-md bg-black/5 nav">
+					<NavLink
+						to={"/"}
+						className={({ isActive }) =>
+							`${
+								isActive && " bg-black text-white"
+							} py-2 px-10 rounded-3xl nav-link`
+						}>
+						Home
+					</NavLink>
+					<NavLink
+						to={"/features"}
+						className={({ isActive }) =>
+							`${
+								isActive && " bg-black text-white"
+							} py-2 px-10 rounded-3xl nav-link`
+						}>
+						Features
+					</NavLink>
+					<NavLink
+						to={"/blog"}
+						className={({ isActive }) =>
+							`${
+								isActive && " bg-black text-white"
+							} py-2 px-10 rounded-3xl nav-link`
+						}>
+						Blog
+					</NavLink>
+				</ul>
+			</div>
 			<Menubar className="visible bg-transparent border-none outline-none sm:invisible">
 				<MenubarMenu>
 					<MenubarTrigger className="">

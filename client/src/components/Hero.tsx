@@ -1,16 +1,89 @@
 import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/all";
+import { useRef } from "react";
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
+	const hero = useRef(null);
+
+	useGSAP(
+		() => {
+			const t1 = gsap.timeline({ defaults: { duration: 0.5 } });
+
+			t1.from(".link", {
+				stagger: 0.2,
+				y: "50%",
+				opacity: 0,
+				scale: 0.5,
+				duration: 1,
+				ease: "back.in",
+			})
+				.from(".h1", {
+					y: "10%",
+					opacity: 0,
+					scale: 0.9,
+					ease: "power3.in",
+				})
+				.from(".p", {
+					y: "20%",
+					opacity: 0,
+					scale: 0.9,
+					ease: "power3.in",
+				})
+				.from(".footer", {
+					width: 0,
+					ease: "elastic.in",
+				});
+
+			gsap.to(".scroll-one", {
+				translateY: "50%",
+				duration: 1,
+				opacity: 1,
+				scale: 1,
+				ease: "bounce.inOut",
+				delay: 1,
+			});
+			gsap.to(".scroll-one", {
+				translateY: "50%",
+				duration: 1.5,
+				repeat: -1,
+				ease: "power1.inOut",
+				delay: 1,
+			});
+			
+			gsap.to(".scroll-two", {
+				translateY: "-50%",
+				duration: 1,
+				opacity: 1,
+				scale: 1,
+				ease: "bounce.inOut",
+				delay: 1.5,
+			});
+			gsap.to(".scroll-two", {
+				translateY: "-50%",
+				duration: 2,
+				repeat: -1,
+				ease: "power1.inOut",
+				delay: 1.5,
+			});
+		},
+		{ scope: hero }
+	);
+
 	return (
-		<div className="flex flex-wrap items-center justify-center w-full px-5 gap-x-10 gap-y-40">
+		<div
+			ref={hero}
+			className="flex flex-wrap items-center justify-center w-full h-screen px-5 gap-x-10 gap-y-40">
 			<div className="flex flex-col items-center w-full h-screen max-w-2xl pb-10">
 				<div className="flex items-center w-full h-full">
 					<div className="flex flex-col gap-7 max-w-96 sm:max-w-md">
-						<p className="text-5xl sm:text-7xl">
+						<p className="text-5xl sm:text-7xl h1">
 							Empower communication viva DaloChat
 						</p>
-						<p className="text-sm  max-w-[22rem] text-black/50">
+						<p className="text-sm  max-w-[22rem] text-black/50 p">
 							<span className="text-black">
 								Instant, real-time
 							</span>{" "}
@@ -25,9 +98,9 @@ export default function Hero() {
 							to users chats
 						</p>
 						<div className="flex gap-5">
-							<div className="flex items-center gap-3 p-1 text-white bg-black rounded-full h-fit">
-								<Link to={"/auth/signin"} className="px-3">
-									Try Out
+							<div className="flex items-center gap-3 p-1 text-white bg-black rounded-full h-fit link">
+								<Link to={"/auth/signin"} className="pl-4 pr-3">
+									Join
 								</Link>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -43,8 +116,8 @@ export default function Hero() {
 									/>
 								</svg>
 							</div>
-							<div className="flex items-center gap-3 p-1 bg-gray-100 rounded-full h-fit">
-								<Link to={""} className="px-3 text-black">
+							<div className="flex items-center gap-3 p-1 bg-gray-100 rounded-full h-fit link">
+								<Link to={""} className="pl-4 pr-3 text-black">
 									Learn More
 								</Link>
 								<svg
@@ -65,7 +138,7 @@ export default function Hero() {
 					</div>
 				</div>
 
-				<div className="flex items-center w-full gap-5 overflow-scroll text-sm app">
+				<div className="flex items-center w-full gap-5 overflow-scroll text-sm app footer">
 					<span className="px-3 py-1 bg-gray-100 rounded-full">
 						Performant
 					</span>
@@ -94,7 +167,7 @@ export default function Hero() {
 				</div>
 			</div>
 
-			<div className="hidden items-center gap-10 xl:flex w-[40rem]">
+			<div className="hidden items-center gap-10 xl:flex  w-[40rem]">
 				<div className="flex flex-col justify-center h-full gap-5">
 					<Avatar className="p-1 size-14 from-rose-400 via-rose-300 to-sky-300 bg-gradient-to-br">
 						<AvatarImage src="love.png" />
@@ -223,7 +296,7 @@ function ScrollItem() {
 
 function ScrollPanelOne() {
 	return (
-		<div className="flex flex-col gap-5 animate-scroll-one">
+		<div className="flex flex-col gap-5 scale-0 -translate-y-1/2 opacity-0 scroll-one">
 			<ScrollItem />
 			<ScrollItem />
 			<ScrollItem />
@@ -234,7 +307,7 @@ function ScrollPanelOne() {
 
 function ScrollPanelTwo() {
 	return (
-		<div className="flex flex-col-reverse gap-5 animate-scroll-two">
+		<div className="flex flex-col-reverse gap-5 scale-0 -translate-y-1/2 opacity-0 scroll-two">
 			<ScrollItem />
 			<ScrollItem />
 			<ScrollItem />
