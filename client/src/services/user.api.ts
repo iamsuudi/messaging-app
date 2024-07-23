@@ -15,6 +15,15 @@ export const signin = async (data: z.infer<typeof formSchema>) => {
 	return response.data;
 };
 
+export const logout = async () => {
+	const response = await axios({
+		method: "post",
+		baseURL,
+		url: "/auth/logout",
+	});
+	return response.data;
+};
+
 export const getMe = async (): Promise<UserType> => {
 	const response = await axios({
 		method: "get",

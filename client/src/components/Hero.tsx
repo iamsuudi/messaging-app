@@ -44,30 +44,39 @@ export default function Hero() {
 				opacity: 1,
 				scale: 1,
 				ease: "bounce.inOut",
-				delay: 1,
+				delay: 1.5,
 			});
 			gsap.to(".scroll-one", {
 				translateY: "50%",
 				duration: 1.5,
 				repeat: -1,
 				ease: "power1.inOut",
-				delay: 1,
+				delay: 1.5,
 			});
-			
+
 			gsap.to(".scroll-two", {
 				translateY: "-50%",
 				duration: 1,
 				opacity: 1,
 				scale: 1,
 				ease: "bounce.inOut",
-				delay: 1.5,
+				delay: 2,
 			});
 			gsap.to(".scroll-two", {
 				translateY: "-50%",
 				duration: 2,
 				repeat: -1,
 				ease: "power1.inOut",
-				delay: 1.5,
+				delay: 2,
+			});
+			
+			gsap.from(".side-icon", {
+				stagger: 0.3,
+				delay: 1,
+				duration: 1,
+				scale: 0,
+				y: "100%",
+				ease: "bounce.in",
 			});
 		},
 		{ scope: hero }
@@ -169,15 +178,15 @@ export default function Hero() {
 
 			<div className="hidden items-center gap-10 xl:flex  w-[40rem]">
 				<div className="flex flex-col justify-center h-full gap-5">
-					<Avatar className="p-1 size-14 from-rose-400 via-rose-300 to-sky-300 bg-gradient-to-br">
+					<Avatar className="p-1 size-14 from-rose-400 via-rose-300 to-sky-300 bg-gradient-to-br side-icon">
 						<AvatarImage src="love.png" />
 						<AvatarFallback>Message</AvatarFallback>
 					</Avatar>
-					<Avatar className="p-1 size-14 from-rose-400 via-rose-300 to-sky-300 bg-gradient-to-br">
+					<Avatar className="p-1 size-14 from-rose-400 via-rose-300 to-sky-300 bg-gradient-to-br side-icon">
 						<AvatarImage src="headset.png" />
 						<AvatarFallback>Headphone</AvatarFallback>
 					</Avatar>
-					<Avatar className="p-2 size-14 from-rose-400 via-rose-300 to-sky-300 bg-gradient-to-br">
+					<Avatar className="p-2 size-14 from-rose-400 via-rose-300 to-sky-300 bg-gradient-to-br side-icon">
 						<AvatarImage src="cable.png" />
 						<AvatarFallback>Connect</AvatarFallback>
 					</Avatar>
@@ -217,7 +226,7 @@ function ScrollItem() {
 				</Avatar>
 			</div>
 			<p className="flex items-center gap-2 text-sm">
-				<span className="p-1 rounded-full from-rose-500 via-rose-400 to-sky-400 bg-gradient-to-br">
+				<span className="p-1 rounded-full from-rose-500 via-rose-400 to-sky-400 bg-gradient-to-br side-icon">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"

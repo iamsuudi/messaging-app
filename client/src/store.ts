@@ -6,6 +6,7 @@ type UserStoreType = {
 	user: UserType | null;
 	setUser: (newUser: UserType) => void;
 	fetchUser: () => Promise<UserType>;
+	removeUser: () => void;
 };
 
 export const useUserStore = create<UserStoreType>((set) => ({
@@ -16,4 +17,5 @@ export const useUserStore = create<UserStoreType>((set) => ({
 		set({ user });
 		return user;
 	},
+	removeUser: () => set({ user: null }),
 }));

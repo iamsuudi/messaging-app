@@ -3,92 +3,104 @@ import {
 	MenubarContent,
 	MenubarItem,
 	MenubarMenu,
+	MenubarSeparator,
 	MenubarTrigger,
 } from "@/components/ui/menubar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useUserStore } from "@/store";
+import { logout } from "@/services/user.api";
+import { useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
 import { useRef } from "react";
-import { useUserStore } from "@/store";
+import { LogOut, Settings, User } from "lucide-react";
 gsap.registerPlugin(ScrollTrigger);
 
 export default function HomeNav() {
-	const homenav = useRef(null);
-	const user = useUserStore(({ user }) => user);
+	const { user, removeUser } = useUserStore(({ user, removeUser }) => ({
+		user,
+		removeUser,
+	}));
+	const navigate = useNavigate();
+	const [search, setSearch] = useState("");
+	const [showSearch, setshowSearch] = useState(false);
+	const nav = useRef(null);
 
 	useGSAP(
 		() => {
-			const t1 = gsap.timeline({ defaults: { duration: 1 } });
-
-			t1.from(".logo", {
-				x: "-50%",
-				opacity: 0,
-				scale: 0,
-			}).from(".nav", {
-				width: 0,
-				ease: "elastic.in",
-				// duration: 2.5,
-			});
-
-			gsap.from(".nav-link", {
-				stagger: 0.5,
-				opacity: 0,
-				x: "-100",
-				duration: 0.5,
-				delay: 1,
-			});
+			if (showSearch) {
+				gsap.from(".search", {
+					scale: 0,
+					x: "100",
+					duration: 0.5,
+					ease: "linear",
+				});
+				gsap.from(".search-icon", {
+					x: "100",
+					duration: 0.5,
+					ease: "linear",
+				});
+			}
 		},
-		{ scope: homenav }
+		{ scope: nav, dependencies: [showSearch] }
 	);
+
+	const logoutHandler = async () => {
+		try {
+			removeUser();
+			await logout();
+			return navigate("/auth/signin");
+		} catch (error) {
+			//
+		}
+	};
 
 	return (
 		<div
-			ref={homenav}
-			className="absolute top-0 z-10 flex items-center justify-between w-full px-3 py-1 border ">
+			ref={nav}
+			className="absolute top-0 z-10 flex items-center w-full px-3 py-1 border">
 			<NavLink
 				to={"/"}
 				className={
-					"p-1 sm:text-3xl text-2xl font-bold flex items-center logo"
+					"p-1 sm:text-3xl text-xl font-bold flex items-center logo"
 				}
 				style={{ fontFamily: "Caveat Brush" }}>
 				DaloChat
 			</NavLink>
-			<div className="hidden sm:flex w-[400px]">
-				<ul className="flex px-5 text-sm rounded-full backdrop-blur-md bg-black/5 nav">
-					<NavLink
-						to={"/"}
-						className={({ isActive }) =>
-							`${
-								isActive && " bg-black text-white"
-							} py-2 px-10 rounded-3xl nav-link`
-						}>
-						Home
-					</NavLink>
-					<NavLink
-						to={"/features"}
-						className={({ isActive }) =>
-							`${
-								isActive && " bg-black text-white"
-							} py-2 px-10 rounded-3xl nav-link`
-						}>
-						Features
-					</NavLink>
-					<NavLink
-						to={"/blog"}
-						className={({ isActive }) =>
-							`${
-								isActive && " bg-black text-white"
-							} py-2 px-10 rounded-3xl nav-link`
-						}>
-						Blog
-					</NavLink>
-				</ul>
+			<div className="flex items-end ml-auto">
+				<button
+					type="button"
+					className="search-icon"
+					onClick={() => setshowSearch(!showSearch)}>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						strokeWidth={1}
+						stroke="currentColor"
+						className="size-4">
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+						/>
+					</svg>
+				</button>
+
+				{showSearch && (
+					<input
+						placeholder="Search..."
+						value={search}
+						onChange={({ target }) => setSearch(target.value)}
+						className="w-40 pl-1 text-xs outline-none focus:outline-none search"
+					/>
+				)}
 			</div>
-			<Menubar className="bg-transparent border-none outline-none ">
+			<Menubar className="bg-transparent border-none outline-none">
 				<MenubarMenu>
-					<MenubarTrigger className="">
+					<MenubarTrigger className="bg-none">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
@@ -109,16 +121,30 @@ export default function HomeNav() {
 								<AvatarImage src="logo.png" />
 								<AvatarFallback>P</AvatarFallback>
 							</Avatar>
-							{user?.email ?? 'not found'}
+							{user?.email ?? "not found"}
 						</MenubarItem>
-						<MenubarItem>
-							<NavLink to={"/home/profile"}>Profile</NavLink>
+						<MenubarSeparator />
+						<MenubarItem className="my-1">
+							<NavLink
+								to={"/home/profile"}
+								className={"flex items-center gap-2"}>
+								<User className="size-4" />
+								Profile
+							</NavLink>
 						</MenubarItem>
-						<MenubarItem>
-							<NavLink to={""}>Settings</NavLink>
+						<MenubarItem className="my-1">
+							<NavLink
+								to={""}
+								className={"flex items-center gap-2"}>
+								<Settings className="size-4" /> Settings
+							</NavLink>
 						</MenubarItem>
-						<MenubarItem>
-							<button>Log out</button>
+						<MenubarItem className="my-1">
+							<button
+								onClick={logoutHandler}
+								className={"flex items-center gap-2"}>
+								<LogOut className="size-4" /> Log out
+							</button>
 						</MenubarItem>
 					</MenubarContent>
 				</MenubarMenu>

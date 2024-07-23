@@ -24,12 +24,12 @@ export default function Page2() {
 			scrollTrigger: {
 				trigger: ".page2",
 				start: "top bottom",
-				end: "+=40%",
+				end: "+=20%",
 				scrub: 2,
 			},
 			ease: "power1.in",
 			duration: 1,
-			y: "-10%",
+			y: "30%",
 			scale: 0.8,
 			opacity: 0.8,
 		});
