@@ -1,46 +1,6 @@
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { useRef } from "react";
-import { ScrollTrigger } from "gsap/all";
-gsap.registerPlugin(ScrollTrigger);
-
 export default function Page2() {
-	const page2 = useRef<HTMLDivElement>(null);
-	gsap.defaults({ duration: 3 });
-
-	useGSAP(() => {
-		gsap.to(".page2 .ai-span", {
-			scrollTrigger: {
-				trigger: ".page2",
-				start: "top 20%",
-				end: "top 10%",
-				scrub: 4,
-			},
-			duration: 1,
-			ease: "power2.inOut",
-			backgroundSize: "100% 100%",
-		});
-		// gsap.from(".page2", {
-		// 	scrollTrigger: {
-		// 		trigger: ".container",
-		// 		start: "top bottom",
-		// 		end: "top 70%",
-		// 		scrub: 2,
-		// 		// pin: true,
-		// 		// pinSpacing: false,
-		// 	},
-		// 	ease: "power1.in",
-		// 	duration: 1,
-		// 	y: "30%",
-		// 	scale: 0.8,
-		// 	opacity: 0.8,
-		// });
-	}, {});
-
 	return (
-		<div
-			ref={page2}
-			className="absolute top-0 left-0 flex items-center justify-center w-screen h-screen px-5 text-gray-800 bg-gray-100 page page2">
+		<div className="absolute top-0 flex items-center justify-center w-screen h-screen px-5 text-gray-800 bg-gray-100 page page2">
 			<div className="flex flex-col items-center justify-center gap-5">
 				<p className="flex gap-2">
 					<svg

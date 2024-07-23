@@ -33,7 +33,7 @@ export default function Hero() {
 					scale: 0.9,
 					ease: "power3.in",
 				})
-				.from(".footer", {
+				.from(".hero-footer", {
 					width: 0,
 					ease: "elastic.in",
 				});
@@ -147,17 +147,17 @@ export default function Hero() {
 					</div>
 				</div>
 
-				<div className="flex items-center w-full gap-5 overflow-scroll text-sm app footer">
-					<span className="px-3 py-1 bg-gray-100 rounded-full">
+				<div className="flex items-center w-full gap-5 overflow-scroll text-sm app hero-footer">
+					<span className="hidden px-3 py-1 bg-gray-100 rounded-full sm:inline-block">
 						Performant
 					</span>
-					<span className="px-3 py-1 rounded-full from-rose-400 via-rose-300 to-sky-300 bg-gradient-to-r">
+					<span className="hidden px-3 py-1 rounded-full sm:inline-block from-rose-400 via-rose-300 to-sky-300 bg-gradient-to-r">
 						Revolutionary
 					</span>
-					<span className="px-3 py-1 bg-gray-100 rounded-full">
+					<span className="hidden px-3 py-1 bg-gray-100 rounded-full sm:inline-block">
 						Progressive
 					</span>
-					<span className="flex items-center gap-2 ml-32 sm:ml-auto">
+					<span className="flex items-center gap-2 ml-auto">
 						DaloChat.com
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -176,7 +176,7 @@ export default function Hero() {
 				</div>
 			</div>
 
-			<div className="hidden items-center gap-10 xl:flex  w-[40rem]">
+			<div className="hidden items-center gap-10 xl:hidden  w-[40rem]">
 				<div className="flex flex-col justify-center h-full gap-5">
 					<Avatar className="p-1 size-14 from-rose-400 via-rose-300 to-sky-300 bg-gradient-to-br side-icon">
 						<AvatarImage src="love.png" />
