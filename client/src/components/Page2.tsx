@@ -9,36 +9,38 @@ export default function Page2() {
 	gsap.defaults({ duration: 3 });
 
 	useGSAP(() => {
-		gsap.to(".ai-span", {
+		gsap.to(".page2 .ai-span", {
 			scrollTrigger: {
 				trigger: ".page2",
-				start: "top 40%",
-				end: "+=40%",
-				scrub: 2,
+				start: "top 20%",
+				end: "top 10%",
+				scrub: 4,
 			},
-			duration: 4,
+			duration: 1,
 			ease: "power2.inOut",
 			backgroundSize: "100% 100%",
 		});
-		gsap.from(".page2", {
-			scrollTrigger: {
-				trigger: ".page2",
-				start: "top bottom",
-				end: "+=20%",
-				scrub: 2,
-			},
-			ease: "power1.in",
-			duration: 1,
-			y: "30%",
-			scale: 0.8,
-			opacity: 0.8,
-		});
+		// gsap.from(".page2", {
+		// 	scrollTrigger: {
+		// 		trigger: ".container",
+		// 		start: "top bottom",
+		// 		end: "top 70%",
+		// 		scrub: 2,
+		// 		// pin: true,
+		// 		// pinSpacing: false,
+		// 	},
+		// 	ease: "power1.in",
+		// 	duration: 1,
+		// 	y: "30%",
+		// 	scale: 0.8,
+		// 	opacity: 0.8,
+		// });
 	}, {});
 
 	return (
 		<div
 			ref={page2}
-			className="flex items-center justify-center w-full h-screen px-5 text-gray-800 bg-gray-100 page2 ">
+			className="absolute top-0 left-0 flex items-center justify-center w-screen h-screen px-5 text-gray-800 bg-gray-100 page page2">
 			<div className="flex flex-col items-center justify-center gap-5">
 				<p className="flex gap-2">
 					<svg
@@ -73,7 +75,7 @@ export default function Page2() {
 						/>
 					</svg>
 				</p>
-				<p className="max-w-screen-md sm:text-4xl text-2xl sm:leading-[3rem] leading-10 tracking-wide text-center">
+				<p className="max-w-screen-md sm:text-4xl text-2xl sm:leading-[3rem] leading-10 tracking-wide text-center ">
 					Your world, your chat - empowered by Dalo. Enjoy a
 					personalized messaging experience
 					<span style={{}} className="px-3 rounded-full ai-span">
