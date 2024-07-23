@@ -8,6 +8,7 @@ import { useRef } from "react";
 import Page4 from "@/components/page4";
 gsap.registerPlugin(ScrollTrigger);
 import Lenis from "lenis";
+import Page5 from "@/components/Page5";
 
 function Home() {
 	const pages = useRef(null);
@@ -23,11 +24,7 @@ function Home() {
 
 			requestAnimationFrame(raf);
 			const t1 = gsap.timeline();
-			t1.from(".page2", {
-				yPercent: 20,
-				ease: "power4.in",
-				scale: 0.8,
-			})
+			t1
 				.to(".page2 .ai-span", {
 					ease: "power2.inOut",
 					backgroundSize: "100% 100%",
@@ -42,7 +39,13 @@ function Home() {
 					ease: "power2.inOut",
 					backgroundSize: "100% 100%",
 				})
-				.from(".page4", { xPercent: 100, scale: 0 });
+				.from(".page4", { xPercent: 100, scale: 0 })
+				.from(".page5", { opacity: 0, scale: 0 })
+				.from('.page5 .diamond', {yPercent: -100, scale: 0})
+				.from('.page5 .face-to-face', {yPercent: -150, scale: 0, xPercent: 100})
+				.from('.page5 .extra', {yPercent: -150, scale: 0, xPercent: -100})
+				.from('.page5 .customer-satisfaction', {yPercent: 150, scale: 0})
+				// .from('.', {yPercent: 150, scale: 0})
 
 			ScrollTrigger.create({
 				animation: t1,
@@ -65,6 +68,7 @@ function Home() {
 					<Page2 />
 					<Page3 />
 					<Page4 />
+					<Page5 />
 				</div>
 			</div>
 			<p className="w-screen bg-red-300 h-96">footer</p>
