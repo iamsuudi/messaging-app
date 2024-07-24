@@ -10,6 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 import Lenis from "lenis";
 import Page5 from "@/components/Page5";
 import Page6 from "@/components/page6";
+import Page7 from "@/components/page7";
 
 function Home() {
 	const pages = useRef(null);
@@ -41,10 +42,6 @@ function Home() {
 				})
 				.from(".page4", { xPercent: 100, scale: 0 })
 				.from(".page5", { opacity: 0, scale: 0 })
-				// .from('.page5 .diamond', {yPercent: -100, scale: 0})
-				// .from('.page5 .face-to-face', {yPercent: -150, scale: 0, xPercent: 100})
-				// .from('.page5 .extra', {yPercent: -150, scale: 0, xPercent: -100})
-				// .from('.page5 .customer-satisfaction', {yPercent: 150, scale: 0})
 				.from(
 					[
 						".diamond",
@@ -84,6 +81,7 @@ function Home() {
 				</div>
 			</div>
 			<Page6 />
+			<Page7 />
 			<p className="w-screen bg-red-300 h-96">footer</p>
 			<p className="w-screen bg-blue-300 h-96">footer</p>
 			<p className="w-screen bg-green-300 h-96">footer</p>

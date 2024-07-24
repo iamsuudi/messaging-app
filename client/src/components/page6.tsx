@@ -16,7 +16,7 @@ type Prop = { card: CardType };
 
 function Card({ card }: Prop) {
 	return (
-		<div className="flex flex-wrap items-center justify-center max-w-screen-lg bg-transparent lg:shadow rounded-3xl">
+		<div className="flex flex-wrap items-center justify-between w-full max-w-lg bg-transparent lg:max-w-screen-lg lg:shadow rounded-3xl">
 			<div className="flex items-center w-full h-56 max-w-lg gap-5 p-4 sm:gap-10 sm:p-7 rounded-l-3xl card-left">
 				<div className="flex items-center justify-center w-10 h-10 bg-black rounded-full shadow-lg sm:h-12 sm:w-12">
 					{card.icon}
@@ -109,7 +109,7 @@ export default function Page6() {
 					scrollTrigger: {
 						trigger: card as unknown as gsap.DOMTarget,
 						scrub: 4,
-						start: "top bottom",
+						start: "top 90%",
 						end: "top 60%",
 					},
 				});
@@ -123,7 +123,7 @@ export default function Page6() {
 					scrollTrigger: {
 						trigger: card as unknown as gsap.DOMTarget,
 						scrub: 4,
-						start: "top bottom",
+						start: "top 90%",
 						end: "top 60%",
 					},
 				});
@@ -135,7 +135,7 @@ export default function Page6() {
 	return (
 		<div
 			ref={page6}
-			className="relative flex flex-col w-screen min-h-screen gap-20 px-5 py-32 text-gray-800 bg-white page6">
+			className="relative flex flex-col items-center w-screen min-h-screen gap-20 px-5 py-32 text-gray-800 bg-white page6">
 			<div className="flex items-center justify-center w-full sm:justify-between">
 				<div className="absolute flex items-center gap-3 p-1 pr-5 text-xs bg-white border rounded-full bottom-4 left-3 sm:relative diamond">
 					<span className="p-1 bg-gray-200 rounded-full">
