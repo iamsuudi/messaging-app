@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
 import { useRef } from "react";
+import { ArrowUpIcon } from "lucide-react";
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
-	const hero = useRef(null);
+	const hero = useRef<HTMLDivElement>(null);
 
 	useGSAP(
 		() => {
@@ -70,7 +72,7 @@ export default function Hero() {
 				ease: "power1.inOut",
 				delay: 2,
 			});
-			
+
 			gsap.from(".side-icon", {
 				stagger: 0.3,
 				delay: 1,
@@ -176,6 +178,15 @@ export default function Hero() {
 					</span>
 				</div>
 			</div>
+			<Button
+				className="fixed z-30 rounded-lg bottom-3 right-3"
+				onClick={() => {
+					if (hero.current) {
+						hero.current.scrollIntoView({ behavior: "smooth" });
+					}
+				}}>
+				<ArrowUpIcon className="size-5" />
+			</Button>
 
 			<div className="hidden items-center gap-10 xl:hidden  w-[40rem]">
 				<div className="flex flex-col justify-center h-full gap-5">

@@ -14,7 +14,7 @@ import Page7 from "@/components/page7";
 
 function Home() {
 	const pages = useRef(null);
-	const lenis = new Lenis({ smoothWheel: true});
+	const lenis = new Lenis({ smoothWheel: true });
 
 	useGSAP(
 		() => {
@@ -129,7 +129,7 @@ function Home() {
 		<div ref={pages} className="w-screen overflow-x-hidden app">
 			<Hero />
 			<div className="pages-wrapper">
-				<div className="relative flex w-screen h-screen bg-gray-100 pages app">
+				<div className="relative flex w-screen h-screen pages app">
 					<Page2 />
 					<Page3 />
 					<Page4 />
