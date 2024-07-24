@@ -34,7 +34,8 @@ export default function Hero() {
 					ease: "power3.in",
 				})
 				.from(".hero-footer", {
-					width: 0,
+					opacity: 0,
+					xPercent: 100,
 					ease: "elastic.in",
 				});
 
