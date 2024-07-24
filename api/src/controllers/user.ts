@@ -31,3 +31,18 @@ export const logout = async (req: Request, res: Response) => {
 		res.sendStatus(200);
 	});
 };
+
+export const updateProfile = async (
+	req: Request<
+		{},
+		{},
+		{ name: string; email: string; username: string; bios: string }
+	>,
+	res: Response
+) => {
+	const updatedData = req.body;
+
+	const updatedUser = await User.findByIdAndUpdate(req.user?.id, updatedData);
+
+	return res.status(202).json(updatedUser);
+};

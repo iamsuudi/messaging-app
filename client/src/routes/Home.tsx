@@ -14,7 +14,7 @@ import Page7 from "@/components/page7";
 
 function Home() {
 	const pages = useRef(null);
-	const lenis = new Lenis();
+	const lenis = new Lenis({ smoothWheel: true});
 
 	useGSAP(
 		() => {
@@ -43,7 +43,7 @@ function Home() {
 				ease: "power2.inOut",
 				backgroundSize: "100% 100%",
 			})
-				.to(".page2", { yPercent: 100 })
+				.to(".page2", { yPercent: 100, opacity: 0 })
 				.from(".page3", {
 					ease: "power4.in",
 					scale: 0,
@@ -52,9 +52,9 @@ function Home() {
 					ease: "power2.inOut",
 					backgroundSize: "100% 100%",
 				})
-				.to(".page3", { yPercent: 100 })
+				.to(".page3", { yPercent: 100, opacity: 0 })
 				.from(".page4", { scale: 0 })
-				.to(".page4", { yPercent: 100 })
+				.to(".page4", { yPercent: 100, opacity: 0 })
 				.from(".page5", { scale: 0 })
 				.from(
 					[
@@ -76,7 +76,7 @@ function Home() {
 				start: "top top",
 				scrub: true,
 				pin: true,
-				end: "+=4000",
+				end: "+=8000",
 				anticipatePin: 1,
 			});
 

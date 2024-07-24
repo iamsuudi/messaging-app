@@ -15,7 +15,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
 import { useRef } from "react";
-import { LogOut, Settings, User } from "lucide-react";
+import { LogOut, MessageCircleMoreIcon, Settings, User, UsersIcon } from "lucide-react";
 gsap.registerPlugin(ScrollTrigger);
 
 export default function HomeNav() {
@@ -100,7 +100,7 @@ export default function HomeNav() {
 			</div>
 			<Menubar className="bg-transparent border-none outline-none">
 				<MenubarMenu>
-					<MenubarTrigger className="bg-none">
+					<MenubarTrigger className="bg-none focus:bg-none">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
@@ -130,6 +130,22 @@ export default function HomeNav() {
 								className={"flex items-center gap-2"}>
 								<User className="size-4" />
 								Profile
+							</NavLink>
+						</MenubarItem>
+						<MenubarItem className="my-1">
+							<NavLink
+								to={"/home"}
+								className={"flex items-center gap-2"}>
+								<MessageCircleMoreIcon className="size-4" />
+								Chats
+							</NavLink>
+						</MenubarItem>
+						<MenubarItem className="my-1 ">
+							<NavLink
+								to={"/home/groups"}
+								className={"flex items-center gap-2"}>
+								<UsersIcon className="size-4" />
+								Groups
 							</NavLink>
 						</MenubarItem>
 						<MenubarItem className="my-1">

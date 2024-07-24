@@ -32,3 +32,13 @@ export const getMe = async (): Promise<UserType> => {
 	});
 	return response.data;
 };
+
+export const updateProfile = async (data: UserType): Promise<UserType> => {
+	const response = await axios({
+		method: "post",
+		baseURL,
+		url: "/updateMe",
+		data,
+	});
+	return response.data;
+};

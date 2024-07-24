@@ -1,7 +1,8 @@
 export interface UserType {
-	firstName: string;
-	lastName: string;
+	name?: string;
 	email: string;
-	passwordHash: string;
-	id: string;
+	_id: string;
+	bio?: string;
+	username?: string;
+	passwordHash?: string;
 }

@@ -6,6 +6,16 @@ export const formSchema = z.object({
 });
 
 export interface UserType {
+	id: string;
 	email: string;
-	passwordHash?: string;
+	username?: string;
+	bio?: string;
+	name?: string;
 }
+
+export const profileSchema = z.object({
+	email: z.string().email(),
+	username: z.string().optional(),
+	bio: z.string().optional(),
+	name: z.string().optional(),
+});

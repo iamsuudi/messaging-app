@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import passport from "passport";
-import { register } from "../controllers/user";
+import { register, updateProfile } from "../controllers/user";
 
 const userRouter = express.Router();
 
@@ -25,5 +25,7 @@ userRouter.post("/auth/logout", async (req: Request, res: Response) => {
         res.sendStatus(200);
     });
 });
+
+userRouter.post("/updateMe", updateProfile);
 
 export default userRouter;

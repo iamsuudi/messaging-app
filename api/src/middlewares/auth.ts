@@ -1,17 +1,15 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcrypt";
-import { UserType } from "../types";
 import User from "../models/user";
 
 passport.serializeUser((user, done) => {
-    const parsed = user as UserType;
-	done(null, parsed.id);
+	done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
 	try {
-		const user = await User.findById(id);
+		const user = await User.findById(id) as unknown as Express.User;
 		done(null, user);
 	} catch (error) {
 		done(error);
@@ -23,7 +21,7 @@ passport.use(
 		{ usernameField: "email" },
 		async (email: string, password: string, done: Function) => {
 			try {
-				const user: UserType | null = await User.findOne({ email });
+				const user = await User.findOne({ email });
 				if (!user) return done(null, false);
 
 				const passwordCorrect = user.passwordHash
@@ -31,7 +29,7 @@ passport.use(
 					: false;
 				if (!passwordCorrect) return done(null, false);
 
-				return done(null, user);
+				return done(null, user.toJSON());
 			} catch (error) {
 				return done(error);
 			}
