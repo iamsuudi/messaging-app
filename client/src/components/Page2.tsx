@@ -9,7 +9,7 @@ export default function Page2() {
 						viewBox="0 0 24 24"
 						strokeWidth={1.0}
 						stroke="currentColor"
-						className="p-1 rounded-full bg-white/50 size-8">
+						className="p-1 rounded-full bg-white/50 size-8 svg">
 						<path
 							strokeLinecap="round"
 							strokeLinejoin="round"
@@ -22,7 +22,7 @@ export default function Page2() {
 						viewBox="0 0 24 24"
 						strokeWidth={1.0}
 						stroke="currentColor"
-						className="p-1 rounded-full bg-white/50 size-8">
+						className="p-1 rounded-full bg-white/50 size-8 svg">
 						<path
 							strokeLinecap="round"
 							strokeLinejoin="round"

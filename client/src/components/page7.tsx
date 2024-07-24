@@ -2,14 +2,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { ThumbsUpIcon, TrendingUpIcon, Users } from "lucide-react";
 
 export default function Page7() {
-
 	return (
-		<div
-			className="flex items-center justify-center w-screen min-h-screen gap-20 px-5 py-20 text-gray-800 bg-white page7">
+		<div className="flex items-center justify-center w-screen min-h-screen gap-20 px-5 py-20 text-gray-800 bg-white page7">
 			<div className="relative flex flex-wrap items-center justify-center w-full max-w-lg p-10 bg-gray-200 lg:max-w-screen-xl lg:justify-between gap-y-32 md:p-20 rounded-3xl sm:p-16">
 				<div className="flex flex-col justify-around w-full max-w-md gap-10 ">
-					<div className="text-3xl font-bold leading-10 tracking-wider max-w-80 lg:font-medium lg:max-w-lg lg:text-5xl">
-						Increase The Number Of Your Connections
+					<div className="text-3xl font-bold leading-snug tracking-wider sm:leading-snug lg:leading-snug max-w-80 lg:font-medium lg:max-w-lg lg:text-5xl">
+						<span className="px-3 rounded-full bg-rose-300">
+							Increase
+						</span>{" "}
+						The Number Of Your social{" "}
+						<span className="px-3 rounded-full bg-rose-300">
+							Networks
+						</span>
 					</div>
 					<p className="text-sm max-w-96">
 						Stay connected, stay informed, and stay secure with Dalo
@@ -19,15 +23,15 @@ export default function Page7() {
 						times.
 					</p>
 					<div className="flex justify-center gap-5 w-fit h-fit">
-						<Avatar className="p-1 bg-white rounded-full size-8 icon">
+						<Avatar className="p-1 bg-white rounded-full size-10 icon">
 							<AvatarImage src="love.png" />
 							<AvatarFallback>Message</AvatarFallback>
 						</Avatar>
-						<Avatar className="p-1 bg-white rounded-full size-8 icon">
+						<Avatar className="p-1 bg-white rounded-full size-10 icon">
 							<AvatarImage src="headset.png" />
 							<AvatarFallback>Headphone</AvatarFallback>
 						</Avatar>
-						<Avatar className="p-2 bg-white rounded-full size-8 icon">
+						<Avatar className="p-2 bg-white rounded-full size-10 icon">
 							<AvatarImage src="cable.png" />
 							<AvatarFallback>Connect</AvatarFallback>
 						</Avatar>
@@ -86,13 +90,15 @@ export default function Page7() {
 						</div>
 
 						<div className="flex items-center justify-between w-full bg-white rounded-full">
-							<button className="flex items-center w-full gap-5 p-2 text-sm text-black">
-								<Avatar className="p-1 size-8">
-									<AvatarImage src="google.png" />
-									<AvatarFallback>Gmail</AvatarFallback>
-								</Avatar>
-								<span>Leave us a review!</span>
-							</button>
+							<a href="mailto:suudiabdulfetah@gmail.com">
+								<button className="flex items-center w-full gap-5 p-2 text-sm text-black">
+									<Avatar className="p-1 size-8">
+										<AvatarImage src="google.png" />
+										<AvatarFallback>Gmail</AvatarFallback>
+									</Avatar>
+									<span>Leave us a review!</span>
+								</button>
+							</a>
 						</div>
 					</div>
 				</div>

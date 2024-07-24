@@ -26,6 +26,18 @@ function Home() {
 
 			requestAnimationFrame(raf);
 
+			gsap.from(".page2 svg", {
+				ease: "power4.in",
+				rotate: 360,
+				repeat: -1,
+				scrollTrigger: {
+					trigger: ".page2",
+					scrub: true,
+					start: "top bottom",
+					end: "top top",
+				},
+			});
+
 			const t1 = gsap.timeline();
 			t1.to(".page2 .ai-span", {
 				ease: "power2.inOut",
@@ -67,7 +79,6 @@ function Home() {
 				end: "+=4000",
 				anticipatePin: 1,
 			});
-			
 
 			/* page 6 animations */
 			gsap.utils.toArray(".page6 .card-right").forEach((card) => {
@@ -98,7 +109,6 @@ function Home() {
 					},
 				});
 			});
-			
 
 			/* page 7 animations */
 			gsap.from(".page7", {

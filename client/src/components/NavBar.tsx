@@ -11,6 +11,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
 import { useRef } from "react";
+import { HouseIcon, ShapesIcon, Zap } from "lucide-react";
 gsap.registerPlugin(ScrollTrigger);
 
 export default function NavBar() {
@@ -44,7 +45,7 @@ export default function NavBar() {
 	return (
 		<div
 			ref={nav}
-			className="fixed top-0 z-10 flex items-center justify-between w-full p-3 backdrop-blur-md sm:backdrop-blur-none">
+			className="fixed top-0 z-20 flex items-center justify-between w-full p-3 backdrop-blur-md sm:backdrop-blur-none">
 			<NavLink
 				to={"/"}
 				className={
@@ -107,13 +108,25 @@ export default function NavBar() {
 					</MenubarTrigger>
 					<MenubarContent>
 						<MenubarItem>
-							<NavLink to={"/"}>Home</NavLink>
+							<NavLink
+								to={"/"}
+								className={"flex items-center gap-2 hover:cursor-pointer"}>
+								<HouseIcon size={14} className="" /> Home
+							</NavLink>
 						</MenubarItem>
 						<MenubarItem>
-							<NavLink to={"/features"}>Features</NavLink>
+							<NavLink
+								to={"/features"}
+								className={"flex items-center gap-2 hover:cursor-pointer"}>
+								<Zap size={14} className="" />
+								Features
+							</NavLink>
 						</MenubarItem>
 						<MenubarItem>
-							<NavLink to={"/blog"}>Blog</NavLink>
+							<NavLink to={"/blog"} className={"flex items-center gap-2 hover:cursor-pointer"}>
+								<ShapesIcon size={14} className="" />
+								Blog
+							</NavLink>
 						</MenubarItem>
 					</MenubarContent>
 				</MenubarMenu>
