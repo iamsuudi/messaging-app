@@ -1,9 +1,11 @@
-import { CableIcon, HandHeartIcon, MessageCircleIcon, MoveUpRightIcon, RocketIcon, ShieldCheckIcon } from "lucide-react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/all";
-import { useRef } from "react";
-gsap.registerPlugin(ScrollTrigger);
+import {
+	CableIcon,
+	HandHeartIcon,
+	MessageCircleIcon,
+	MoveUpRightIcon,
+	RocketIcon,
+	ShieldCheckIcon,
+} from "lucide-react";
 
 interface CardType {
 	header: string;
@@ -96,46 +98,8 @@ const cards: CardType[] = [
 ];
 
 export default function Page6() {
-	const page6 = useRef(null);
-
-	useGSAP(
-		() => {
-			gsap.utils.toArray(".card-right").forEach((card) => {
-				gsap.from(card as unknown as gsap.DOMTarget, {
-					xPercent: -50,
-					yPercent: 50,
-					opacity: 0.5,
-					stagger: 1,
-					scrollTrigger: {
-						trigger: card as unknown as gsap.DOMTarget,
-						scrub: 4,
-						start: "top 90%",
-						end: "top 60%",
-					},
-				});
-			});
-			gsap.utils.toArray(".card-left").forEach((card) => {
-				gsap.from(card as unknown as gsap.DOMTarget, {
-					xPercent: 50,
-					yPercent: 50,
-					opacity: 0.5,
-					stagger: 1,
-					scrollTrigger: {
-						trigger: card as unknown as gsap.DOMTarget,
-						scrub: 4,
-						start: "top 90%",
-						end: "top 60%",
-					},
-				});
-			});
-		},
-		{ scope: page6 }
-	);
-
 	return (
-		<div
-			ref={page6}
-			className="relative flex flex-col items-center w-screen min-h-screen gap-20 px-5 py-32 text-gray-800 bg-white page6">
+		<div className="relative flex flex-col items-center w-screen min-h-screen gap-20 px-5 py-32 text-gray-800 bg-white page6">
 			<div className="flex items-center justify-center w-full sm:justify-between">
 				<div className="absolute flex items-center gap-3 p-1 pr-5 text-xs bg-white border rounded-full bottom-4 left-3 sm:relative diamond">
 					<span className="p-1 bg-gray-200 rounded-full">

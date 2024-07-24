@@ -25,23 +25,25 @@ function Home() {
 			}
 
 			requestAnimationFrame(raf);
+
 			const t1 = gsap.timeline();
 			t1.to(".page2 .ai-span", {
 				ease: "power2.inOut",
 				backgroundSize: "100% 100%",
 			})
+				.to(".page2", { yPercent: 100 })
 				.from(".page3", {
-					yPercent: -100,
 					ease: "power4.in",
-					opacity: 0,
-					scale: 2,
+					scale: 0,
 				})
 				.to(".page3 .ai-span", {
 					ease: "power2.inOut",
 					backgroundSize: "100% 100%",
 				})
-				.from(".page4", { xPercent: 100, scale: 0 })
-				.from(".page5", { opacity: 0, scale: 0 })
+				.to(".page3", { yPercent: 100 })
+				.from(".page4", { scale: 0 })
+				.to(".page4", { yPercent: 100 })
+				.from(".page5", { scale: 0 })
 				.from(
 					[
 						".diamond",
@@ -65,6 +67,50 @@ function Home() {
 				end: "+=4000",
 				anticipatePin: 1,
 			});
+			
+
+			/* page 6 animations */
+			gsap.utils.toArray(".page6 .card-right").forEach((card) => {
+				gsap.from(card as unknown as gsap.DOMTarget, {
+					xPercent: -50,
+					yPercent: 50,
+					opacity: 0.5,
+					stagger: 1,
+					scrollTrigger: {
+						trigger: card as unknown as gsap.DOMTarget,
+						scrub: 4,
+						start: "top 90%",
+						end: "top 60%",
+					},
+				});
+			});
+			gsap.utils.toArray(".page6 .card-left").forEach((card) => {
+				gsap.from(card as unknown as gsap.DOMTarget, {
+					xPercent: 50,
+					yPercent: 50,
+					opacity: 0.5,
+					stagger: 1,
+					scrollTrigger: {
+						trigger: card as unknown as gsap.DOMTarget,
+						scrub: 4,
+						start: "top 90%",
+						end: "top 60%",
+					},
+				});
+			});
+			
+
+			/* page 7 animations */
+			gsap.from(".page7", {
+				scale: 0.5,
+				opacity: 0,
+				scrollTrigger: {
+					trigger: ".page7",
+					start: "top 80%",
+					end: "top 30%",
+					scrub: true,
+				},
+			});
 		},
 		{ scope: pages }
 	);
@@ -73,7 +119,7 @@ function Home() {
 		<div ref={pages} className="w-screen overflow-x-hidden app">
 			<Hero />
 			<div className="pages-wrapper">
-				<div className="relative flex w-screen h-screen pages app">
+				<div className="relative flex w-screen h-screen bg-gray-100 pages app">
 					<Page2 />
 					<Page3 />
 					<Page4 />

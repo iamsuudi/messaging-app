@@ -1,32 +1,12 @@
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/all";
-import { useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { ThumbsUpIcon, TrendingUpIcon, Users } from "lucide-react";
-gsap.registerPlugin(ScrollTrigger);
 
 export default function Page7() {
-	const page7 = useRef(null);
-
-	useGSAP(() => {
-		gsap.from(".page7", {
-			scale: 0.5,
-			opacity: 0,
-			scrollTrigger: {
-				trigger: ".page7",
-				start: "top 80%",
-				end: "top 30%",
-				scrub: true,
-			},
-		});
-	}, {});
 
 	return (
 		<div
-			ref={page7}
 			className="flex items-center justify-center w-screen min-h-screen gap-20 px-5 py-20 text-gray-800 bg-white page7">
-			<div className="relative flex flex-wrap items-center justify-center w-full max-w-lg p-10 bg-gray-100 lg:max-w-screen-xl lg:justify-between gap-y-32 md:p-20 rounded-3xl sm:p-16">
+			<div className="relative flex flex-wrap items-center justify-center w-full max-w-lg p-10 bg-gray-200 lg:max-w-screen-xl lg:justify-between gap-y-32 md:p-20 rounded-3xl sm:p-16">
 				<div className="flex flex-col justify-around w-full max-w-md gap-10 ">
 					<div className="text-3xl font-bold leading-10 tracking-wider max-w-80 lg:font-medium lg:max-w-lg lg:text-5xl">
 						Increase The Number Of Your Connections
