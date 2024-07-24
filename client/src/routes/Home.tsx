@@ -30,7 +30,7 @@ function Home() {
 					backgroundSize: "100% 100%",
 				})
 				.from(".page3", {
-					yPercent: 100,
+					yPercent: -100,
 					ease: "power4.in",
 					opacity: 0,
 					scale: 2,
@@ -41,11 +41,15 @@ function Home() {
 				})
 				.from(".page4", { xPercent: 100, scale: 0 })
 				.from(".page5", { opacity: 0, scale: 0 })
-				.from('.page5 .diamond', {yPercent: -100, scale: 0})
-				.from('.page5 .face-to-face', {yPercent: -150, scale: 0, xPercent: 100})
-				.from('.page5 .extra', {yPercent: -150, scale: 0, xPercent: -100})
-				.from('.page5 .customer-satisfaction', {yPercent: 150, scale: 0})
-				// .from('.', {yPercent: 150, scale: 0})
+				// .from('.page5 .diamond', {yPercent: -100, scale: 0})
+				// .from('.page5 .face-to-face', {yPercent: -150, scale: 0, xPercent: 100})
+				// .from('.page5 .extra', {yPercent: -150, scale: 0, xPercent: -100})
+				// .from('.page5 .customer-satisfaction', {yPercent: 150, scale: 0})
+				.from(['.diamond', '.face-to-face', '.extra', '.customer-satisfaction'], {
+					scale: 0,
+					opacity: 0,
+					// stagger: 0.5,
+				})
 
 			ScrollTrigger.create({
 				animation: t1,

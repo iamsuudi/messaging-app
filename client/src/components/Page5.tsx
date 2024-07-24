@@ -4,7 +4,7 @@ import { GemIcon, SquareUser, Users } from "lucide-react";
 export default function Page5() {
 	return (
 		<div className="absolute top-0 flex items-center justify-center w-screen h-screen px-5 text-gray-800 bg-gray-100 page page5">
-			<div className="flex flex-col items-center justify-center gap-40 diamonnd">
+			<div className="flex flex-col items-center justify-center gap-20 diamonnd">
 				<div className="flex items-center gap-2 p-1 pr-3 text-sm bg-white rounded-full diamond">
 					<span className="p-1 bg-gray-200 rounded-full">
 						<GemIcon className="size-4" />
@@ -48,9 +48,17 @@ export default function Page5() {
 						</div>
 					</div>
 
-					<div className="absolute hidden w-48 gap-3 p-3 text-sm text-black rounded-lg sm:flex -left-64 bottom-32 extra">
+					<div className="absolute hidden w-56 gap-3 p-3 text-sm text-black rounded-lg md:flex -left-64 bottom-20 extra">
 						Innovative features and user-friendly interface make it
 						easier than ever to stay in touch with your loved ones.
+					</div>
+
+					<div className="absolute hidden w-56 gap-3 p-3 text-4xl font-black text-black rounded-lg md:flex -left-60 bottom-56 ">
+						Chat Smart
+					</div>
+
+					<div className="absolute hidden w-56 gap-3 p-3 text-4xl font-black text-black rounded-lg md:flex -right-60 bottom-56 ">
+						Chat Dalo.
 					</div>
 
 					<div className="flex justify-end gap-3 mb-auto">
@@ -85,7 +93,7 @@ export default function Page5() {
 					</div>
 				</div>
 
-				<div className="w-full gap-3 p-3 text-sm text-black rounded-lg sm:hidden extra">
+				<div className="w-full gap-3 p-3 mt-10 text-sm text-black rounded-lg sm:hidden extra">
 					Innovative features and user-friendly interface make it
 					easier than ever to stay in touch with your loved ones.
 				</div>

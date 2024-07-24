@@ -106,8 +106,8 @@ export default function Hero() {
 							</span>{" "}
 							to users chats
 						</p>
-						<div className="flex gap-5">
-							<div className="flex items-center gap-3 p-1 text-white bg-black rounded-full h-fit link">
+						<div className="z-10 flex gap-5">
+							<button className="flex items-center gap-3 p-1 text-white bg-black rounded-full h-fit link">
 								<Link to={"/auth/signin"} className="pl-4 pr-3">
 									Join
 								</Link>
@@ -124,8 +124,8 @@ export default function Hero() {
 										d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"
 									/>
 								</svg>
-							</div>
-							<div className="flex items-center gap-3 p-1 bg-gray-100 rounded-full h-fit link">
+							</button>
+							<button className="flex items-center gap-3 p-1 bg-gray-100 rounded-full h-fit link">
 								<Link to={""} className="pl-4 pr-3 text-black">
 									Learn More
 								</Link>
@@ -142,7 +142,7 @@ export default function Hero() {
 										d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"
 									/>
 								</svg>
-							</div>
+							</button>
 						</div>
 					</div>
 				</div>
