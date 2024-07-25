@@ -42,20 +42,21 @@ function Home() {
 			t1.to(".page2 .ai-span", {
 				ease: "power2.inOut",
 				backgroundSize: "100% 100%",
-			})
-				.to(".page2", { yPercent: 100, opacity: 0 })
+			}).to(".page2", { scale: 1, opacity: 0, background: "none"  })
 				.from(".page3", {
 					ease: "power4.in",
 					scale: 0,
+					opacity: 0,
+					background: "none" 
 				})
 				.to(".page3 .ai-span", {
 					ease: "power2.inOut",
 					backgroundSize: "100% 100%",
 				})
-				.to(".page3", { yPercent: 100, opacity: 0 })
-				.from(".page4", { scale: 0 })
-				.to(".page4", { yPercent: 100, opacity: 0 })
-				.from(".page5", { scale: 0 })
+				.to(".page3", { scale: 1, opacity: 0, background: "none"  })
+				.from(".page4", { scale: 0, opacity: 0, background: "none"  })
+				.to(".page4", { scale: 1, opacity: 0, background: "none"  })
+				.from(".page5", { scale: 0, opacity: 0, background: "none" })
 				.from(
 					[
 						".diamond",
@@ -76,7 +77,7 @@ function Home() {
 				start: "top top",
 				scrub: true,
 				pin: true,
-				end: "+=8000",
+				end: "+=10000",
 				anticipatePin: 1,
 			});
 
@@ -112,8 +113,8 @@ function Home() {
 
 			/* page 7 animations */
 			gsap.from(".page7", {
-				scale: 0.5,
-				opacity: 0,
+				scale: 0.8,
+				xPercent: -100,
 				scrollTrigger: {
 					trigger: ".page7",
 					start: "top 80%",
