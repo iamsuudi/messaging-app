@@ -8,14 +8,14 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MessageCircleMoreIcon, PlusIcon, UsersIcon } from "lucide-react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export default function HomeSideBar() {
 	return (
-		<aside className="fixed bottom-0 flex justify-around w-full gap-3 p-2 border sm:py-16 sm:px-5 sm:left-0 sm:top-12 sm:h-full sm:w-fit sm:flex-col h-fit sm:justify-start gap-y-5">
-			<Link to={""} className="p-2 rounded-full">
+		<aside className="fixed bottom-0 z-20 flex justify-around w-full gap-3 p-2 rounded-t-2xl sm:rounded-none backdrop-blur-xl sm:py-16 sm:px-5 sm:left-0 sm:top-14 sm:h-full sm:w-fit sm:flex-col h-fit sm:justify-start gap-y-5">
+			<NavLink to={"/home"} className="p-2 rounded-full">
 				<MessageCircleMoreIcon />
-			</Link>
+			</NavLink>
 
 			<DropdownMenu>
 				<DropdownMenuTrigger className="outline-none sm:hidden">
@@ -34,9 +34,9 @@ export default function HomeSideBar() {
 				</DropdownMenuContent>
 			</DropdownMenu>
 
-			<Link to={""} className="p-2 rounded-full ">
+			<NavLink to={"/home/groups"} className="p-2 rounded-full ">
 				<UsersIcon />
-			</Link>
+			</NavLink>
 
 			<DropdownMenu>
 				<DropdownMenuTrigger className="hidden outline-none sm:block">

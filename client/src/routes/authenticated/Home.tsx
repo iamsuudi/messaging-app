@@ -19,7 +19,7 @@ export default function HomeIn() {
 	return (
 		<div className="flex flex-col w-screen min-h-screen app">
 			<HomeNav />
-			<div className="flex flex-col-reverse w-full h-full pb-14 pt-14 sm:pl-20 sm:pb-2 ">
+			<div className="flex flex-col-reverse w-full h-full pt-14 sm:pt-16 pb-14 sm:pl-20 sm:pb-2">
 				<Outlet />
 			</div>
 		</div>
