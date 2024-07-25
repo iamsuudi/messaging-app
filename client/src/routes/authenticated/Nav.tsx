@@ -60,7 +60,7 @@ export default function HomeNav() {
 	return (
 		<div
 			ref={nav}
-			className="fixed top-0 z-10 flex items-center w-full px-3 py-2 rounded-b-lg backdrop-blur-lg">
+			className="fixed top-0 z-10 flex items-center w-full px-3 py-2 bg-white shadow-sm">
 			<NavLink
 				to={"/"}
 				className={

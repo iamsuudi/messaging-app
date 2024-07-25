@@ -3,14 +3,14 @@ import HomeSideBar from "./SideBar";
 
 function GroupRow() {
 	return (
-		<div className="flex items-center w-full h-20 gap-4 p-3 border">
+		<div className="flex items-center w-full h-20 gap-4 p-3 ">
 			<Avatar className="rounded-full size-14">
 				<AvatarImage src="https://github.com/shadcn.png" />
 				<AvatarFallback></AvatarFallback>
 			</Avatar>
 			<div className="flex flex-col ">
 				<p className="font-black tracking-[1px] text-md">CodeNight</p>
-				<p className="h-8 max-w-full overflow-hidden text-xs font-bold ">
+				<p className="h-8 max-w-full overflow-hidden text-xs font-bold whitespace-nowrap text-ellipsis">
 					<span className="text-gray-800"> Abdulfetah Suudi</span>
 					{" : "}
 					<span className="tracking-tighter text-gray-400">

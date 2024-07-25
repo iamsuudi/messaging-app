@@ -1,18 +1,19 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import HomeSideBar from "./SideBar";
+import { Link } from "react-router-dom";
 
 function ChatRow() {
 	return (
-		<div className="flex items-center h-20 gap-3 p-3 border">
+		<Link to={'/chats/56'} className="flex items-center h-20 gap-3 p-3 sm:gap-5">
 			<Avatar className="rounded-full size-14">
 				<AvatarImage src="https://github.com/shadcn.png" />
 				<AvatarFallback></AvatarFallback>
 			</Avatar>
 			<div className="flex flex-col gap-1">
-				<p className="font-black tracking-[1px] text-md  h-5 overflow-hidden">
+				<p className="font-black tracking-[1px] text-md  h-5 overflow-hidden whitespace-nowrap text-ellipsis">
 					Abdulfetah Suudi
 				</p>
-				<p className="h-8 max-w-full overflow-hidden text-xs font-bold tracking-tighter text-gray-800 ">
+				<p className="h-8 max-w-full overflow-hidden text-xs font-bold tracking-tighter text-gray-800 whitespace-nowrap text-ellipsis">
 					Why don't you come home?
 				</p>
 			</div>
@@ -22,7 +23,7 @@ function ChatRow() {
 					1
 				</span>
 			</div>
-		</div>
+		</Link>
 	);
 }
 
