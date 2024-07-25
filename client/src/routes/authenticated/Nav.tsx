@@ -60,7 +60,7 @@ export default function HomeNav() {
 	return (
 		<div
 			ref={nav}
-			className="absolute top-0 z-10 flex items-center w-full px-3 py-1 border">
+			className="fixed top-0 z-10 flex items-center w-full px-3 py-1 bg-white border">
 			<NavLink
 				to={"/"}
 				className={
@@ -123,7 +123,9 @@ export default function HomeNav() {
 							</Avatar>
 							{user?.email ?? "not found"}
 						</MenubarItem>
+						
 						<MenubarSeparator />
+						
 						<MenubarItem className="my-1">
 							<NavLink
 								to={"/home/profile"}
@@ -132,6 +134,7 @@ export default function HomeNav() {
 								Profile
 							</NavLink>
 						</MenubarItem>
+						
 						<MenubarItem className="my-1">
 							<NavLink
 								to={"/home"}
@@ -140,7 +143,8 @@ export default function HomeNav() {
 								Chats
 							</NavLink>
 						</MenubarItem>
-						<MenubarItem className="my-1 ">
+						
+						<MenubarItem className="my-1">
 							<NavLink
 								to={"/home/groups"}
 								className={"flex items-center gap-2"}>
@@ -148,6 +152,7 @@ export default function HomeNav() {
 								Groups
 							</NavLink>
 						</MenubarItem>
+						
 						<MenubarItem className="my-1">
 							<NavLink
 								to={""}
@@ -155,6 +160,7 @@ export default function HomeNav() {
 								<Settings className="size-4" /> Settings
 							</NavLink>
 						</MenubarItem>
+						
 						<MenubarItem className="my-1">
 							<button
 								onClick={logoutHandler}
