@@ -9,8 +9,9 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
 	try {
-		const user = await User.findById(id) as unknown as Express.User;
-		done(null, user);
+		const user = await User.findById(id);
+		const parsed = user?.toJSON() as Express.User;
+		done(null, parsed);
 	} catch (error) {
 		done(error);
 	}
