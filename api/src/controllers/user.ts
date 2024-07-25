@@ -14,12 +14,18 @@ export const register = async (
 	if (!password || !email)
 		return res.status(402).json({ message: "Incorrent credentials" });
 
-	const passwordHash = await bcrypt.hash(password, Number(SALT) || 10);
+	const user = await User.findOne({ email });
 
-	await User.create({
-		email,
-		passwordHash,
-	});
+	if (!user) {
+		const passwordHash = await bcrypt.hash(password, Number(SALT) || 10);
+
+		await User.create({
+			email,
+			passwordHash,
+		});
+	} else {
+		return res.status(400).json({ message: "Email is already taken!" });
+	}
 
 	next();
 };

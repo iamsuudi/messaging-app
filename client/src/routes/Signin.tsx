@@ -1,6 +1,6 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { signin } from "@/services/user.api";
+import { signin, signup } from "@/services/user.api";
 import { formSchema } from "@/types";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -17,17 +17,27 @@ import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import { useUserStore } from "@/store";
+import { userErrorStore, useUserStore } from "@/store";
+import { AxiosError } from "axios";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 type FormFields = z.infer<typeof formSchema>;
 
 export default function Signin() {
 	const navigate = useNavigate();
+	const [signType, setSignType] = useState("Signin");
 	const { setUser, fetchUser, user } = useUserStore((state) => state);
+	const { error, setError, removeError } = userErrorStore((state) => state);
 
 	useEffect(() => {
+		const timer = setTimeout(() => {
+			removeError();
+		}, 3000);
+
 		if (!user) {
 			fetchUser()
 				.then(() => {
@@ -39,7 +49,9 @@ export default function Signin() {
 		} else {
 			navigate("/home");
 		}
-	}, []);
+
+		return () => clearTimeout(timer);
+	}, [error, user, fetchUser, navigate, removeError]);
 
 	const form = useForm<FormFields>({
 		defaultValues: {
@@ -50,33 +62,39 @@ export default function Signin() {
 
 	const onSubmit: SubmitHandler<FormFields> = async (data) => {
 		try {
-			const response = await signin(data);
-			console.log(response);
+			let response;
+			if (signType === "Signin") {
+				response = await signin(data);
+			} else {
+				response = await signup(data);
+			}
 			setUser(response);
 			navigate("/home");
 		} catch (error) {
-			form.setError("root", {
-				message: "Error occurred while trying to signin",
-			});
+			const e = error as unknown as AxiosError;
+			console.log(e?.response?.data.message);
+			setError(e?.response?.data.message ?? 'Incorrect credentials');
 		}
 	};
 
-	useEffect(() => {
-		const timer = setTimeout(() => {
-			form.setError("root", {
-				message: undefined,
-			});
-		}, 3000);
-
-		return () => clearTimeout(timer);
-	}, [form]);
-
 	return (
-		<div className="flex items-center justify-center w-screen h-screen px-5">
+		<div className="flex flex-col items-center justify-center w-screen h-screen px-3">
+			{error && (
+				<div className="fixed w-full px-5 max-w-96 h-fit top-24">
+					<Alert
+						variant="destructive"
+						className="w-full font-bold bg-gray-50">
+						<AlertCircle className="w-4 h-4" />
+						<AlertTitle className="font-bold">Error</AlertTitle>
+						<AlertDescription>{error}</AlertDescription>
+					</Alert>
+				</div>
+			)}
+
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}
-					className="w-full p-10 space-y-8 border-t-2 rounded-lg shadow-xl max-w-96 border-rose-300">
+					className="w-full p-10 space-y-8 rounded-lg shadow-xl max-w-96 ">
 					<FormField
 						control={form.control}
 						name="email"
@@ -113,32 +131,35 @@ export default function Signin() {
 					/>
 					<Button
 						type="submit"
-						className="w-full bg-blue-400 hover:bg-blue-500"
+						className="w-full bg-black/50"
 						disabled={form.formState.isSubmitting}>
-						{form.formState.isSubmitting
-							? "Signing in..."
-							: "Signin"}
+						{form.formState.isSubmitting ? "Sending..." : signType}
 					</Button>
 
 					<Separator orientation="horizontal" />
 
 					<Button
 						type="submit"
-						className="w-full"
+						className="flex items-center w-full gap-3"
 						disabled={form.formState.isSubmitting}>
-						<Avatar>
+						<Avatar className="size-6">
 							<AvatarImage src="google.png" />
 						</Avatar>
 						{form.formState.isSubmitting
-							? "Signing in..."
+							? "Wait..."
 							: "Signin with google"}
 					</Button>
 
-					{form.formState.errors.root && (
-						<FormMessage
-							children={form.formState.errors.root.message}
-						/>
-					)}
+					<button
+						type="button"
+						className="text-sm underline underline-offset-4"
+						onClick={() =>
+							setSignType(
+								signType === "Signin" ? "Signup" : "Signin"
+							)
+						}>
+						{signType === "Signin" ? "Signup" : "Signin"}
+					</button>
 				</form>
 			</Form>
 		</div>

@@ -111,7 +111,7 @@ export default function Hero() {
 						</p>
 						<div className="z-10 flex gap-5">
 							<button className="flex items-center gap-3 p-1 text-white bg-black rounded-full h-fit link">
-								<Link to={"/auth/signin"} className="pl-4 pr-3">
+								<Link to={"/auth2"} className="pl-4 pr-3">
 									Join
 								</Link>
 								<svg

@@ -20,7 +20,7 @@ export default function Router() {
 					element: <Home />,
 				},
 				{
-					path: "auth/signin",
+					path: "auth2",
 					element: <Signin />,
 				},
 			],

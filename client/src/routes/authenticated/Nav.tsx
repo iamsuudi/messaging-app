@@ -51,7 +51,7 @@ export default function HomeNav() {
 		try {
 			removeUser();
 			await logout();
-			return navigate("/auth/signin");
+			return navigate("/auth2");
 		} catch (error) {
 			//
 		}

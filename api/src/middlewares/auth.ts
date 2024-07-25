@@ -23,12 +23,13 @@ passport.use(
 		async (email: string, password: string, done: Function) => {
 			try {
 				const user = await User.findOne({ email });
-				if (!user) return done(null, false);
+				if (!user) throw new Error("User doesn't exist");
 
 				const passwordCorrect = user.passwordHash
-					? bcrypt.compare(password, user.passwordHash)
+					? await bcrypt.compare(password, user.passwordHash)
 					: false;
-				if (!passwordCorrect) return done(null, false);
+
+				if (!passwordCorrect) throw new Error("Incorrect password");
 
 				return done(null, user.toJSON());
 			} catch (error) {
