@@ -17,14 +17,18 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 
-import { useUserStore } from "@/store";
+import { userErrorStore, useUserStore } from "@/store";
 import { Textarea } from "@/components/ui/textarea";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
+import { AxiosError } from "axios";
 
 type FormFields = z.infer<typeof profileSchema>;
 
 export default function Profile() {
 	const navigate = useNavigate();
 	const { setUser, fetchUser, user } = useUserStore((state) => state);
+	const { error, setError, removeError } = userErrorStore((state) => state);
 
 	useEffect(() => {
 		if (!user) {
@@ -34,7 +38,13 @@ export default function Profile() {
 		} else {
 			//
 		}
-	}, [user]);
+
+		const timer = setTimeout(() => {
+			removeError();
+		}, 3000);
+
+		return () => clearTimeout(timer);
+	}, [user, fetchUser, navigate, removeError]);
 
 	const form = useForm<FormFields>({
 		defaultValues: {
@@ -52,28 +62,29 @@ export default function Profile() {
 				...data,
 				id: user?.id as string,
 			});
-			console.log(response);
+			// console.log(response);
 			setUser(response);
-			// navigate("/home");
+			navigate("/home");
 		} catch (error) {
-			form.setError("root", {
-				message: "Error occurred while trying to signin",
-			});
+			const e = error as AxiosError;
+			setError(e.response?.data.message ?? e.message);
 		}
 	};
 
-	useEffect(() => {
-		const timer = setTimeout(() => {
-			form.setError("root", {
-				message: undefined,
-			});
-		}, 3000);
-
-		return () => clearTimeout(timer);
-	}, [form]);
-
 	return (
 		<div className="flex flex-col items-center justify-center w-screen h-screen px-5">
+			{error && (
+				<div className="fixed w-full px-5 max-w-96 h-fit top-24">
+					<Alert
+						variant="destructive"
+						className="w-full font-bold bg-gray-50">
+						<AlertCircle className="w-4 h-4" />
+						<AlertTitle className="font-bold">Error</AlertTitle>
+						<AlertDescription>{error}</AlertDescription>
+					</Alert>
+				</div>
+			)}
+
 			<h1 className="text-2xl font-bold">Update your info</h1>
 			<Form {...form}>
 				<form
