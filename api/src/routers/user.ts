@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import passport from "passport";
-import { register, updateProfile } from "../controllers/user";
+import { register, searchUsers, updateProfile } from "../controllers/user";
 
 const userRouter = express.Router();
 
@@ -27,5 +27,7 @@ userRouter.post("/auth/logout", async (req: Request, res: Response) => {
 });
 
 userRouter.post("/updateMe", updateProfile);
+
+userRouter.get('/searchUsers/:query', searchUsers)
 
 export default userRouter;

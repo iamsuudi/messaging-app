@@ -52,3 +52,16 @@ export const updateProfile = async (
 
 	return res.status(202).json(updatedUser);
 };
+
+export const searchUsers = async (
+	req: Request<{ query: string }>,
+	res: Response
+) => {
+	const { query } = req.params;
+
+	const users = await User.find({
+		username: { $regex: query, $options: "i" },
+	});
+
+	return res.status(200).json(users);
+};

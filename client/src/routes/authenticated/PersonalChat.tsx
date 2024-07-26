@@ -2,7 +2,7 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
 import { CheckCheckIcon, ChevronLeft, PhoneIcon, SendIcon } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 <Avatar>
 	<AvatarImage src="logo.png" />
@@ -40,11 +40,13 @@ export default function PersonalChat() {
 
 	return (
 		<div className="relative flex flex-col w-screen h-screen overflow-hidden">
-			<nav className="flex items-center justify-between gap-2 p-2 border backdrop-blur-sm">
+			<nav className="flex items-center justify-between gap-2 px-2 py-3 border backdrop-blur-sm">
 				<button onClick={() => navigate(-1)}>
 					<ChevronLeft />
 				</button>
-				<div className="flex font-bold tracking-wide max-w-[70%] overflow-hidden whitespace-nowrap text-ellipsis">Abdulfetah Suudi</div>
+				<div className="flex font-bold tracking-wide max-w-[70%] overflow-hidden whitespace-nowrap text-ellipsis">
+					Abdulfetah Suudi
+				</div>
 				<button className="mr-2">
 					<PhoneIcon fill="blueblack" strokeWidth={0} />
 				</button>

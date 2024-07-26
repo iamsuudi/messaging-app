@@ -52,3 +52,12 @@ export const updateProfile = async (data: UserType): Promise<UserType> => {
 	});
 	return response.data;
 };
+
+export const searchUsers = async (query: string): Promise<UserType[]> => {
+	const response = await axios({
+		method: "get",
+		baseURL,
+		url: `/searchUsers/${query}`,
+	});
+	return response.data;
+};

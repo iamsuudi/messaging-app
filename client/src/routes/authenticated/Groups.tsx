@@ -10,7 +10,7 @@ function GroupRow() {
 			</Avatar>
 			<div className="flex flex-col ">
 				<p className="font-black tracking-[1px] text-md">CodeNight</p>
-				<p className="h-8 max-w-full overflow-hidden text-xs font-bold whitespace-nowrap text-ellipsis">
+				<p className="max-w-full overflow-hidden text-xs font-bold whitespace-nowrap text-ellipsis">
 					<span className="text-gray-800"> Abdulfetah Suudi</span>
 					{" : "}
 					<span className="tracking-tighter text-gray-400">

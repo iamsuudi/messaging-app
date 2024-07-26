@@ -9,11 +9,11 @@ function ChatRow() {
 				<AvatarImage src="https://github.com/shadcn.png" />
 				<AvatarFallback></AvatarFallback>
 			</Avatar>
-			<div className="flex flex-col gap-1">
-				<p className="font-black tracking-[1px] text-md  h-5 overflow-hidden whitespace-nowrap text-ellipsis">
+			<div className="flex flex-col">
+				<p className="font-black tracking-[1px] text-md overflow-hidden whitespace-nowrap text-ellipsis">
 					Abdulfetah Suudi
 				</p>
-				<p className="h-8 max-w-full overflow-hidden text-xs font-bold tracking-tighter text-gray-800 whitespace-nowrap text-ellipsis">
+				<p className="max-w-full overflow-hidden text-xs font-bold tracking-tighter text-gray-800 whitespace-nowrap text-ellipsis">
 					Why don't you come home?
 				</p>
 			</div>
@@ -31,7 +31,7 @@ export default function Chats() {
 	return (
 		<div className="relative flex flex-col h-fit">
 			<HomeSideBar />
-			<div className="flex flex-col py-3 sm:px-5">
+			<div className="flex flex-col py-1 sm:px-5">
 				<ChatRow />
 				<ChatRow />
 				<ChatRow />

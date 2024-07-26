@@ -1,14 +1,13 @@
-import { Button } from "@/components/ui/button";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { MessageCircleMoreIcon, PlusIcon, UsersIcon } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 export default function HomeSideBar() {
 	return (
@@ -17,42 +16,45 @@ export default function HomeSideBar() {
 				<MessageCircleMoreIcon />
 			</NavLink>
 
-			<DropdownMenu>
-				<DropdownMenuTrigger className="outline-none sm:hidden">
-					<Button className="flex gap-1 px-8 rounded-full">
-						<PlusIcon size={18} />
-						<span className="">New Chat</span>
-					</Button>
-				</DropdownMenuTrigger>
-				<DropdownMenuContent>
-					<DropdownMenuLabel>My Account</DropdownMenuLabel>
-					<DropdownMenuSeparator />
-					<DropdownMenuItem>Profile</DropdownMenuItem>
-					<DropdownMenuItem>Billing</DropdownMenuItem>
-					<DropdownMenuItem>Team</DropdownMenuItem>
-					<DropdownMenuItem>Subscription</DropdownMenuItem>
-				</DropdownMenuContent>
-			</DropdownMenu>
+			<Dialog>
+				<DialogTrigger className="text-white sm:hidden">
+					<PlusIcon className="p-2 bg-black rounded-full size-9" />
+				</DialogTrigger>
+				<DialogContent className="flex flex-col gap-3 py-10 bg-opacity-30 max-w-[90%] backdrop-blur-lg rounded w-96">
+					<DialogHeader>
+						<DialogTitle className="text-center">
+							Create Group
+						</DialogTitle>
+						<Input
+							placeholder="Type here..."
+							className="focus-visible:ring-0"
+						/>
+					</DialogHeader>
+					<div className="bg-red-100 h-72"></div>
+				</DialogContent>
+			</Dialog>
 
 			<NavLink to={"/home/groups"} className="p-2 rounded-full ">
 				<UsersIcon />
 			</NavLink>
 
-			<DropdownMenu>
-				<DropdownMenuTrigger className="hidden outline-none sm:block">
-					<button className="text-white">
-						<PlusIcon className="p-2 bg-black rounded-full size-9" />
-					</button>
-				</DropdownMenuTrigger>
-				<DropdownMenuContent>
-					<DropdownMenuLabel>My Account</DropdownMenuLabel>
-					<DropdownMenuSeparator />
-					<DropdownMenuItem>Profile</DropdownMenuItem>
-					<DropdownMenuItem>Billing</DropdownMenuItem>
-					<DropdownMenuItem>Team</DropdownMenuItem>
-					<DropdownMenuItem>Subscription</DropdownMenuItem>
-				</DropdownMenuContent>
-			</DropdownMenu>
+			<Dialog>
+				<DialogTrigger className="hidden text-white sm:block">
+					<PlusIcon className="p-2 bg-black rounded-full size-9" />
+				</DialogTrigger>
+				<DialogContent className="flex flex-col gap-3 py-10 bg-opacity-30 max-w-[90%] backdrop-blur-lg rounded w-96">
+					<DialogHeader>
+						<DialogTitle className="text-center">
+							Create Group
+						</DialogTitle>
+						<Input
+							placeholder="Type here..."
+							className="focus-visible:ring-0"
+						/>
+					</DialogHeader>
+					<div className="bg-red-100 h-72"></div>
+				</DialogContent>
+			</Dialog>
 		</aside>
 	);
 }
