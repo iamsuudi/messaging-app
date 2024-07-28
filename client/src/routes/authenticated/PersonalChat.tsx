@@ -11,8 +11,8 @@ import { useNavigate } from "react-router-dom";
 
 function MyMessage() {
 	return (
-		<div className="flex flex-wrap gap-2 items-start p-2 ml-auto bg-pink-200 rounded-2xl rounded-br-none w-fit max-w-[70%]">
-			<span className="px-2">
+		<div className="flex flex-wrap gap-2 items-start p-2 ml-auto bg-pink-200 dark:bg-rose-900/40 rounded-2xl rounded-br-none w-fit max-w-[70%]">
+			<span className="px-2 tracking-wider">
 				justify-between w-20 mt-auto text-xs border
 			</span>
 			<span className="flex items-end justify-between mt-auto ml-auto text-xs min-w-20">
@@ -24,8 +24,8 @@ function MyMessage() {
 
 function OthersMessage() {
 	return (
-		<div className="flex flex-wrap gap-2 justify-between items-start p-2 mr-auto bg-gray-200 rounded-2xl rounded-bl-none w-fit max-w-[70%]">
-			<span className="px-2">
+		<div className="flex flex-wrap gap-2 justify-between items-start p-2 mr-auto bg-gray-200 dark:bg-black/20 rounded-2xl rounded-bl-none w-fit max-w-[70%]">
+			<span className="px-2 tracking-wider">
 				justify-between w-20 mt-auto text-xs border
 			</span>
 			<span className="flex items-end justify-between mt-auto ml-auto text-xs min-w-14">
@@ -39,8 +39,8 @@ export default function PersonalChat() {
 	const navigate = useNavigate();
 
 	return (
-		<div className="relative flex flex-col w-screen h-screen overflow-hidden">
-			<nav className="flex items-center justify-between gap-2 px-2 py-3 border backdrop-blur-sm">
+		<div className="relative flex flex-col w-screen h-screen overflow-hidden dark:bg-gradient-to-tr dark:from-[#09203f] dark:to-[#5c323f] bg-background bg-fixed">
+			<nav className="flex items-center justify-between gap-2 px-2 py-3 dark:bg-white/5 backdrop-blur-sm">
 				<button onClick={() => navigate(-1)}>
 					<ChevronLeft />
 				</button>
@@ -52,7 +52,7 @@ export default function PersonalChat() {
 				</button>
 			</nav>
 
-			<div className="flex flex-col w-full h-full gap-3 p-3 overflow-scroll bg-gray-50 app">
+			<div className="flex flex-col w-full h-full gap-3 p-3 overflow-scroll app">
 				<MyMessage />
 				<OthersMessage />
 				<MyMessage />
@@ -73,12 +73,12 @@ export default function PersonalChat() {
 				<OthersMessage />
 			</div>
 
-			<div className="flex items-center gap-2 p-2 overflow-hidden h-fit max-h-20 bg-black/5">
+			<div className="flex items-center gap-2 p-2 overflow-hidden h-fit max-h-20 bg-black/5 dark:bg-white/5">
 				<input
 					placeholder="Type your message..."
-					className="w-full p-2 bg-transparent border focus:outline-none app "
+					className="w-full p-2 tracking-wider bg-transparent focus:outline-none app"
 				/>
-				<Button className="rounded-lg ">
+				<Button className="rounded-lg dark:bg-gradient-to-tr dark:from-[#8b5185] dark:to-[#8a3f57] bg-fixed">
 					<SendIcon className="" />
 				</Button>
 			</div>

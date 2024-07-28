@@ -20,12 +20,13 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useUserStore } from "@/store";
 import { logout } from "@/services/user.api";
 import SearchDrawer from "./SearchDialog";
+import { ModeToggle } from "@/components/mode-toggle";
 
 export default function HomeNav() {
 	// const [search, setSearch] = useState("");
 
 	return (
-		<div className="fixed top-0 z-10 flex items-center w-full px-3 py-2 bg-white shadow-sm">
+		<div className="fixed top-0 z-10 flex items-center w-full px-3 py-2 shadow-sm backdrop-blur-lg">
 			<NavLink
 				to={"/"}
 				className={
@@ -34,11 +35,12 @@ export default function HomeNav() {
 				style={{ fontFamily: "Caveat Brush" }}>
 				DaloChat
 			</NavLink>
-			<div className="flex items-end ml-auto">
+			<div className="flex items-end ml-5 mr-auto">
 				<SearchDrawer>
 					<SearchIcon className="size-4" />
 				</SearchDrawer>
 			</div>
+			<ModeToggle />
 			<MenuComponent />
 		</div>
 	);
@@ -64,7 +66,7 @@ function MenuComponent() {
 	return (
 		<Menubar className="bg-transparent border-none outline-none">
 			<MenubarMenu>
-				<MenubarTrigger className="bg-none focus:bg-none">
+				<MenubarTrigger className="bg-none focus:bg-transparent">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
@@ -79,7 +81,7 @@ function MenuComponent() {
 						/>
 					</svg>
 				</MenubarTrigger>
-				<MenubarContent>
+				<MenubarContent className="border-none dark:bg-white/5 backdrop-blur-lg">
 					<MenubarItem>
 						<Avatar>
 							<AvatarImage src="logo.png" />
@@ -88,7 +90,7 @@ function MenuComponent() {
 						{user?.email ?? "not found"}
 					</MenubarItem>
 
-					<MenubarSeparator />
+					<MenubarSeparator className="dark:bg-white" />
 
 					<MenubarItem className="my-1">
 						<NavLink
