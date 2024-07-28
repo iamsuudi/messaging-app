@@ -11,6 +11,8 @@ import "./middlewares/auth";
 import unKnowEndpointHandler from "./middlewares/unKnowEndpoint";
 import errrorHandler from "./middlewares/errrorHandler";
 import userRouter from "./routers/user";
+import { createServer } from "http";
+import { Server } from "socket.io";
 
 mongoose.set("strictQuery", false);
 
@@ -25,7 +27,14 @@ mongoose
 		console.error("error connecting to mongodb: ", error.message);
 	});
 
+// socket setup
 const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer);
+
+io.on("connection", (socket) => {
+	console.log("a user connected");
+});
 
 app.use(
 	cors({
@@ -35,6 +44,7 @@ app.use(
 );
 app.use(express.json());
 app.use(morgan("dev"));
+
 app.use(
 	session({
 		secret: SECRET as string,
@@ -63,4 +73,4 @@ app.get("/api/me", (req, res) =>
 app.use(unKnowEndpointHandler);
 app.use(errrorHandler);
 
-export default app;
+export default httpServer;
