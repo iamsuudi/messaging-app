@@ -25,6 +25,7 @@ import { AxiosError } from "axios";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useTheme } from "@/components/theme-provider";
 
 type SigninFormFields = z.infer<typeof signinFormSchema>;
 type SignupFormFields = z.infer<typeof signupFormSchema>;
@@ -33,8 +34,10 @@ export default function Signin() {
 	const navigate = useNavigate();
 	const { setUser, fetchUser, user } = useUserStore((state) => state);
 	const { error, setError, removeError } = userErrorStore((state) => state);
+	const { setTheme } = useTheme();
 
 	useEffect(() => {
+		setTheme("light");
 		const timer = setTimeout(() => {
 			removeError();
 		}, 3000);
@@ -48,7 +51,7 @@ export default function Signin() {
 		}
 
 		return () => clearTimeout(timer);
-	}, [error, user, fetchUser, navigate, removeError]);
+	}, [error, user, fetchUser, navigate, removeError, setTheme]);
 
 	const signinForm = useForm<SigninFormFields>({
 		defaultValues: {

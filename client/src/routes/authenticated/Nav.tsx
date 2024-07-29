@@ -26,7 +26,7 @@ export default function HomeNav() {
 	return (
 		<div className="fixed top-0 z-10 flex items-center w-full px-3 py-2 shadow-sm backdrop-blur-lg">
 			<NavLink
-				to={""}
+				to={"/"}
 				className={
 					"p-1 sm:text-3xl text-xl font-bold flex items-center logo"
 				}

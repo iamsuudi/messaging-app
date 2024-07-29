@@ -4,17 +4,22 @@ import Page3 from "@/components/Page3";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Page4 from "@/components/page4";
 gsap.registerPlugin(ScrollTrigger);
 import Lenis from "lenis";
 import Page5 from "@/components/Page5";
 import Page6 from "@/components/page6";
 import Page7 from "@/components/page7";
+import { useTheme } from "@/components/theme-provider";
 
 function Home() {
 	const pages = useRef(null);
 	const lenis = new Lenis({ smoothWheel: true });
+	const { setTheme } = useTheme();
+	useEffect(() => {
+		setTheme("light");
+	}, [setTheme]);
 
 	useGSAP(
 		() => {

@@ -1,12 +1,15 @@
 import { Outlet } from "react-router-dom";
 import NavBar from "./components/NavBar";
+import { ThemeProvider } from "./components/theme-provider";
 
 function App() {
 	return (
-		<div className="">
-			<NavBar />
-			<Outlet />
-		</div>
+		<ThemeProvider defaultTheme="light">
+			<div className="">
+				<NavBar />
+				<Outlet />
+			</div>
+		</ThemeProvider>
 	);
 }
 
