@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import passport from "passport";
 import session from "express-session";
@@ -13,6 +13,8 @@ import errrorHandler from "./middlewares/errrorHandler";
 import userRouter from "./routers/user";
 import { createServer } from "http";
 import { Server } from "socket.io";
+import chatRouter from "./routers/chat";
+import groupRouter from "./routers/group";
 
 mongoose.set("strictQuery", false);
 
@@ -41,12 +43,13 @@ const io = new Server(httpServer, {
 	cors: { origin: "*" },
 });
 
-io.on("connection", (socket) => {
-	console.log("a user connected");
-});
-
 app.use(express.json());
 app.use(morgan("dev"));
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+	req.io = io;
+	next();
+});
 
 app.use(
 	session({
@@ -65,7 +68,7 @@ app.use(passport.session());
 app.use(passport.authenticate("session"));
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/api", userRouter);
+app.use("/api", userRouter, chatRouter, groupRouter);
 
 app.get("/api/me", (req, res) =>
 	req.user

@@ -14,7 +14,6 @@ export default function HomeIn() {
 	useEffect(() => {
 		if (!user) {
 			fetchUser().catch(() => {
-				navigate("/auth2");
 			});
 		}
 	}, [user, fetchUser, navigate]);

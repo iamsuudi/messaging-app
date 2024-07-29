@@ -30,3 +30,17 @@ export const profileSchema = z.object({
 	bio: z.string().optional(),
 	name: z.string().optional(),
 });
+
+export interface ChatType {
+	id: string;
+	receiver: UserType;
+	messages: MessageType[];
+}
+
+export interface MessageType {
+	id: string;
+	sender: string;
+	content: string;
+	date: Date;
+	seen: boolean;
+}

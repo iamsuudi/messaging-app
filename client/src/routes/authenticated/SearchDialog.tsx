@@ -9,14 +9,15 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { startPersonalChatWithSomeone } from "@/services/chat.api";
 import { searchUsers } from "@/services/user.api";
-import { userErrorStore } from "@/store";
+import { userErrorStore, useUserStore } from "@/store";
 import { UserType } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { AlertCircle, BanIcon, UserSearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface SearchPropType {
 	children: JSX.Element;
@@ -27,9 +28,38 @@ interface UserPropType {
 }
 
 function UserRow({ user }: UserPropType) {
+	const me = useUserStore.getState().user;
+	const { error, setError, removeError } = userErrorStore((state) => state);
+
+	const navigate = useNavigate();
+
+	const { mutateAsync } = useMutation({
+		mutationKey: ["currentChat"],
+		mutationFn: async () => {
+			return await startPersonalChatWithSomeone(user.id);
+		},
+		onSuccess: (data) => {
+			console.log({ data });
+
+			if (me?.id === user.id) navigate(`/home/profile`);
+			else navigate(`/chats/${data}`);
+		},
+		onError: (error) => {
+			setError(error.message ?? "Check your internet connection.");
+		},
+	});
+
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			removeError();
+		}, 3000);
+
+		return () => clearTimeout(timer);
+	}, [error, removeError]);
+
 	return (
-		<Link
-			to={`/chats/${user.id}`}
+		<button
+			onClick={async () => mutateAsync()}
 			className="flex items-center h-16 gap-3 sm:gap-5">
 			<Avatar className="rounded-full size-12">
 				<AvatarImage src="https://github.com/shadcn.png" />
@@ -38,11 +68,11 @@ function UserRow({ user }: UserPropType) {
 				<p className="overflow-hidden font-medium text-md whitespace-nowrap text-ellipsis">
 					{user.name ?? "No Name"}
 				</p>
-				<p className="max-w-full overflow-hidden text-xs font-medium opacity-60 whitespace-nowrap text-ellipsis">
+				<p className="max-w-full overflow-hidden text-xs font-medium text-start opacity-60 whitespace-nowrap text-ellipsis">
 					@{user.username}
 				</p>
 			</div>
-		</Link>
+		</button>
 	);
 }
 
@@ -87,7 +117,7 @@ export default function SearchDrawer({ children }: SearchPropType) {
 									await mutateAsync(target.value);
 								} catch (error) {
 									const e = error as AxiosError;
-									console.log(e.message);
+									// console.log(e.message);
 									setError(
 										e.response?.data.message ??
 											"Check your internet connection."

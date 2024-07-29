@@ -21,7 +21,6 @@ import { logout } from "@/services/user.api";
 import SearchDrawer from "./SearchDialog";
 import { ModeToggle } from "@/components/mode-toggle";
 import { socket } from "@/socket.io";
-import { useTheme } from "@/components/theme-provider";
 
 export default function HomeNav() {
 	return (
@@ -51,14 +50,11 @@ function MenuComponent() {
 		removeUser,
 	}));
 
-	const { setTheme } = useTheme();
-
 	const navigate = useNavigate();
 
 	const logoutHandler = async () => {
 		try {
 			removeUser();
-			setTheme("light");
 			await logout();
 			socket.disconnect();
 			return navigate("/auth2");
