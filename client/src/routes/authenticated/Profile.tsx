@@ -100,6 +100,8 @@ export default function Profile() {
 									<Input
 										placeholder="username@domain.com"
 										type="email"
+										spellCheck="false"
+										className=" dark:bg-white/5"
 										{...field}
 									/>
 								</FormControl>
@@ -117,6 +119,8 @@ export default function Profile() {
 									<Input
 										placeholder="iamsuudi"
 										type="text"
+										spellCheck="false"
+										className=" dark:bg-white/5"
 										{...field}
 									/>
 								</FormControl>
@@ -134,6 +138,8 @@ export default function Profile() {
 									<Input
 										placeholder="Full Name"
 										type="text"
+										spellCheck="false"
+										className=" dark:bg-white/5"
 										{...field}
 									/>
 								</FormControl>
@@ -150,6 +156,8 @@ export default function Profile() {
 								<FormControl>
 									<Textarea
 										placeholder="Your bio"
+										spellCheck="false"
+										className=" dark:bg-white/5"
 										{...field}
 									/>
 								</FormControl>

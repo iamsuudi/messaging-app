@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/menubar";
 import {
 	Settings,
-	User,
 	LogOut,
 	MessageCircleMoreIcon,
 	UsersIcon,
@@ -21,14 +20,14 @@ import { useUserStore } from "@/store";
 import { logout } from "@/services/user.api";
 import SearchDrawer from "./SearchDialog";
 import { ModeToggle } from "@/components/mode-toggle";
+import { socket } from "@/socket.io";
+import { useTheme } from "@/components/theme-provider";
 
 export default function HomeNav() {
-	// const [search, setSearch] = useState("");
-
 	return (
 		<div className="fixed top-0 z-10 flex items-center w-full px-3 py-2 shadow-sm backdrop-blur-lg">
 			<NavLink
-				to={"/"}
+				to={""}
 				className={
 					"p-1 sm:text-3xl text-xl font-bold flex items-center logo"
 				}
@@ -51,12 +50,17 @@ function MenuComponent() {
 		user,
 		removeUser,
 	}));
+
+	const { setTheme } = useTheme();
+
 	const navigate = useNavigate();
 
 	const logoutHandler = async () => {
 		try {
 			removeUser();
+			setTheme("light");
 			await logout();
+			socket.disconnect();
 			return navigate("/auth2");
 		} catch (error) {
 			//
@@ -66,7 +70,7 @@ function MenuComponent() {
 	return (
 		<Menubar className="bg-transparent border-none outline-none">
 			<MenubarMenu>
-				<MenubarTrigger className="bg-none focus:bg-transparent">
+				<MenubarTrigger className="bg-none focus:bg-transparent data-[state=open]:bg-transparent">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
@@ -81,25 +85,28 @@ function MenuComponent() {
 						/>
 					</svg>
 				</MenubarTrigger>
+
 				<MenubarContent className="border-none dark:bg-white/5 backdrop-blur-lg">
-					<MenubarItem>
+					<MenubarItem
+						className="flex items-center gap-2"
+						onClick={() => navigate("/home/profile")}>
 						<Avatar>
 							<AvatarImage src="logo.png" />
 							<AvatarFallback>P</AvatarFallback>
 						</Avatar>
-						{user?.email ?? "not found"}
+						<div className="flex flex-col">
+							<span className="font-bold">
+								{user?.name ?? user?.email}
+							</span>
+							<span className="text-xs opacity-80">
+								@
+								{user?.username ??
+									`${user?.email?.split("@")[0]}`}
+							</span>
+						</div>
 					</MenubarItem>
 
-					<MenubarSeparator className="dark:bg-white" />
-
-					<MenubarItem className="my-1">
-						<NavLink
-							to={"/home/profile"}
-							className={"flex items-center gap-2"}>
-							<User className="size-4" />
-							Profile
-						</NavLink>
-					</MenubarItem>
+					<MenubarSeparator className="opacity-20 dark:bg-white" />
 
 					<MenubarItem className="my-1">
 						<NavLink

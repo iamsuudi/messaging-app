@@ -141,7 +141,7 @@ function Home() {
 
 			/* page 7 animations */
 			gsap.from(".page7", {
-				scale: 0.6,
+				scale: 0.9,
 				yPercent: 10,
 				scrollTrigger: {
 					trigger: ".page7",

@@ -29,7 +29,7 @@ interface UserPropType {
 function UserRow({ user }: UserPropType) {
 	return (
 		<Link
-			to={"/chats/56"}
+			to={`/chats/${user.id}`}
 			className="flex items-center h-16 gap-3 sm:gap-5">
 			<Avatar className="rounded-full size-12">
 				<AvatarImage src="https://github.com/shadcn.png" />
@@ -38,7 +38,7 @@ function UserRow({ user }: UserPropType) {
 				<p className="overflow-hidden font-medium text-md whitespace-nowrap text-ellipsis">
 					{user.name ?? "No Name"}
 				</p>
-				<p className="max-w-full overflow-hidden text-xs font-medium text-gray-800 whitespace-nowrap text-ellipsis">
+				<p className="max-w-full overflow-hidden text-xs font-medium opacity-60 whitespace-nowrap text-ellipsis">
 					@{user.username}
 				</p>
 			</div>
@@ -80,7 +80,7 @@ export default function SearchDrawer({ children }: SearchPropType) {
 						autoCapitalize="false"
 						spellCheck="false"
 						autoFocus
-						className="focus-visible:ring-0 dark:bg-transparent"
+						className=" dark:bg-transparent"
 						onChange={async ({ target }) => {
 							if (target.value.length > 3 && !isPending) {
 								try {
@@ -100,14 +100,30 @@ export default function SearchDrawer({ children }: SearchPropType) {
 					/>
 				</DialogHeader>
 				<div className="flex flex-col gap-2 overflow-scroll h-96 bg-background app dark:bg-transparent">
-					{isPending && (
-						<div className="flex items-center space-x-4">
-							<Skeleton className="w-12 h-12 rounded-full" />
-							<div className="space-y-2">
-								<Skeleton className="h-4 w-[250px]" />
-								<Skeleton className="h-4 w-[200px]" />
+					{isPending && searching && (
+						<>
+							<div className="flex items-center space-x-4">
+								<Skeleton className="w-12 h-12 rounded-full" />
+								<div className="space-y-2">
+									<Skeleton className="h-4 w-[250px]" />
+									<Skeleton className="h-4 w-[200px]" />
+								</div>
 							</div>
-						</div>
+							<div className="flex items-center space-x-4">
+								<Skeleton className="w-12 h-12 rounded-full" />
+								<div className="space-y-2">
+									<Skeleton className="h-4 w-[250px]" />
+									<Skeleton className="h-4 w-[200px]" />
+								</div>
+							</div>
+							<div className="flex items-center space-x-4">
+								<Skeleton className="w-12 h-12 rounded-full" />
+								<div className="space-y-2">
+									<Skeleton className="h-4 w-[250px]" />
+									<Skeleton className="h-4 w-[200px]" />
+								</div>
+							</div>
+						</>
 					)}
 
 					{data &&

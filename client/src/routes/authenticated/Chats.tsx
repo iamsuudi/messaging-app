@@ -19,7 +19,7 @@ function ChatRow() {
 			</div>
 			<div className="flex flex-col items-center gap-1 ml-auto min-w-16">
 				<span className="text-xs opacity-80">2:23 AM</span>
-				<span className="flex items-center justify-center w-5 h-5 text-xs font-medium rounded-full bg-rose-300">
+				<span className="flex items-center justify-center w-5 h-5 text-xs font-medium rounded-full bg-orange-900/60">
 					1
 				</span>
 			</div>

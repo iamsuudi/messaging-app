@@ -41,12 +41,8 @@ export default function Signin() {
 
 		if (!user) {
 			fetchUser()
-				.then(() => {
-					navigate("/home");
-				})
-				.catch(() => {
-					//
-				});
+				.then(() => navigate("/home"))
+				.catch(() => {});
 		} else {
 			navigate("/home");
 		}
@@ -106,10 +102,16 @@ export default function Signin() {
 				</div>
 			)}
 
-			<Tabs defaultValue="signin" className="flex flex-col items-center w-full">
+			<Tabs
+				defaultValue="signin"
+				className="flex flex-col items-center w-full">
 				<TabsList className="flex w-full max-w-96">
-					<TabsTrigger value="signin" className="w-full">Signin</TabsTrigger>
-					<TabsTrigger value="signup" className="w-full">Signup</TabsTrigger>
+					<TabsTrigger value="signin" className="w-full">
+						Signin
+					</TabsTrigger>
+					<TabsTrigger value="signup" className="w-full">
+						Signup
+					</TabsTrigger>
 				</TabsList>
 				<TabsContent value="signin" className="w-full max-w-96">
 					<Form {...signinForm}>

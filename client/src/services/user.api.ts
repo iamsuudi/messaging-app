@@ -1,11 +1,11 @@
 import { z } from "zod";
 import axios from "axios";
-import { formSchema, UserType } from "@/types";
+import { signinFormSchema, signupFormSchema, UserType } from "@/types";
 axios.defaults.withCredentials = true;
 
 const baseURL = "http://localhost:3001/api";
 
-export const signin = async (data: z.infer<typeof formSchema>) => {
+export const signin = async (data: z.infer<typeof signinFormSchema>) => {
 	const response = await axios({
 		method: "post",
 		baseURL,
@@ -15,7 +15,7 @@ export const signin = async (data: z.infer<typeof formSchema>) => {
 	return response.data;
 };
 
-export const signup = async (data: z.infer<typeof formSchema>) => {
+export const signup = async (data: z.infer<typeof signupFormSchema>) => {
 	const response = await axios({
 		method: "post",
 		baseURL,

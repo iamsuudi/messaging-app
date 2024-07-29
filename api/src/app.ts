@@ -29,19 +29,22 @@ mongoose
 
 // socket setup
 const app = express();
-const httpServer = createServer(app);
-const io = new Server(httpServer);
-
-io.on("connection", (socket) => {
-	console.log("a user connected");
-});
-
 app.use(
 	cors({
 		origin: "http://localhost:5173",
 		credentials: true,
 	})
 );
+
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+	cors: { origin: "*" },
+});
+
+io.on("connection", (socket) => {
+	console.log("a user connected");
+});
+
 app.use(express.json());
 app.use(morgan("dev"));
 
