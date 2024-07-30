@@ -6,7 +6,7 @@ import { getPersonalChats } from "@/services/chat.api";
 import { ChatType, MessageType } from "@/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FrownIcon } from "lucide-react";
-import { compareAsc } from "date-fns";
+import { compareAsc, format } from "date-fns";
 
 type ChatPropType = {
 	chat: ChatType;
@@ -40,9 +40,9 @@ function ChatRow({ chat }: ChatPropType) {
 				</p>
 			</div>
 			<div className="flex flex-col items-center gap-1 ml-auto min-w-16">
-				<span className="text-xs opacity-80">2:23 AM</span>
+				<span className="text-xs opacity-80">{format(lastMessage.date ?? new Date(), 'h:m a')}</span>
 				<span className="flex items-center justify-center w-5 h-5 text-xs font-medium rounded-full bg-orange-900/60">
-					1
+					3
 				</span>
 			</div>
 		</Link>
@@ -81,6 +81,7 @@ export default function Chats() {
 					<LoadingSkeleton />
 				</>
 			)}
+			
 			{!isLoading && chats && chats?.length > 0 ? (
 				<div className="flex flex-col py-1 sm:px-5">
 					{chats?.map((chat) => {

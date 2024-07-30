@@ -25,9 +25,10 @@ interface SearchPropType {
 
 interface UserPropType {
 	user: UserType;
+	setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function UserRow({ user }: UserPropType) {
+function UserRow({ user, setOpen }: UserPropType) {
 	const me = useUserStore.getState().user;
 	const { error, setError, removeError } = userErrorStore((state) => state);
 
@@ -36,16 +37,17 @@ function UserRow({ user }: UserPropType) {
 	const { mutateAsync } = useMutation({
 		mutationKey: ["currentChat"],
 		mutationFn: async () => {
-			return await startPersonalChatWithSomeone(user.id);
-		},
-		onSuccess: (data) => {
-			console.log({ data });
-
-			if (me?.id === user.id) navigate(`/home/profile`);
-			else navigate(`/chats/${data}`);
-		},
-		onError: (error) => {
-			setError(error.message ?? "Check your internet connection.");
+			try {
+				const chatId = await startPersonalChatWithSomeone(user.id);
+				if (me?.id === user.id) {
+					setOpen(false);
+					return navigate("/home/profile");
+				}
+				setOpen(false);
+				return navigate(`/chats/${chatId}`);
+			} catch (error) {
+				setError("Check your internet connection.");
+			}
 		},
 	});
 
@@ -77,6 +79,7 @@ function UserRow({ user }: UserPropType) {
 }
 
 export default function SearchDrawer({ children }: SearchPropType) {
+	const [open, setOpen] = useState(false);
 	const { error, setError, removeError } = userErrorStore((state) => state);
 	const [searching, setSearching] = useState(false);
 	const { isPending, data, mutateAsync } = useMutation({
@@ -96,7 +99,7 @@ export default function SearchDrawer({ children }: SearchPropType) {
 	}, [error, removeError]);
 
 	return (
-		<Dialog>
+		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger>{children}</DialogTrigger>
 			<DialogContent className="flex flex-col gap-3 pt-10 bg-opacity-30 max-w-[90%] backdrop-blur-lg dark:bg-black/5 rounded-xl w-96">
 				<DialogHeader>
@@ -160,7 +163,13 @@ export default function SearchDrawer({ children }: SearchPropType) {
 						data.length > 0 &&
 						searching &&
 						data.map((user) => {
-							return <UserRow key={user.id} user={user} />;
+							return (
+								<UserRow
+									key={user.id}
+									user={user}
+									setOpen={setOpen}
+								/>
+							);
 						})}
 
 					{data && data.length === 0 && searching && <NoUserFound />}

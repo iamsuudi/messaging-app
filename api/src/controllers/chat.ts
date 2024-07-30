@@ -3,8 +3,16 @@ import Chat from "../models/chat";
 import Message from "../models/message";
 import { PersonalChatFormatted } from "../types";
 import chatsParser from "../utils/chatsParser";
+import { io } from "../app";
 
 export const getIndividualChats = async (req: Request, res: Response) => {
+	io.on("connection", (socket) => {
+		console.log("a user joined");
+		socket.on("disconnect", () => {
+			console.log("user disconnected");
+		});
+	});
+
 	const myId = req.user?.id as string;
 
 	const chats = await Chat.find({ users: myId });
@@ -24,11 +32,15 @@ export const getIndividualChat = async (
 	req: Request<{ chatId: string }>,
 	res: Response
 ) => {
+	const myId = req.user?.id as string;
+
 	const { chatId } = req.params;
 
-	const chat = await Chat.findById(chatId);
+	const rawChat = await Chat.findById(chatId);
 
-	return res.status(200).json(chat);
+	const parsedChat = rawChat ? await chatsParser(myId, rawChat.toJSON()) : null;
+
+	return res.status(200).json(parsedChat);
 };
 
 export const makeIndividualChat = async (
@@ -43,6 +55,8 @@ export const makeIndividualChat = async (
 		content,
 		date: new Date(),
 	});
+	io.emit("messa");
+	console.log({ newMessage });
 
 	const chat = await Chat.findById(chatId);
 	chat?.messages.push(newMessage._id);
@@ -68,17 +82,17 @@ export const createIndividualChat = async (
 				users: [otherPersonId, req.user?.id],
 			});
 
-			// const {io} = req;
-			// io.on('connection', {
-			// 	console.log('a user joined');
-				
-			// })
+			console.log("new chat created");
 
-			return res.status(201).send(newChat._id.toString());
+			return res.status(201).send(newChat);
 		}
 
-		return res.status(200).send(chat._id.toString());
+		console.log("previous chat returned");
+
+		return res.status(200).send(chat);
 	}
+
+	res.sendStatus(200);
 };
 
 export const deleteMessage = async (req: Request, res: Response) => {};

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ChatType } from "@/types";
+import { ChatType, MessageType } from "@/types";
 axios.defaults.withCredentials = true;
 
 const baseURL = "http://localhost:3001/api";
@@ -34,4 +34,19 @@ export const startPersonalChatWithSomeone = async (
 		},
 	});
 	return response.data.id;
+};
+
+export const sendMessage = async (
+	chatId: string,
+	message: string
+): Promise<MessageType> => {
+	const response = await axios({
+		method: "post",
+		baseURL,
+		url: `/chat/individual/${chatId}`,
+		data: {
+			message,
+		},
+	});
+	return response.data;
 };

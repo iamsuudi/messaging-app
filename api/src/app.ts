@@ -39,8 +39,10 @@ app.use(
 );
 
 const httpServer = createServer(app);
-const io = new Server(httpServer, {
+
+export const io = new Server(httpServer, {
 	cors: { origin: "*" },
+	connectionStateRecovery: {},
 });
 
 app.use(express.json());
