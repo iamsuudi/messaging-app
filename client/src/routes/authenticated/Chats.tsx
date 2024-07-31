@@ -7,6 +7,8 @@ import { ChatType, MessageType } from "@/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FrownIcon } from "lucide-react";
 import { compareAsc, format } from "date-fns";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 
 type ChatPropType = {
 	chat: ChatType;
@@ -25,7 +27,7 @@ function ChatRow({ chat }: ChatPropType) {
 
 	return (
 		<Link
-			to={`/chats/${chat.id}`}
+			to={`/home/chats/${chat.id}`}
 			className="flex items-center h-20 gap-3 p-3 sm:gap-5">
 			<Avatar className="rounded-full size-12">
 				<AvatarImage src="https://github.com/shadcn.png" />
@@ -33,14 +35,16 @@ function ChatRow({ chat }: ChatPropType) {
 			</Avatar>
 			<div className="flex flex-col max-w-[50%]">
 				<p className="font-black tracking-[1px] text-md overflow-hidden whitespace-nowrap text-ellipsis opacity-80">
-					{receiver?.name}
+					{receiver ? receiver.name ?? "No Name Yet" : "Deleted Account"}
 				</p>
 				<p className="max-w-full overflow-hidden text-xs font-bold tracking-tighter opacity-50 whitespace-nowrap text-ellipsis">
-					{lastMessage?.content ?? ""}
+					{lastMessage?.content ?? "No chat history"}
 				</p>
 			</div>
 			<div className="flex flex-col items-center gap-1 ml-auto min-w-16">
-				<span className="text-xs opacity-80">{format(lastMessage.date ?? new Date(), 'h:m a')}</span>
+				<span className="text-xs opacity-80">
+					{format(lastMessage?.date ?? new Date(), "h:m a")}
+				</span>
 				<span className="flex items-center justify-center w-5 h-5 text-xs font-medium rounded-full bg-orange-900/60">
 					3
 				</span>
@@ -50,11 +54,7 @@ function ChatRow({ chat }: ChatPropType) {
 }
 
 export default function Chats() {
-	const {
-		data: chats,
-		isLoading,
-		error,
-	} = useQuery({
+	const { data: chats, isLoading } = useQuery({
 		queryKey: ["chats"],
 		queryFn: async () => {
 			const response = await getPersonalChats();
@@ -64,13 +64,15 @@ export default function Chats() {
 		},
 	});
 
-	if (error) {
-		console.log(error.message);
-		return;
-	}
+	useGSAP(() => {
+		gsap.from("#chatsPage", {
+			opacity: 0.5,
+			duration: 1,
+		});
+	}, {});
 
 	return (
-		<div className="relative flex flex-col h-fit">
+		<div className="relative flex flex-col h-full" id="chatsPage">
 			<HomeSideBar />
 			{isLoading && (
 				<>
@@ -81,7 +83,7 @@ export default function Chats() {
 					<LoadingSkeleton />
 				</>
 			)}
-			
+
 			{!isLoading && chats && chats?.length > 0 ? (
 				<div className="flex flex-col py-1 sm:px-5">
 					{chats?.map((chat) => {

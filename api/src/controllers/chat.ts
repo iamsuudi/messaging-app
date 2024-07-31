@@ -6,14 +6,14 @@ import chatsParser from "../utils/chatsParser";
 import { io } from "../app";
 
 export const getIndividualChats = async (req: Request, res: Response) => {
+	const myId = req.user?.id as string;
+
 	io.on("connection", (socket) => {
-		console.log("a user joined");
+		console.log(`user ${myId} is online`);
 		socket.on("disconnect", () => {
-			console.log("user disconnected");
+			console.log(`user ${myId} is offline`);
 		});
 	});
-
-	const myId = req.user?.id as string;
 
 	const chats = await Chat.find({ users: myId });
 
@@ -38,7 +38,18 @@ export const getIndividualChat = async (
 
 	const rawChat = await Chat.findById(chatId);
 
-	const parsedChat = rawChat ? await chatsParser(myId, rawChat.toJSON()) : null;
+	const parsedChat = rawChat
+		? await chatsParser(myId, rawChat.toJSON())
+		: null;
+
+	io.on("connection", (socket) => {
+		socket.join(chatId);
+		console.log(`${myId} joined the chat ${chatId}`);
+		socket.to(chatId).emit("message", parsedChat);
+		socket.on("disconnect", () => {
+			console.log(`${myId} left the chat ${chatId}`);
+		});
+	});
 
 	return res.status(200).json(parsedChat);
 };
@@ -55,8 +66,6 @@ export const makeIndividualChat = async (
 		content,
 		date: new Date(),
 	});
-	io.emit("messa");
-	console.log({ newMessage });
 
 	const chat = await Chat.findById(chatId);
 	chat?.messages.push(newMessage._id);

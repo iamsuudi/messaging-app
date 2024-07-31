@@ -42,11 +42,11 @@ export default function Router() {
 					path: "groups",
 					element: <Groups />,
 				},
+				{
+					path: "chats/:chatId",
+					element: <PersonalChat />,
+				},
 			],
-		},
-		{
-			path: "/chats/:chatId",
-			element: <PersonalChat />,
 		},
 	]);
 

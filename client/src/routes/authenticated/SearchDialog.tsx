@@ -44,7 +44,7 @@ function UserRow({ user, setOpen }: UserPropType) {
 					return navigate("/home/profile");
 				}
 				setOpen(false);
-				return navigate(`/chats/${chatId}`);
+				return navigate(`/home/chats/${chatId}`);
 			} catch (error) {
 				setError("Check your internet connection.");
 			}

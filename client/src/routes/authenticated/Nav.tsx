@@ -57,7 +57,7 @@ function MenuComponent() {
 			removeUser();
 			await logout();
 			socket.disconnect();
-			return navigate("/auth2");
+			navigate("/auth2");
 		} catch (error) {
 			//
 		}
@@ -82,7 +82,7 @@ function MenuComponent() {
 					</svg>
 				</MenubarTrigger>
 
-				<MenubarContent className="border-none dark:bg-white/5 backdrop-blur-lg">
+				<MenubarContent className="flex flex-col gap-2 p-3 border-none dark:bg-white/5 backdrop-blur-lg">
 					<MenubarItem
 						className="flex items-center gap-2"
 						onClick={() => navigate("/home/profile")}>
@@ -104,7 +104,7 @@ function MenuComponent() {
 
 					<MenubarSeparator className="opacity-20 dark:bg-white" />
 
-					<MenubarItem className="my-1">
+					<MenubarItem className="py-2">
 						<NavLink
 							to={"/home"}
 							className={"flex items-center gap-2"}>
@@ -113,7 +113,7 @@ function MenuComponent() {
 						</NavLink>
 					</MenubarItem>
 
-					<MenubarItem className="my-1">
+					<MenubarItem className="py-2">
 						<NavLink
 							to={"/home/groups"}
 							className={"flex items-center gap-2"}>
@@ -122,13 +122,13 @@ function MenuComponent() {
 						</NavLink>
 					</MenubarItem>
 
-					<MenubarItem className="my-1">
+					<MenubarItem className="py-2">
 						<NavLink to={""} className={"flex items-center gap-2"}>
 							<Settings className="size-4" /> Settings
 						</NavLink>
 					</MenubarItem>
 
-					<MenubarItem className="my-1">
+					<MenubarItem className="py-2">
 						<button
 							onClick={logoutHandler}
 							className={"flex items-center gap-2"}>

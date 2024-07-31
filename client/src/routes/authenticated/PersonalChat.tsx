@@ -1,8 +1,7 @@
-import { ThemeProvider } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getPersonalChat, sendMessage } from "@/services/chat.api";
-// import { socket } from "@/socket.io";
+import { socket } from "@/socket.io";
 import { useUserStore } from "@/store";
 import { MessageType, UserType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
@@ -19,6 +18,16 @@ import {
 
 import { Fragment, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import Chats from "./Chats";
+import {
+	ResizableHandle,
+	ResizablePanel,
+	ResizablePanelGroup,
+} from "@/components/ui/resizable";
+import HomeSideBar from "./SideBar";
 
 type MessagePropType = {
 	msg: MessageType;
@@ -60,18 +69,26 @@ export default function PersonalChat() {
 	const fetchUser = useUserStore.getState().fetchUser;
 	const navigate = useNavigate();
 	const { chatId } = useParams();
-
 	const [message, setMessage] = useState("");
 
 	useEffect(() => {
+		const getMessage = (msg: MessageType) => {
+			console.log({ msg });
+		};
 		if (!user) {
 			fetchUser().catch(() => {
 				navigate("/auth2");
 			});
+		} else {
+			// console.log({ connected });
+			socket.on("message", getMessage);
 		}
+		return () => {
+			socket.off("message", getMessage);
+		};
 	}, [user, fetchUser, navigate]);
 
-	const { data: chat, error } = useQuery({
+	const { data: chat } = useQuery({
 		queryKey: ["chat"],
 		queryFn: async () => {
 			const response = await getPersonalChat(chatId as string);
@@ -90,24 +107,90 @@ export default function PersonalChat() {
 		}
 	};
 
-	if (error) {
-		console.log(error.message);
-		return;
-	}
+	useGSAP(
+		() => {
+			gsap.from("#personalChatPage", {
+				opacity: 0.5,
+				duration: 0.5,
+			});
+		},
+		{ dependencies: [chat, user] }
+	);
 
 	if (chat && user) {
 		return (
-			<ThemeProvider>
-				<div className="relative flex flex-col w-screen h-screen overflow-hidden dark:bg-gradient-to-tr dark:from-[#09203f] dark:to-[#5c323f] bg-background bg-fixed">
+			<ResizablePanelGroup
+				direction="horizontal"
+				className="flex w-full h-full">
+				<ResizablePanel
+					defaultSize={30}
+					className="hidden h-full xl:block">
+					<div>
+						<p className="p-3 text-lg font-bold text-center">
+							Personal Chats
+						</p>
+						<Chats />
+					</div>
+				</ResizablePanel>
+				<ResizableHandle className="hidden hover:cursor-pointer xl:block" />
+				<ResizablePanel
+					defaultSize={70}
+					className="hidden h-full xl:block">
+					<div
+						id="personalChatPage"
+						className="relative h-full flex flex-col  overflow-hidden dark:bg-gradient-to-tr dark:from-[#09203f] dark:to-[#5c323f] bg-background bg-fixed">
+						<nav className="flex items-center justify-between gap-2 px-2 py-3 bg-black/5 dark:bg-white/5 backdrop-blur-sm">
+							<button
+								onClick={() => navigate(-1)}
+								className="xl:invisible">
+								<ChevronLeft />
+							</button>
+							<div className="flex font-bold tracking-wide max-w-[70%] overflow-hidden whitespace-nowrap text-ellipsis">
+								{chat?.receiver.name}
+							</div>
+							<button className="mr-2">
+								<PhoneIcon
+									fill="currentColor"
+									strokeWidth={0}
+								/>
+							</button>
+						</nav>
+
+						<RenderMessages user={user} />
+
+						<div className="flex items-center gap-2 p-2 overflow-hidden h-fit max-h-20 bg-black/5 dark:bg-white/5">
+							<input
+								placeholder="Type your message..."
+								value={message}
+								spellCheck="false"
+								onChange={({ target }) =>
+									setMessage(target.value)
+								}
+								className="w-full p-2 tracking-wider bg-transparent focus:outline-none app"
+							/>
+							<Button
+								type="button"
+								onClick={onSubmit}
+								className="rounded-lg dark:bg-gradient-to-tr dark:from-[#8b5185] dark:to-[#8a3f57] bg-fixed">
+								<SendIcon className="" />
+							</Button>
+						</div>
+					</div>
+				</ResizablePanel>
+				<div
+					id="personalChatPage"
+					className="relative w-full h-full flex flex-col xl:hidden overflow-hidden dark:bg-gradient-to-tr dark:from-[#09203f] dark:to-[#5c323f] bg-background bg-fixed">
 					<nav className="flex items-center justify-between gap-2 px-2 py-3 bg-black/5 dark:bg-white/5 backdrop-blur-sm">
-						<button onClick={() => navigate(-1)}>
+						<button
+							onClick={() => navigate(-1)}
+							className="xl:invisible">
 							<ChevronLeft />
 						</button>
 						<div className="flex font-bold tracking-wide max-w-[70%] overflow-hidden whitespace-nowrap text-ellipsis">
 							{chat?.receiver.name}
 						</div>
 						<button className="mr-2">
-							<PhoneIcon fill="blueblack" strokeWidth={0} />
+							<PhoneIcon fill="currentColor" strokeWidth={0} />
 						</button>
 					</nav>
 
@@ -128,8 +211,10 @@ export default function PersonalChat() {
 							<SendIcon className="" />
 						</Button>
 					</div>
+					
+					<HomeSideBar />
 				</div>
-			</ThemeProvider>
+			</ResizablePanelGroup>
 		);
 	}
 }
