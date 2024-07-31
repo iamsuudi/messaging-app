@@ -4,16 +4,10 @@ import Message from "../models/message";
 import { PersonalChatFormatted } from "../types";
 import chatsParser from "../utils/chatsParser";
 import { io } from "../app";
+import { onlineUsers } from "../socket";
 
 export const getIndividualChats = async (req: Request, res: Response) => {
 	const myId = req.user?.id as string;
-
-	io.on("connection", (socket) => {
-		console.log(`user ${myId} is online`);
-		socket.on("disconnect", () => {
-			console.log(`user ${myId} is offline`);
-		});
-	});
 
 	const chats = await Chat.find({ users: myId });
 
@@ -42,14 +36,9 @@ export const getIndividualChat = async (
 		? await chatsParser(myId, rawChat.toJSON())
 		: null;
 
-	io.on("connection", (socket) => {
-		socket.join(chatId);
-		console.log(`${myId} joined the chat ${chatId}`);
-		socket.to(chatId).emit("message", parsedChat);
-		socket.on("disconnect", () => {
-			console.log(`${myId} left the chat ${chatId}`);
-		});
-	});
+	// joinRoom(chatId);
+	onlineUsers[myId].leave(chatId);
+	onlineUsers[myId].join(chatId);
 
 	return res.status(200).json(parsedChat);
 };
@@ -70,6 +59,8 @@ export const makeIndividualChat = async (
 	const chat = await Chat.findById(chatId);
 	chat?.messages.push(newMessage._id);
 	await chat?.save();
+
+	io.to(chatId).emit("message", newMessage);
 
 	return res.status(200).json(newMessage);
 };

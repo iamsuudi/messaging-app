@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response } from "express";
+import express from "express";
 import cors from "cors";
 import passport from "passport";
 import session from "express-session";
@@ -8,13 +8,16 @@ import morgan from "morgan";
 import { MONGODB_URI, SECRET } from "./utils/config";
 import "express-async-errors";
 import "./middlewares/auth";
+
 import unKnowEndpointHandler from "./middlewares/unKnowEndpoint";
 import errrorHandler from "./middlewares/errrorHandler";
 import userRouter from "./routers/user";
-import { createServer } from "http";
-import { Server } from "socket.io";
 import chatRouter from "./routers/chat";
 import groupRouter from "./routers/group";
+
+import { createServer } from "http";
+import { Server } from "socket.io";
+import { setupSocket } from "./socket";
 
 mongoose.set("strictQuery", false);
 
@@ -31,6 +34,7 @@ mongoose
 
 // socket setup
 const app = express();
+
 app.use(
 	cors({
 		origin: "http://localhost:5173",
@@ -41,17 +45,13 @@ app.use(
 const httpServer = createServer(app);
 
 export const io = new Server(httpServer, {
-	cors: { origin: "*" },
+	cors: { origin: "http://localhost:5173" },
 	connectionStateRecovery: {},
 });
 
 app.use(express.json());
-app.use(morgan("dev"));
 
-app.use((req: Request, res: Response, next: NextFunction) => {
-	req.io = io;
-	next();
-});
+app.use(morgan("dev"));
 
 app.use(
 	session({
@@ -67,18 +67,24 @@ app.use(
 	})
 );
 app.use(passport.session());
+
 app.use(passport.authenticate("session"));
+
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/api", userRouter, chatRouter, groupRouter);
 
-app.get("/api/me", (req, res) =>
-	req.user
-		? res.status(200).json(req.user)
-		: res.status(401).json({ message: "Not authenticated" })
-);
+app.get("/api/me", (req, res) => {
+	if (req.user) {
+		setupSocket(req.user.id);
+		res.status(200).json(req.user);
+	} else {
+		res.status(401).json({ message: "Not authenticated" });
+	}
+});
 
 app.use(unKnowEndpointHandler);
+
 app.use(errrorHandler);
 
 export default httpServer;

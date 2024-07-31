@@ -1,42 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import HomeNav from "./Nav";
 import { useUserStore } from "@/store";
 import { Outlet, useNavigate } from "react-router-dom";
 import { ThemeProvider } from "@/components/theme-provider";
-import { socket } from "@/socket.io";
+import useSocket from "@/socket";
 
 export default function HomeIn() {
 	const user = useUserStore.getState().user;
 	const fetchUser = useUserStore.getState().fetchUser;
 	const navigate = useNavigate();
-	const [connected, setConnected] = useState(false);
-
-	console.log({ connected });
-
-	useEffect(() => {
-		const onConnect = () => {
-			console.log("connected to socket");
-			setConnected(true);
-		};
-		const onDisconnect = () => {
-			console.log("disconnected from socket");
-			setConnected(false);
-		};
-
-		socket.on("connect", onConnect);
-		socket.on("disconnect", onDisconnect);
-
-		return () => {
-			socket.off("connect", onConnect);
-			socket.off("disconnect", onDisconnect);
-		};
-	}, []);
+	const socket = useSocket();
 
 	useEffect(() => {
 		if (!user) {
 			fetchUser().catch(() => {
 				navigate("/auth2");
 			});
+		} else {
+			console.log(socket?.id);
 		}
 		// console.log({ connected });
 	}, [user, fetchUser, navigate]);

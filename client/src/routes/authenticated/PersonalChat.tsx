@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getPersonalChat, sendMessage } from "@/services/chat.api";
-import { socket } from "@/socket.io";
 import { useUserStore } from "@/store";
 import { MessageType, UserType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
@@ -16,7 +15,7 @@ import {
 	SendIcon,
 } from "lucide-react";
 
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import gsap from "gsap";
@@ -28,6 +27,7 @@ import {
 	ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import HomeSideBar from "./SideBar";
+import useSocket from "@/socket";
 
 type MessagePropType = {
 	msg: MessageType;
@@ -72,20 +72,13 @@ export default function PersonalChat() {
 	const [message, setMessage] = useState("");
 
 	useEffect(() => {
-		const getMessage = (msg: MessageType) => {
-			console.log({ msg });
-		};
 		if (!user) {
 			fetchUser().catch(() => {
 				navigate("/auth2");
 			});
 		} else {
-			// console.log({ connected });
-			socket.on("message", getMessage);
+			//
 		}
-		return () => {
-			socket.off("message", getMessage);
-		};
 	}, [user, fetchUser, navigate]);
 
 	const { data: chat } = useQuery({
@@ -156,7 +149,7 @@ export default function PersonalChat() {
 							</button>
 						</nav>
 
-						<RenderMessages user={user} />
+						<Messages user={user} />
 
 						<div className="flex items-center gap-2 p-2 overflow-hidden h-fit max-h-20 bg-black/5 dark:bg-white/5">
 							<input
@@ -194,7 +187,7 @@ export default function PersonalChat() {
 						</button>
 					</nav>
 
-					<RenderMessages user={user} />
+					<Messages user={user} />
 
 					<div className="flex items-center gap-2 p-2 overflow-hidden h-fit max-h-20 bg-black/5 dark:bg-white/5">
 						<input
@@ -211,7 +204,7 @@ export default function PersonalChat() {
 							<SendIcon className="" />
 						</Button>
 					</div>
-					
+
 					<HomeSideBar />
 				</div>
 			</ResizablePanelGroup>
@@ -219,9 +212,12 @@ export default function PersonalChat() {
 	}
 }
 
-function RenderMessages({ user }: UserPropType) {
+function Messages({ user }: UserPropType) {
 	const { chatId } = useParams();
+	const ref = useRef(null);
 	const days: string[] = [];
+	const socket = useSocket();
+	const [messages, setMessages] = useState<MessageType[]>([]);
 
 	const { data: chat, isLoading } = useQuery({
 		queryKey: ["chat"],
@@ -231,46 +227,65 @@ function RenderMessages({ user }: UserPropType) {
 		},
 	});
 
+	useEffect(() => {
+		if (chat) setMessages(chat.messages);
+	}, [chat]);
+
+	useEffect(() => {
+		socket?.on("message", (msg: MessageType) => {
+			console.log({ msg });
+			setMessages(messages.concat(msg));
+		});
+	}, [socket, chat, messages]);
+
 	return (
-		<div className="flex flex-col w-full h-full gap-3 p-3 overflow-scroll app">
+		<div ref={ref} className="flex flex-col w-full h-full gap-3 p-3 overflow-scroll app">
 			{isLoading && <LoadingComponent />}
 
-			{chat?.messages?.map((msg) => {
-				const mine = msg.sender === user?.id;
-
-				const isInThisMonth =
-					differenceInCalendarMonths(msg.date, new Date()) < 1;
-
-				const formattedDate = isInThisMonth
-					? format(msg.date, "MMM d")
-					: format(msg.date, "y MMM d");
-
-				if (days.includes(formattedDate))
-					return mine ? (
-						<MyMessage key={msg.id} msg={msg} />
-					) : (
-						<OthersMessage key={msg.id} msg={msg} />
-					);
-				else {
-					days.push(formattedDate);
-					return (
-						<Fragment key={msg.id}>
-							<p className="my-3 text-sm font-medium text-center">
-								{formattedDate}
-							</p>
-							{mine ? (
-								<MyMessage msg={msg} />
-							) : (
-								<OthersMessage msg={msg} />
-							)}
-						</Fragment>
-					);
-				}
+			{messages.map((msg) => {
+				return (
+					<RenderMessage
+						key={msg.id}
+						days={days}
+						user={user}
+						msg={msg}
+					/>
+				);
 			})}
 
-			{chat?.messages.length === 0 && <NoChatHistoryComponent />}
+			{messages.length === 0 && <NoChatHistoryComponent />}
 		</div>
 	);
+}
+
+type RenderMessageProps = {
+	days: string[];
+	user: UserType;
+	msg: MessageType;
+};
+
+function RenderMessage({ days, user, msg }: RenderMessageProps) {
+	const mine = msg.sender === user?.id;
+
+	const isInThisMonth = differenceInCalendarMonths(msg.date, new Date()) < 1;
+
+	const formattedDate = isInThisMonth
+		? format(msg.date, "MMM d")
+		: format(msg.date, "y MMM d");
+
+	if (days.includes(formattedDate))
+		return mine ? <MyMessage msg={msg} /> : <OthersMessage msg={msg} />;
+	else {
+		days.push(formattedDate);
+		return (
+			<Fragment>
+				<p className="my-3 text-sm font-medium text-center">
+					{formattedDate}
+				</p>
+				{mine ? <MyMessage msg={msg} /> : <OthersMessage msg={msg} />}
+			</Fragment>
+		);
+	}
 }
 
 function LoadingComponent() {

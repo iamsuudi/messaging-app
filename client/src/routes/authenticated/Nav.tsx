@@ -20,7 +20,6 @@ import { useUserStore } from "@/store";
 import { logout } from "@/services/user.api";
 import SearchDrawer from "./SearchDialog";
 import { ModeToggle } from "@/components/mode-toggle";
-import { socket } from "@/socket.io";
 
 export default function HomeNav() {
 	return (
@@ -56,7 +55,6 @@ function MenuComponent() {
 		try {
 			removeUser();
 			await logout();
-			socket.disconnect();
 			navigate("/auth2");
 		} catch (error) {
 			//
