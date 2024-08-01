@@ -12,6 +12,7 @@ export interface MessageFormat {
 	content: string;
 	date: Date;
 	seen: string;
+	chatId: string;
 }
 
 export interface ChatType {

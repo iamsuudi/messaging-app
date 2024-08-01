@@ -51,6 +51,7 @@ export const makeIndividualChat = async (
 		sender,
 		content,
 		date: new Date(),
+		chatId,
 	});
 
 	// attach it to the corresponding chat
@@ -60,6 +61,9 @@ export const makeIndividualChat = async (
 
 	// now send message to the users in the room
 	io.to(chatId).emit("message", newMessage);
+
+	// and to home page to refresh last message shown
+	io.emit("message", newMessage);
 
 	return res.status(200).json(newMessage);
 };

@@ -43,4 +43,5 @@ export interface MessageType {
 	content: string;
 	date: Date;
 	seen: boolean;
+	chatId: string;
 }

@@ -7,8 +7,8 @@ import { ChatType, MessageType } from "@/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FrownIcon } from "lucide-react";
 import { compareAsc, format } from "date-fns";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
+import { useEffect, useState } from "react";
+import { socket } from "@/socket";
 
 type ChatPropType = {
 	chat: ChatType;
@@ -22,8 +22,15 @@ function sortMessages(messages: MessageType[]) {
 
 function ChatRow({ chat }: ChatPropType) {
 	const { receiver } = chat;
-	const lastMessage = sortMessages(chat.messages)[chat.messages.length - 1];
-	// console.log({chat});
+	const [lastMessage, setLastMessage] = useState(
+		sortMessages(chat.messages)[chat.messages.length - 1]
+	);
+	useEffect(() => {
+		// setLastMessage();
+		socket.on("message", (msg: MessageType) => {
+			if (msg.chatId === chat.id) setLastMessage(msg);
+		});
+	}, [chat]);
 
 	return (
 		<Link
@@ -35,7 +42,9 @@ function ChatRow({ chat }: ChatPropType) {
 			</Avatar>
 			<div className="flex flex-col max-w-[50%]">
 				<p className="font-black tracking-[1px] text-md overflow-hidden whitespace-nowrap text-ellipsis opacity-80">
-					{receiver ? receiver.name ?? "No Name Yet" : "Deleted Account"}
+					{receiver
+						? receiver.name ?? "No Name Yet"
+						: "Deleted Account"}
 				</p>
 				<p className="max-w-full overflow-hidden text-xs font-bold tracking-tighter opacity-50 whitespace-nowrap text-ellipsis">
 					{lastMessage?.content ?? "No chat history"}
@@ -63,13 +72,6 @@ export default function Chats() {
 			return response;
 		},
 	});
-
-	useGSAP(() => {
-		gsap.from("#chatsPage", {
-			opacity: 0.5,
-			duration: 1,
-		});
-	}, {});
 
 	return (
 		<div className="relative flex flex-col h-full" id="chatsPage">
