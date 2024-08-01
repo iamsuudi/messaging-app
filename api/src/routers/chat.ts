@@ -7,15 +7,16 @@ import {
 	getIndividualChats,
 	makeIndividualChat,
 } from "../controllers/chat";
+import { authenticated } from "../middlewares/authenticated";
 
 const chatRouter = express.Router();
 
-chatRouter.post("/chat/individual", createIndividualChat);
-chatRouter.post("/chat/individual/:chatId", makeIndividualChat);
-chatRouter.get("/chat/individual/:chatId", getIndividualChat);
-chatRouter.get("/chat/individual", getIndividualChats);
-chatRouter.put("/chat/individual/:chatId", getIndividualChats);
-chatRouter.delete("/chat/individual/:chatId", deleteIndividualChat);
-chatRouter.delete("/chat/individual/:chatId/message", deleteMessage);
+chatRouter.post("/chat/individual", authenticated, createIndividualChat);
+chatRouter.post("/chat/individual/:chatId", authenticated, makeIndividualChat);
+chatRouter.get("/chat/individual/:chatId", authenticated, getIndividualChat);
+chatRouter.get("/chat/individual", authenticated, getIndividualChats);
+chatRouter.put("/chat/individual/:chatId", authenticated, getIndividualChats);
+chatRouter.delete("/chat/individual/:chatId", authenticated, deleteIndividualChat);
+chatRouter.delete("/chat/individual/:chatId/message", authenticated, deleteMessage);
 
 export default chatRouter;

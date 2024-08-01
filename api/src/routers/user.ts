@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import passport from "passport";
 import { register, searchUsers, updateProfile } from "../controllers/user";
+import { authenticated } from "../middlewares/authenticated";
 // import { setupSocket } from "../socket";
 
 const userRouter = express.Router();
@@ -33,8 +34,8 @@ userRouter.post("/auth/logout", async (req: Request, res: Response) => {
 	});
 });
 
-userRouter.post("/updateMe", updateProfile);
+userRouter.post("/updateMe", authenticated, updateProfile);
 
-userRouter.get("/searchUsers/:query", searchUsers);
+userRouter.get("/searchUsers/:query", authenticated, searchUsers);
 
 export default userRouter;
