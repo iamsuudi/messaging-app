@@ -4,10 +4,11 @@ import { ChatType, MessageFormat, PersonalChatFormatted } from "../types";
 
 export default async function chatsParser(
 	myId: string,
-	chat: ChatType
+	chat: ChatType,
+	reverse = false
 ): Promise<PersonalChatFormatted> {
-	const receiverId = chat.users.find(
-		(chatter) => chatter.toString() !== myId
+	const receiverId = chat.users.find((chatter) =>
+		reverse ? chatter.toString() === myId : chatter.toString() !== myId
 	);
 
 	const receiverData = await User.findById(receiverId);

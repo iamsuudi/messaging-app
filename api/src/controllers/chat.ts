@@ -63,7 +63,7 @@ export const makeIndividualChat = async (
 	io.to(chatId).emit("message", newMessage);
 
 	// and to home page to refresh last message shown
-	io.emit("message", newMessage);
+	io.emit("lastMessage", newMessage);
 
 	return res.status(200).json(newMessage);
 };
@@ -75,7 +75,7 @@ export const createIndividualChat = async (
 	res: Response
 ) => {
 	const { otherPersonId } = req.body;
-	const myId = req.user?.id;
+	const myId = req.user?.id as string;
 
 	if (myId !== otherPersonId) {
 		const chat = await Chat.findOne({ users: [otherPersonId, myId] });
@@ -84,6 +84,8 @@ export const createIndividualChat = async (
 			const newChat = await Chat.create({
 				users: [otherPersonId, req.user?.id],
 			});
+
+			io.emit("newChat", await chatsParser(myId, newChat.toJSON(), true));
 
 			return res.status(201).send(newChat);
 		}

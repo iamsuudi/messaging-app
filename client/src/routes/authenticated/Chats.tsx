@@ -27,7 +27,7 @@ function ChatRow({ chat }: ChatPropType) {
 	);
 	useEffect(() => {
 		// setLastMessage();
-		socket.on("message", (msg: MessageType) => {
+		socket.on("lastMessage", (msg: MessageType) => {
 			if (msg.chatId === chat.id) setLastMessage(msg);
 		});
 	}, [chat]);
@@ -63,15 +63,24 @@ function ChatRow({ chat }: ChatPropType) {
 }
 
 export default function Chats() {
-	const { data: chats, isLoading } = useQuery({
+	const [chats, setChats] = useState<ChatType[]>([]);
+	const { data, isLoading } = useQuery({
 		queryKey: ["chats"],
 		queryFn: async () => {
 			const response = await getPersonalChats();
-			console.log({ response });
-
 			return response;
 		},
 	});
+
+	useEffect(() => {
+		if (data) setChats(data);
+	}, [data]);
+
+	useEffect(() => {
+		socket.on("newChat", (newChat: ChatType) => {
+			setChats(chats.concat(newChat));
+		});
+	}, [chats]);
 
 	return (
 		<div className="relative flex flex-col h-full" id="chatsPage">
