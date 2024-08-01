@@ -3,13 +3,13 @@ import HomeNav from "./Nav";
 import { useUserStore } from "@/store";
 import { Outlet, useNavigate } from "react-router-dom";
 import { ThemeProvider } from "@/components/theme-provider";
-import useSocket from "@/socket";
+import { socket } from "@/socket";
 
 export default function HomeIn() {
 	const user = useUserStore.getState().user;
 	const fetchUser = useUserStore.getState().fetchUser;
 	const navigate = useNavigate();
-	const socket = useSocket();
+	console.log(socket?.id);
 
 	useEffect(() => {
 		if (!user) {
@@ -17,9 +17,8 @@ export default function HomeIn() {
 				navigate("/auth2");
 			});
 		} else {
-			console.log(socket?.id);
+			//
 		}
-		// console.log({ connected });
 	}, [user, fetchUser, navigate]);
 
 	return (

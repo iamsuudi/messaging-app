@@ -4,7 +4,6 @@ import Message from "../models/message";
 import { PersonalChatFormatted } from "../types";
 import chatsParser from "../utils/chatsParser";
 import { io } from "../app";
-import { onlineUsers } from "../socket";
 
 export const getIndividualChats = async (req: Request, res: Response) => {
 	const myId = req.user?.id as string;
@@ -36,10 +35,6 @@ export const getIndividualChat = async (
 		? await chatsParser(myId, rawChat.toJSON())
 		: null;
 
-	// joinRoom(chatId);
-	onlineUsers[myId].leave(chatId);
-	onlineUsers[myId].join(chatId);
-
 	return res.status(200).json(parsedChat);
 };
 
@@ -50,16 +45,20 @@ export const makeIndividualChat = async (
 	const sender = req.user?.id;
 	const { message: content } = req.body;
 	const { chatId } = req.params;
+
+	// create message
 	const newMessage = await Message.create({
 		sender,
 		content,
 		date: new Date(),
 	});
 
+	// attach it to the corresponding chat
 	const chat = await Chat.findById(chatId);
 	chat?.messages.push(newMessage._id);
 	await chat?.save();
 
+	// now send message to the users in the room
 	io.to(chatId).emit("message", newMessage);
 
 	return res.status(200).json(newMessage);
@@ -82,12 +81,8 @@ export const createIndividualChat = async (
 				users: [otherPersonId, req.user?.id],
 			});
 
-			console.log("new chat created");
-
 			return res.status(201).send(newChat);
 		}
-
-		console.log("previous chat returned");
 
 		return res.status(200).send(chat);
 	}

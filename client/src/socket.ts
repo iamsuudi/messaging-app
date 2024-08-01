@@ -6,13 +6,15 @@ const options = {
 	retries: 3,
 };
 
+export const socket: Socket = io(url, options);
+
 const useSocket = (): Socket | undefined => {
 	const socketRef = useRef<Socket>();
 
-	useEffect(() => {
-		// Connect to the server
-		socketRef.current = io(url, options);
+	// Connect to the server
+	socketRef.current = socket;
 
+	useEffect(() => {
 		return () => {
 			// Clean up the socket connection on component unmount
 			if (socketRef.current) {

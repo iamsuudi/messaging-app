@@ -18,8 +18,6 @@ import {
 import { Fragment, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 import Chats from "./Chats";
 import {
 	ResizableHandle,
@@ -27,7 +25,7 @@ import {
 	ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import HomeSideBar from "./SideBar";
-import useSocket from "@/socket";
+import { socket } from "@/socket";
 
 type MessagePropType = {
 	msg: MessageType;
@@ -71,6 +69,8 @@ export default function PersonalChat() {
 	const { chatId } = useParams();
 	const [message, setMessage] = useState("");
 
+	console.log(socket?.id);
+
 	useEffect(() => {
 		if (!user) {
 			fetchUser().catch(() => {
@@ -79,7 +79,8 @@ export default function PersonalChat() {
 		} else {
 			//
 		}
-	}, [user, fetchUser, navigate]);
+		socket.emit("joinChat", chatId);
+	}, [user, fetchUser, navigate, chatId]);
 
 	const { data: chat } = useQuery({
 		queryKey: ["chat"],
@@ -92,23 +93,12 @@ export default function PersonalChat() {
 
 	const onSubmit = async () => {
 		try {
-			const response = await sendMessage(chatId as string, message);
-			console.log({ response });
+			await sendMessage(chatId as string, message);
 			setMessage("");
 		} catch (error) {
 			console.log("error occurred");
 		}
 	};
-
-	useGSAP(
-		() => {
-			gsap.from("#personalChatPage", {
-				opacity: 0.5,
-				duration: 0.5,
-			});
-		},
-		{ dependencies: [chat, user] }
-	);
 
 	if (chat && user) {
 		return (
@@ -214,9 +204,8 @@ export default function PersonalChat() {
 
 function Messages({ user }: UserPropType) {
 	const { chatId } = useParams();
-	const ref = useRef(null);
+	const ref = useRef<HTMLDivElement>(null);
 	const days: string[] = [];
-	const socket = useSocket();
 	const [messages, setMessages] = useState<MessageType[]>([]);
 
 	const { data: chat, isLoading } = useQuery({
@@ -236,10 +225,13 @@ function Messages({ user }: UserPropType) {
 			console.log({ msg });
 			setMessages(messages.concat(msg));
 		});
-	}, [socket, chat, messages]);
+		if (ref.current) ref.current.scrollTop = ref.current.scrollHeight;
+	}, [chat, messages]);
 
 	return (
-		<div ref={ref} className="flex flex-col w-full h-full gap-3 p-3 overflow-scroll app">
+		<div
+			ref={ref}
+			className="flex flex-col w-full h-full gap-3 p-3 overflow-scroll app">
 			{isLoading && <LoadingComponent />}
 
 			{messages.map((msg) => {

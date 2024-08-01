@@ -49,6 +49,8 @@ export const io = new Server(httpServer, {
 	connectionStateRecovery: {},
 });
 
+setupSocket("someone");
+
 app.use(express.json());
 
 app.use(morgan("dev"));
@@ -76,7 +78,6 @@ app.use("/api", userRouter, chatRouter, groupRouter);
 
 app.get("/api/me", (req, res) => {
 	if (req.user) {
-		setupSocket(req.user.id);
 		res.status(200).json(req.user);
 	} else {
 		res.status(401).json({ message: "Not authenticated" });
