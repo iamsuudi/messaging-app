@@ -40,7 +40,6 @@ function ChatRow({ chat }: ChatPropType) {
 	);
 
 	useEffect(() => {
-		// const decreaseSeen = (msg: MessageType) => {};
 		const addUnSeen = (msg: MessageType) => {
 			if (chat.id === msg.chatId && user?.id !== msg.sender)
 				setUnSeen(unSeen + 1);
@@ -50,8 +49,7 @@ function ChatRow({ chat }: ChatPropType) {
 		};
 		socket.on("addUnSeen", addUnSeen);
 		socket.on("lastMessage", changeLastSeen);
-		// socket.on("lastMessage", changeLastSeen);
-		
+
 		return () => {
 			socket.off("addUnSeen", addUnSeen);
 			socket.off("lastMessage", changeLastSeen);
@@ -119,8 +117,9 @@ export default function Chats() {
 	}, [chats]);
 
 	return (
-		<div className="relative flex flex-col h-full" id="chatsPage">
+		<div className="flex flex-col h-full" id="chatsPage">
 			<HomeSideBar />
+			
 			{isLoading && (
 				<>
 					<LoadingSkeleton />

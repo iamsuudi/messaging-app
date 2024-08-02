@@ -30,7 +30,7 @@ function GroupRow() {
 
 export default function Groups() {
 	return (
-		<div className="relative flex flex-col h-fit">
+		<div className="relative flex flex-col h-full">
 			<HomeSideBar />
 			<div className="flex flex-col py-1 sm:px-5 app">
 				<GroupRow />

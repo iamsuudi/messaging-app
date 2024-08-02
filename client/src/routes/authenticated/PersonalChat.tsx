@@ -15,7 +15,7 @@ import {
 	SendIcon,
 } from "lucide-react";
 
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import Chats from "./Chats";
@@ -82,14 +82,10 @@ function Messages({ user }: UserPropType) {
 
 	useEffect(() => {
 		const thereIsUnseenMessage = (msg: MessageType) => {
-			console.log("a msg is unseen");
-
 			socket.emit("unSeen", msg);
 		};
 
 		const handleIncomingMessage = (msg: MessageType) => {
-			console.log("message coming");
-
 			if (user.id !== msg.sender) {
 				seeMessage(chatId as string, msg.id).catch(() => {});
 				msg.seen = true;
@@ -194,10 +190,8 @@ export default function PersonalChat() {
 				{window.innerWidth > 1280 ? (
 					<ResizablePanelGroup
 						direction="horizontal"
-						className="flex w-full h-full">
-						<ResizablePanel
-							defaultSize={30}
-							className="h-full ">
+						className="flex w-full h-full bg-rose-900/5">
+						<ResizablePanel defaultSize={30} className="h-full ">
 							<div>
 								<p className="p-3 text-lg font-bold text-center">
 									Personal Chats
@@ -208,7 +202,7 @@ export default function PersonalChat() {
 						<ResizableHandle className="hover:cursor-grab" />
 						<ResizablePanel
 							defaultSize={70}
-							className="h-full ">
+							className="h-full bg-yellow-300">
 							<div
 								id="personalChatPage"
 								className="relative h-full flex flex-col  overflow-hidden dark:bg-gradient-to-tr dark:from-[#09203f] dark:to-[#5c323f] bg-background bg-fixed">
@@ -274,15 +268,19 @@ type InputComponentProps = {
 
 function InputComponent({ chatId }: InputComponentProps) {
 	const [message, setMessage] = useState("");
+	const ref = useRef<HTMLInputElement>(null);
 
-	const onSubmit = async () => {
+	const onSubmit = useCallback(async () => {
 		try {
+			console.log({ message });
+
 			await sendMessage(chatId as string, message);
 			setMessage("");
+			if (ref.current) ref.current.focus();
 		} catch (error) {
 			console.log("error occurred");
 		}
-	};
+	}, [chatId, message]);
 
 	return (
 		<div className="flex items-center gap-2 p-2 overflow-hidden h-fit max-h-20 bg-black/5 dark:bg-white/5">
@@ -290,6 +288,8 @@ function InputComponent({ chatId }: InputComponentProps) {
 				placeholder="Type your message..."
 				value={message}
 				spellCheck="false"
+				ref={ref}
+				id="messageInputField"
 				onChange={({ target }) => setMessage(target.value)}
 				className="w-full p-2 tracking-wider bg-transparent focus:outline-none app"
 			/>

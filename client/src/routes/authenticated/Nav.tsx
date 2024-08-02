@@ -23,7 +23,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 
 export default function HomeNav() {
 	return (
-		<div className="fixed top-0 z-10 flex items-center w-full px-3 py-2 shadow-sm backdrop-blur-lg">
+		<div className="fixed top-0 z-10 flex items-center w-full px-3 py-2 shadow-sm backdrop-blur-lg h-[60px]">
 			<NavLink
 				to={"/"}
 				className={
@@ -82,7 +82,7 @@ function MenuComponent() {
 
 				<MenubarContent className="flex flex-col gap-2 p-3 border-none dark:bg-white/5 backdrop-blur-lg">
 					<MenubarItem
-						className="flex items-center gap-2"
+						className="flex items-center gap-2 hover:cursor-pointer"
 						onClick={() => navigate("/home/profile")}>
 						<Avatar>
 							<AvatarImage src="logo.png" />
@@ -102,34 +102,34 @@ function MenuComponent() {
 
 					<MenubarSeparator className="opacity-20 dark:bg-white" />
 
-					<MenubarItem className="py-2">
-						<NavLink
-							to={"/home"}
-							className={"flex items-center gap-2"}>
+					<MenubarItem className="">
+						<button
+							onClick={() => navigate("/home")}
+							className={"flex items-center gap-2 w-full py-1"}>
 							<MessageCircleMoreIcon className="size-4" />
 							Chats
-						</NavLink>
+						</button>
 					</MenubarItem>
 
-					<MenubarItem className="py-2">
-						<NavLink
-							to={"/home/groups"}
-							className={"flex items-center gap-2"}>
+					<MenubarItem className="">
+						<button
+							onClick={() => navigate("/home/groups")}
+							className={"flex items-center gap-2 w-full py-1"}>
 							<UsersIcon className="size-4" />
 							Groups
-						</NavLink>
+						</button>
 					</MenubarItem>
 
-					<MenubarItem className="py-2">
-						<NavLink to={""} className={"flex items-center gap-2"}>
+					<MenubarItem className="">
+						<button onClick={() => navigate("")} className={"flex items-center gap-2 w-full py-1"}>
 							<Settings className="size-4" /> Settings
-						</NavLink>
+						</button>
 					</MenubarItem>
 
-					<MenubarItem className="py-2">
+					<MenubarItem className="">
 						<button
 							onClick={logoutHandler}
-							className={"flex items-center gap-2"}>
+							className={"flex items-center gap-2 w-full py-1"}>
 							<LogOut className="size-4" /> Log out
 						</button>
 					</MenubarItem>
