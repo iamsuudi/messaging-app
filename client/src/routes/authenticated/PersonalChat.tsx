@@ -82,8 +82,8 @@ function Messages({ user }: UserPropType) {
 
 	useEffect(() => {
 		const thereIsUnseenMessage = (msg: MessageType) => {
-			console.log('a msg is unseen');
-			
+			console.log("a msg is unseen");
+
 			socket.emit("unSeen", msg);
 		};
 
@@ -166,8 +166,6 @@ export default function PersonalChat() {
 	const navigate = useNavigate();
 	const { chatId } = useParams();
 
-	// console.log(socket?.id);
-
 	useEffect(() => {
 		console.log("mounted");
 
@@ -192,29 +190,58 @@ export default function PersonalChat() {
 
 	if (chat && user) {
 		return (
-			<ResizablePanelGroup
-				direction="horizontal"
-				className="flex w-full h-full">
-				<ResizablePanel
-					defaultSize={30}
-					className="hidden h-full xl:block">
-					<div>
-						<p className="p-3 text-lg font-bold text-center">
-							Personal Chats
-						</p>
-						<Chats />
-					</div>
-				</ResizablePanel>
-				<ResizableHandle className="hidden hover:cursor-pointer xl:block" />
-				<ResizablePanel
-					defaultSize={70}
-					className="hidden h-full xl:block">
+			<>
+				{window.innerWidth > 1280 ? (
+					<ResizablePanelGroup
+						direction="horizontal"
+						className="flex w-full h-full">
+						<ResizablePanel
+							defaultSize={30}
+							className="h-full ">
+							<div>
+								<p className="p-3 text-lg font-bold text-center">
+									Personal Chats
+								</p>
+								<Chats />
+							</div>
+						</ResizablePanel>
+						<ResizableHandle className="hover:cursor-grab" />
+						<ResizablePanel
+							defaultSize={70}
+							className="h-full ">
+							<div
+								id="personalChatPage"
+								className="relative h-full flex flex-col  overflow-hidden dark:bg-gradient-to-tr dark:from-[#09203f] dark:to-[#5c323f] bg-background bg-fixed">
+								<nav className="flex items-center justify-between gap-2 px-2 py-3 bg-black/5 dark:bg-white/5 backdrop-blur-sm">
+									<button
+										onClick={() => navigate("/home")}
+										className="xl:invisible">
+										<ChevronLeft />
+									</button>
+									<div className="flex font-bold tracking-wide max-w-[70%] overflow-hidden whitespace-nowrap text-ellipsis">
+										{chat?.receiver.name}
+									</div>
+									<button className="mr-2">
+										<PhoneIcon
+											fill="currentColor"
+											strokeWidth={0}
+										/>
+									</button>
+								</nav>
+
+								<Messages user={user} />
+
+								<InputComponent chatId={chatId as string} />
+							</div>
+						</ResizablePanel>
+					</ResizablePanelGroup>
+				) : (
 					<div
 						id="personalChatPage"
-						className="relative h-full flex flex-col  overflow-hidden dark:bg-gradient-to-tr dark:from-[#09203f] dark:to-[#5c323f] bg-background bg-fixed">
+						className="relative w-full h-full flex flex-col xl:hidden overflow-hidden dark:bg-gradient-to-tr dark:from-[#09203f] dark:to-[#5c323f] bg-background bg-fixed">
 						<nav className="flex items-center justify-between gap-2 px-2 py-3 bg-black/5 dark:bg-white/5 backdrop-blur-sm">
 							<button
-								onClick={() => navigate("/home")}
+								onClick={() => navigate(-1)}
 								className="xl:invisible">
 								<ChevronLeft />
 							</button>
@@ -232,32 +259,11 @@ export default function PersonalChat() {
 						<Messages user={user} />
 
 						<InputComponent chatId={chatId as string} />
+
+						<HomeSideBar />
 					</div>
-				</ResizablePanel>
-				<div
-					id="personalChatPage"
-					className="relative w-full h-full flex flex-col xl:hidden overflow-hidden dark:bg-gradient-to-tr dark:from-[#09203f] dark:to-[#5c323f] bg-background bg-fixed">
-					<nav className="flex items-center justify-between gap-2 px-2 py-3 bg-black/5 dark:bg-white/5 backdrop-blur-sm">
-						<button
-							onClick={() => navigate(-1)}
-							className="xl:invisible">
-							<ChevronLeft />
-						</button>
-						<div className="flex font-bold tracking-wide max-w-[70%] overflow-hidden whitespace-nowrap text-ellipsis">
-							{chat?.receiver.name}
-						</div>
-						<button className="mr-2">
-							<PhoneIcon fill="currentColor" strokeWidth={0} />
-						</button>
-					</nav>
-
-					<Messages user={user} />
-
-					<InputComponent chatId={chatId as string} />
-
-					<HomeSideBar />
-				</div>
-			</ResizablePanelGroup>
+				)}
+			</>
 		);
 	}
 }

@@ -19,7 +19,7 @@ export default function HomeIn() {
 			});
 		} else {
 			queryClient.invalidateQueries({ queryKey: ["chats"] });
-			navigate("/home/chats");
+			// navigate("/home/chats");
 		}
 		socket.emit("leaveChat");
 	}, [user, fetchUser, navigate, queryClient]);
