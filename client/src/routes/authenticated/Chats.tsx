@@ -35,15 +35,28 @@ function ChatRow({ chat }: ChatPropType) {
 	const [lastMessage, setLastMessage] = useState(
 		sortMessages(chat.messages)[chat.messages.length - 1]
 	);
-	const [unSeen, setUnseen] = useState<number>(
+	const [unSeen, setUnSeen] = useState<number>(
 		calculateUnSeenMessages(user as UserType, chat.messages)
 	);
 
 	useEffect(() => {
-		socket.on("lastMessage", (msg: MessageType) => {
+		// const decreaseSeen = (msg: MessageType) => {};
+		const addUnSeen = (msg: MessageType) => {
+			if (chat.id === msg.chatId && user?.id !== msg.sender)
+				setUnSeen(unSeen + 1);
+		};
+		const changeLastSeen = (msg: MessageType) => {
 			if (msg.chatId === chat.id) setLastMessage(msg);
-		});
-	}, [chat]);
+		};
+		socket.on("addUnSeen", addUnSeen);
+		socket.on("lastMessage", changeLastSeen);
+		// socket.on("lastMessage", changeLastSeen);
+		
+		return () => {
+			socket.off("addUnSeen", addUnSeen);
+			socket.off("lastMessage", changeLastSeen);
+		};
+	}, [chat, unSeen, user]);
 
 	return (
 		<Link
@@ -87,6 +100,7 @@ export default function Chats() {
 			const response = await getPersonalChats();
 			return response;
 		},
+		refetchOnMount: true,
 	});
 
 	useEffect(() => {
@@ -94,9 +108,14 @@ export default function Chats() {
 	}, [data]);
 
 	useEffect(() => {
-		socket.on("newChat", (newChat: ChatType) => {
+		const addChat = (newChat: ChatType) => {
 			setChats(chats.concat(newChat));
-		});
+		};
+		socket.on("newChat", addChat);
+
+		return () => {
+			socket.off("newChat", addChat);
+		};
 	}, [chats]);
 
 	return (

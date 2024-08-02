@@ -31,7 +31,7 @@ export default function Router() {
 			element: <HomeIn />,
 			children: [
 				{
-					index: true,
+					path: 'chats',
 					element: <Chats />,
 				},
 				{

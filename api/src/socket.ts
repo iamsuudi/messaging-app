@@ -20,16 +20,16 @@ export const setupSocket = (myId: string) => {
 
 		});
 
-		io.on("leaveChat", (chatId: string) => {
+		socket.on("leaveChat", (chatId: string) => {
 			socket.leave(chatId);
 			socket.rooms.clear();
 			console.log(`socket ${socket.id} leaved chat ${chatId}`);
 		});
 
-		io.on("unSeen", (msg: MessageFormat) => {
+		socket.on("unSeen", (msg: MessageFormat) => {
 			console.log("message unseen");
 
-			socket.emit("addUnSeen", msg);
+			io.emit("addUnSeen", msg);
 		});
 
 		socket.on("disconnect", () => {

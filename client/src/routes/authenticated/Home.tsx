@@ -4,12 +4,13 @@ import { useUserStore } from "@/store";
 import { Outlet, useNavigate } from "react-router-dom";
 import { ThemeProvider } from "@/components/theme-provider";
 import { socket } from "@/socket";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function HomeIn() {
 	const user = useUserStore.getState().user;
 	const fetchUser = useUserStore.getState().fetchUser;
 	const navigate = useNavigate();
-	console.log(socket?.id);
+	const queryClient = useQueryClient();
 
 	useEffect(() => {
 		if (!user) {
@@ -17,10 +18,11 @@ export default function HomeIn() {
 				navigate("/auth2");
 			});
 		} else {
-			//
+			queryClient.invalidateQueries({ queryKey: ["chats"] });
+			navigate("/home/chats");
 		}
 		socket.emit("leaveChat");
-	}, [user, fetchUser, navigate]);
+	}, [user, fetchUser, navigate, queryClient]);
 
 	return (
 		<ThemeProvider defaultTheme="dark" storageKey="dalochat-ui-theme">

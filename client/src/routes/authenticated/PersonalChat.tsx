@@ -82,6 +82,8 @@ function Messages({ user }: UserPropType) {
 
 	useEffect(() => {
 		const thereIsUnseenMessage = (msg: MessageType) => {
+			console.log('a msg is unseen');
+			
 			socket.emit("unSeen", msg);
 		};
 
