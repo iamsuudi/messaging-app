@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import HomeSideBar from "./SideBar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getPersonalChats } from "@/services/chat.api";
 import { ChatType, MessageType, UserType } from "@/types";
@@ -61,7 +61,13 @@ function ChatRow({ chat }: ChatPropType) {
 			to={`/home/chats/${chat.id}`}
 			className="flex items-center h-20 gap-3 p-3 sm:gap-5">
 			<Avatar className="rounded-full size-12">
-				<AvatarImage src={receiver?.picture ? `http://localhost:3001/${receiver.picture}` : "https://github.com/shadcn.png"} />
+				<AvatarImage
+					src={
+						receiver?.picture
+							? `http://localhost:3001/${receiver.picture}`
+							: "https://github.com/shadcn.png"
+					}
+				/>
 				<AvatarFallback></AvatarFallback>
 			</Avatar>
 			<div className="flex flex-col max-w-[50%]">
@@ -91,6 +97,10 @@ function ChatRow({ chat }: ChatPropType) {
 }
 
 export default function Chats() {
+	const user = useUserStore.getState().user;
+	const fetchUser = useUserStore.getState().fetchUser;
+	const navigate = useNavigate();
+
 	const [chats, setChats] = useState<ChatType[]>([]);
 	const { data, isLoading } = useQuery({
 		queryKey: ["chats"],
@@ -99,6 +109,7 @@ export default function Chats() {
 			return response;
 		},
 		refetchOnMount: true,
+		refetchOnWindowFocus: true,
 	});
 
 	useEffect(() => {
@@ -106,20 +117,27 @@ export default function Chats() {
 	}, [data]);
 
 	useEffect(() => {
+		if (!user) {
+			fetchUser().catch(() => {
+				navigate("/auth2");
+			});
+		}
+		
 		const addChat = (newChat: ChatType) => {
 			setChats(chats.concat(newChat));
 		};
+		
 		socket.on("newChat", addChat);
 
 		return () => {
 			socket.off("newChat", addChat);
 		};
-	}, [chats]);
+	}, [chats, fetchUser, user, navigate]);
 
 	return (
 		<div className="flex flex-col h-full" id="chatsPage">
 			<HomeSideBar />
-			
+
 			{isLoading && (
 				<>
 					<LoadingSkeleton />
@@ -135,9 +153,9 @@ export default function Chats() {
 					{chats?.map((chat) => {
 						return <ChatRow key={chat.id} chat={chat} />;
 					})}
-				</div> 
-			) }
-			
+				</div>
+			)}
+
 			{!isLoading && chats && chats.length === 0 && (
 				<div className="flex flex-col items-center justify-center w-full h-full gap-2 py-10 opacity-50">
 					<FrownIcon className="size-24" strokeWidth={0.5} />

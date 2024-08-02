@@ -163,8 +163,6 @@ export default function PersonalChat() {
 	const { chatId } = useParams();
 
 	useEffect(() => {
-		console.log("mounted");
-
 		if (!user) {
 			fetchUser().catch(() => {
 				navigate("/auth2");
@@ -235,7 +233,7 @@ export default function PersonalChat() {
 						className="relative w-full h-full flex flex-col xl:hidden overflow-hidden dark:bg-gradient-to-tr dark:from-[#09203f] dark:to-[#5c323f] bg-background bg-fixed">
 						<nav className="flex items-center justify-between gap-2 px-2 py-3 bg-black/5 dark:bg-white/5 backdrop-blur-sm">
 							<button
-								onClick={() => navigate(-1)}
+								onClick={() => navigate("/home")}
 								className="xl:invisible">
 								<ChevronLeft />
 							</button>
@@ -272,8 +270,6 @@ function InputComponent({ chatId }: InputComponentProps) {
 
 	const onSubmit = useCallback(async () => {
 		try {
-			console.log({ message });
-
 			await sendMessage(chatId as string, message);
 			setMessage("");
 			if (ref.current) ref.current.focus();

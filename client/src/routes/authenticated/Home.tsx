@@ -3,7 +3,6 @@ import HomeNav from "./Nav";
 import { useUserStore } from "@/store";
 import { Outlet, useNavigate } from "react-router-dom";
 import { ThemeProvider } from "@/components/theme-provider";
-import { socket } from "@/socket";
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function HomeIn() {
@@ -19,9 +18,7 @@ export default function HomeIn() {
 			});
 		} else {
 			queryClient.invalidateQueries({ queryKey: ["chats"] });
-			// navigate("/home/chats");
 		}
-		socket.emit("leaveChat");
 	}, [user, fetchUser, navigate, queryClient]);
 
 	return (
