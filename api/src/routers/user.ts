@@ -2,6 +2,9 @@ import express, { Request, Response } from "express";
 import passport from "passport";
 import { register, searchUsers, updateProfile } from "../controllers/user";
 import { authenticated } from "../middlewares/authenticated";
+import { upload } from "../middlewares/profileUpload";
+import path from "path";
+import User from "../models/user";
 // import { setupSocket } from "../socket";
 
 const userRouter = express.Router();
@@ -35,6 +38,25 @@ userRouter.post("/auth/logout", async (req: Request, res: Response) => {
 });
 
 userRouter.post("/updateMe", authenticated, updateProfile);
+
+userRouter.post(
+	"/updateMe/pic",
+	authenticated,
+	upload,
+	async (req: Request, res: Response) => {
+		console.log(req.file);
+
+		const fileExtension = path.extname(req.file?.originalname as string);
+		const user = await User.findByIdAndUpdate(
+			req.user?.id,
+			{
+				picture: `${req.user?.id}${fileExtension}`,
+			},
+			{ new: true }
+		);
+		res.status(201).json(user);
+	}
+);
 
 userRouter.get("/searchUsers/:query", authenticated, searchUsers);
 

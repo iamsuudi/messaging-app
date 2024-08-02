@@ -3,6 +3,7 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import {
 	Dialog,
 	DialogContent,
+	DialogDescription,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
@@ -64,7 +65,7 @@ function UserRow({ user, setOpen }: UserPropType) {
 			onClick={async () => mutateAsync()}
 			className="flex items-center h-16 gap-3 sm:gap-5">
 			<Avatar className="rounded-full size-12">
-				<AvatarImage src="https://github.com/shadcn.png" />
+				<AvatarImage src={user?.picture ? `http://localhost:3001/${user.picture}` : "https://github.com/shadcn.png"} />
 			</Avatar>
 			<div className="flex flex-col gap-0">
 				<p className="overflow-hidden font-medium text-md whitespace-nowrap text-ellipsis">
@@ -100,6 +101,7 @@ export default function SearchDrawer({ children }: SearchPropType) {
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
+			<DialogDescription></DialogDescription>
 			<DialogTrigger>{children}</DialogTrigger>
 			<DialogContent className="flex flex-col gap-3 pt-10 max-w-[90%] dark:bg-white/5 rounded-xl w-96 border-none">
 				<DialogHeader>

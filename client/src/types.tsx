@@ -22,6 +22,7 @@ export interface UserType {
 	username?: string;
 	bio?: string;
 	name?: string;
+	picture?: string;
 }
 
 export const profileSchema = z.object({

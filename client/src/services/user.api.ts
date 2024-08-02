@@ -53,6 +53,16 @@ export const updateProfile = async (data: UserType): Promise<UserType> => {
 	return response.data;
 };
 
+export const updateProfilePic = async (data: FormData): Promise<UserType> => {
+	const response = await axios({
+		method: "post",
+		baseURL,
+		url: "/updateMe/pic",
+		data,
+	});
+	return response.data;
+};
+
 export const searchUsers = async (query: string): Promise<UserType[]> => {
 	const response = await axios({
 		method: "get",

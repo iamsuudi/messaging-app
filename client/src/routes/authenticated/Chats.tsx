@@ -61,7 +61,7 @@ function ChatRow({ chat }: ChatPropType) {
 			to={`/home/chats/${chat.id}`}
 			className="flex items-center h-20 gap-3 p-3 sm:gap-5">
 			<Avatar className="rounded-full size-12">
-				<AvatarImage src="https://github.com/shadcn.png" />
+				<AvatarImage src={receiver?.picture ? `http://localhost:3001/${receiver.picture}` : "https://github.com/shadcn.png"} />
 				<AvatarFallback></AvatarFallback>
 			</Avatar>
 			<div className="flex flex-col max-w-[50%]">
@@ -130,13 +130,15 @@ export default function Chats() {
 				</>
 			)}
 
-			{!isLoading && chats && chats?.length > 0 ? (
+			{!isLoading && chats && chats.length > 0 && (
 				<div className="flex flex-col py-1 sm:px-5">
 					{chats?.map((chat) => {
 						return <ChatRow key={chat.id} chat={chat} />;
 					})}
-				</div>
-			) : (
+				</div> 
+			) }
+			
+			{!isLoading && chats && chats.length === 0 && (
 				<div className="flex flex-col items-center justify-center w-full h-full gap-2 py-10 opacity-50">
 					<FrownIcon className="size-24" strokeWidth={0.5} />
 					<p className="text-lg font-medium">No Chat History</p>
@@ -148,7 +150,7 @@ export default function Chats() {
 
 function LoadingSkeleton() {
 	return (
-		<div className="flex items-center w-full p-2 pr-5 space-x-4">
+		<div className="flex items-center w-full p-2 pr-5 my-2 space-x-4">
 			<Skeleton className="rounded-full min-h-14 min-w-14" />
 			<div className="w-full space-y-2">
 				<Skeleton className="w-full h-5" />

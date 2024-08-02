@@ -85,7 +85,7 @@ function MenuComponent() {
 						className="flex items-center gap-2 hover:cursor-pointer"
 						onClick={() => navigate("/home/profile")}>
 						<Avatar>
-							<AvatarImage src="logo.png" />
+							<AvatarImage src={user?.picture ? `http://localhost:3001/${user.picture}` : "https://github.com/shadcn.png"} />
 							<AvatarFallback>P</AvatarFallback>
 						</Avatar>
 						<div className="flex flex-col">
