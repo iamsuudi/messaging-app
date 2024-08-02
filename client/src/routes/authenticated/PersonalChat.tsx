@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getPersonalChat, sendMessage } from "@/services/chat.api";
+import { getPersonalChat, seeMessage, sendMessage } from "@/services/chat.api";
 import { useUserStore } from "@/store";
 import { MessageType, UserType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
@@ -40,7 +40,7 @@ function MyMessage({ msg }: MessagePropType) {
 		<div className="flex flex-wrap gap-2 items-start p-2 ml-auto bg-pink-200 dark:bg-rose-900/40 rounded-2xl rounded-br-none w-fit max-w-[70%]">
 			<span className="px-2 tracking-wider">{msg.content}</span>
 			<span className="flex items-end justify-between mt-auto ml-auto text-xs min-w-20">
-				{format(msg.date, "h:m a")}{" "}
+				{format(msg.date, "hh:mm a")}{" "}
 				{msg.seen ? (
 					<CheckCheckIcon className="opacity-80 size-4" />
 				) : (
@@ -56,8 +56,104 @@ function OthersMessage({ msg }: MessagePropType) {
 		<div className="flex flex-wrap gap-2 justify-between items-start p-2 mr-auto bg-gray-200 dark:bg-black/20 rounded-2xl rounded-bl-none w-fit max-w-[70%]">
 			<span className="px-2 tracking-wider">{msg.content}</span>
 			<span className="flex items-end justify-between mt-auto ml-auto text-xs min-w-14">
-				{format(msg.date, "h:m a")}
+				{format(msg.date, "hh:mm a")}
 			</span>
+		</div>
+	);
+}
+
+function Messages({ user }: UserPropType) {
+	const { chatId } = useParams();
+	const ref = useRef<HTMLDivElement>(null);
+	const days: string[] = [];
+	const [messages, setMessages] = useState<MessageType[]>([]);
+
+	const { data: chat, isLoading } = useQuery({
+		queryKey: ["chat"],
+		queryFn: async () => {
+			const response = await getPersonalChat(chatId as string);
+			return response;
+		},
+	});
+
+	useEffect(() => {
+		if (chat) setMessages(chat.messages);
+	}, [chat]);
+
+	useEffect(() => {
+		const thereIsUnseenMessage = (msg: MessageType) => {
+			socket.emit("unSeen", msg);
+		};
+
+		const handleIncomingMessage = (msg: MessageType) => {
+			console.log("message coming");
+
+			if (user.id !== msg.sender) {
+				seeMessage(chatId as string, msg.id).catch(() => {});
+				msg.seen = true;
+			} else {
+				thereIsUnseenMessage(msg);
+			}
+			setMessages(messages.concat(msg));
+		};
+
+		const messagesAreSeen = () => {
+			setMessages(
+				messages.map((message) => {
+					if (message.sender === user.id && !message.seen) {
+						message.seen = true;
+						return message;
+					}
+					return message;
+				})
+			);
+		};
+
+		const AMessageSeen = (messageId: string) => {
+			setMessages(
+				messages.map((msg) => {
+					if (msg.id === messageId) {
+						msg.seen = true;
+						return msg;
+					}
+					return msg;
+				})
+			);
+		};
+
+		socket?.on("message", handleIncomingMessage);
+
+		socket?.on("messagesAreSeen", messagesAreSeen);
+
+		socket?.on("AMessageSeen", AMessageSeen);
+
+		if (ref.current) ref.current.scrollTop = ref.current.scrollHeight;
+
+		return () => {
+			socket.off("message", handleIncomingMessage);
+			socket.off("messagesAreSeen", messagesAreSeen);
+			socket.off("AMessageSeen", AMessageSeen);
+		};
+	}, [chat, messages, user.id, chatId]);
+
+	return (
+		<div
+			ref={ref}
+			className="flex flex-col w-full h-full gap-3 p-3 overflow-scroll app">
+			{isLoading && <LoadingComponent />}
+
+			{messages.map((msg) => {
+				return (
+					<RenderMessage
+						key={msg.id}
+						days={days}
+						user={user}
+						msg={msg}
+					/>
+				);
+			})}
+
+			{messages.length === 0 && <NoChatHistoryComponent />}
 		</div>
 	);
 }
@@ -67,11 +163,12 @@ export default function PersonalChat() {
 	const fetchUser = useUserStore.getState().fetchUser;
 	const navigate = useNavigate();
 	const { chatId } = useParams();
-	const [message, setMessage] = useState("");
 
-	console.log(socket?.id);
+	// console.log(socket?.id);
 
 	useEffect(() => {
+		console.log("mounted");
+
 		if (!user) {
 			fetchUser().catch(() => {
 				navigate("/auth2");
@@ -90,15 +187,6 @@ export default function PersonalChat() {
 			return response;
 		},
 	});
-
-	const onSubmit = async () => {
-		try {
-			await sendMessage(chatId as string, message);
-			setMessage("");
-		} catch (error) {
-			console.log("error occurred");
-		}
-	};
 
 	if (chat && user) {
 		return (
@@ -124,7 +212,7 @@ export default function PersonalChat() {
 						className="relative h-full flex flex-col  overflow-hidden dark:bg-gradient-to-tr dark:from-[#09203f] dark:to-[#5c323f] bg-background bg-fixed">
 						<nav className="flex items-center justify-between gap-2 px-2 py-3 bg-black/5 dark:bg-white/5 backdrop-blur-sm">
 							<button
-								onClick={() => navigate(-1)}
+								onClick={() => navigate("/home")}
 								className="xl:invisible">
 								<ChevronLeft />
 							</button>
@@ -141,23 +229,7 @@ export default function PersonalChat() {
 
 						<Messages user={user} />
 
-						<div className="flex items-center gap-2 p-2 overflow-hidden h-fit max-h-20 bg-black/5 dark:bg-white/5">
-							<input
-								placeholder="Type your message..."
-								value={message}
-								spellCheck="false"
-								onChange={({ target }) =>
-									setMessage(target.value)
-								}
-								className="w-full p-2 tracking-wider bg-transparent focus:outline-none app"
-							/>
-							<Button
-								type="button"
-								onClick={onSubmit}
-								className="rounded-lg dark:bg-gradient-to-tr dark:from-[#8b5185] dark:to-[#8a3f57] bg-fixed">
-								<SendIcon className="" />
-							</Button>
-						</div>
+						<InputComponent chatId={chatId as string} />
 					</div>
 				</ResizablePanel>
 				<div
@@ -179,21 +251,7 @@ export default function PersonalChat() {
 
 					<Messages user={user} />
 
-					<div className="flex items-center gap-2 p-2 overflow-hidden h-fit max-h-20 bg-black/5 dark:bg-white/5">
-						<input
-							placeholder="Type your message..."
-							value={message}
-							spellCheck="false"
-							onChange={({ target }) => setMessage(target.value)}
-							className="w-full p-2 tracking-wider bg-transparent focus:outline-none app"
-						/>
-						<Button
-							type="button"
-							onClick={onSubmit}
-							className="rounded-lg dark:bg-gradient-to-tr dark:from-[#8b5185] dark:to-[#8a3f57] bg-fixed">
-							<SendIcon className="" />
-						</Button>
-					</div>
+					<InputComponent chatId={chatId as string} />
 
 					<HomeSideBar />
 				</div>
@@ -202,50 +260,37 @@ export default function PersonalChat() {
 	}
 }
 
-function Messages({ user }: UserPropType) {
-	const { chatId } = useParams();
-	const ref = useRef<HTMLDivElement>(null);
-	const days: string[] = [];
-	const [messages, setMessages] = useState<MessageType[]>([]);
+type InputComponentProps = {
+	chatId: string;
+};
 
-	const { data: chat, isLoading } = useQuery({
-		queryKey: ["chat"],
-		queryFn: async () => {
-			const response = await getPersonalChat(chatId as string);
-			return response;
-		},
-	});
+function InputComponent({ chatId }: InputComponentProps) {
+	const [message, setMessage] = useState("");
 
-	useEffect(() => {
-		if (chat) setMessages(chat.messages);
-	}, [chat]);
-
-	useEffect(() => {
-		socket?.on("message", (msg: MessageType) => {
-			console.log({ msg });
-			setMessages(messages.concat(msg));
-		});
-		if (ref.current) ref.current.scrollTop = ref.current.scrollHeight;
-	}, [chat, messages]);
+	const onSubmit = async () => {
+		try {
+			await sendMessage(chatId as string, message);
+			setMessage("");
+		} catch (error) {
+			console.log("error occurred");
+		}
+	};
 
 	return (
-		<div
-			ref={ref}
-			className="flex flex-col w-full h-full gap-3 p-3 overflow-scroll app">
-			{isLoading && <LoadingComponent />}
-
-			{messages.map((msg) => {
-				return (
-					<RenderMessage
-						key={msg.id}
-						days={days}
-						user={user}
-						msg={msg}
-					/>
-				);
-			})}
-
-			{messages.length === 0 && <NoChatHistoryComponent />}
+		<div className="flex items-center gap-2 p-2 overflow-hidden h-fit max-h-20 bg-black/5 dark:bg-white/5">
+			<input
+				placeholder="Type your message..."
+				value={message}
+				spellCheck="false"
+				onChange={({ target }) => setMessage(target.value)}
+				className="w-full p-2 tracking-wider bg-transparent focus:outline-none app"
+			/>
+			<Button
+				type="button"
+				onClick={onSubmit}
+				className="rounded-lg dark:bg-gradient-to-tr dark:from-[#8b5185] dark:to-[#8a3f57] bg-fixed">
+				<SendIcon className="" />
+			</Button>
 		</div>
 	);
 }

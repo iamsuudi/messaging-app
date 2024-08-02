@@ -3,7 +3,7 @@ import { io, Socket } from "socket.io-client";
 
 const url = "http://localhost:3001";
 const options = {
-	retries: 3,
+	// retries: 3,
 };
 
 export const socket: Socket = io(url, options);

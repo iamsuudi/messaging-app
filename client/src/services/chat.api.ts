@@ -50,3 +50,33 @@ export const sendMessage = async (
 	});
 	return response.data;
 };
+
+export const seeMessage = async (
+	chatId: string,
+	messageId: string
+): Promise<MessageType> => {
+	const response = await axios({
+		method: "post",
+		baseURL,
+		url: `/chat/individual/${chatId}/see`,
+		data: {
+			messageId,
+		},
+	});
+	return response.data;
+};
+
+export const unSeenMessage = async (
+	chatId: string,
+	sender: string
+): Promise<MessageType> => {
+	const response = await axios({
+		method: "post",
+		baseURL,
+		url: `/chat/individual/${chatId}/unseen`,
+		data: {
+			sender,
+		},
+	});
+	return response.data;
+};

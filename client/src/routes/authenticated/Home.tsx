@@ -19,6 +19,7 @@ export default function HomeIn() {
 		} else {
 			//
 		}
+		socket.emit("leaveChat");
 	}, [user, fetchUser, navigate]);
 
 	return (

@@ -32,8 +32,11 @@ export const getIndividualChat = async (
 	const rawChat = await Chat.findById(chatId);
 
 	const parsedChat = rawChat
-		? await chatsParser(myId, rawChat.toJSON())
+		? await chatsParser(myId, rawChat.toJSON(), false, true)
 		: null;
+
+	// inform the other chat member that all messages are now seen
+	io.to(chatId).emit("messagesAreSeen");
 
 	return res.status(200).json(parsedChat);
 };
@@ -97,3 +100,18 @@ export const createIndividualChat = async (
 };
 
 export const deleteMessage = async (req: Request, res: Response) => {};
+
+export const seeMessage = async (
+	req: Request<{ chatId: string }, {}, { messageId: string }>,
+	res: Response
+) => {
+	const { chatId } = req.params;
+	const { messageId } = req.body;
+
+	// inform the other chat member that message is seen
+	io.to(chatId).emit("AMessageSeen", messageId);
+
+	await Message.findByIdAndUpdate(messageId, { seen: true });
+
+	res.sendStatus(200);
+};

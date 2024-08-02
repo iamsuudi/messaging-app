@@ -1,5 +1,6 @@
 import { Socket } from "socket.io";
 import { io } from "./app";
+import { MessageFormat } from "./types";
 
 export const onlineUsers: { [key: string]: Socket } = {};
 
@@ -16,6 +17,19 @@ export const setupSocket = (myId: string) => {
 		socket.on("joinChat", (chatId: string, hello: string) => {
 			socket.join(chatId);
 			console.log(`socket ${socket.id} joined chat ${chatId}`);
+
+		});
+
+		io.on("leaveChat", (chatId: string) => {
+			socket.leave(chatId);
+			socket.rooms.clear();
+			console.log(`socket ${socket.id} leaved chat ${chatId}`);
+		});
+
+		io.on("unSeen", (msg: MessageFormat) => {
+			console.log("message unseen");
+
+			socket.emit("addUnSeen", msg);
 		});
 
 		socket.on("disconnect", () => {

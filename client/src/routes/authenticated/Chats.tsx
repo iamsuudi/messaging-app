@@ -3,12 +3,13 @@ import HomeSideBar from "./SideBar";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getPersonalChats } from "@/services/chat.api";
-import { ChatType, MessageType } from "@/types";
+import { ChatType, MessageType, UserType } from "@/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FrownIcon } from "lucide-react";
 import { compareAsc, format } from "date-fns";
 import { useEffect, useState } from "react";
 import { socket } from "@/socket";
+import { useUserStore } from "@/store";
 
 type ChatPropType = {
 	chat: ChatType;
@@ -20,13 +21,25 @@ function sortMessages(messages: MessageType[]) {
 	return sorted;
 }
 
+function calculateUnSeenMessages(user: UserType, messages: MessageType[]) {
+	let sum = 0;
+	for (const msg of messages) {
+		if (msg.sender !== user.id && !msg.seen) sum++;
+	}
+	return sum;
+}
+
 function ChatRow({ chat }: ChatPropType) {
+	const user = useUserStore.getState().user;
 	const { receiver } = chat;
 	const [lastMessage, setLastMessage] = useState(
 		sortMessages(chat.messages)[chat.messages.length - 1]
 	);
+	const [unSeen, setUnseen] = useState<number>(
+		calculateUnSeenMessages(user as UserType, chat.messages)
+	);
+
 	useEffect(() => {
-		// setLastMessage();
 		socket.on("lastMessage", (msg: MessageType) => {
 			if (msg.chatId === chat.id) setLastMessage(msg);
 		});
@@ -51,12 +64,16 @@ function ChatRow({ chat }: ChatPropType) {
 				</p>
 			</div>
 			<div className="flex flex-col items-center gap-1 ml-auto min-w-16">
-				<span className="text-xs opacity-80">
-					{format(lastMessage?.date ?? new Date(), "h:m a")}
-				</span>
-				<span className="flex items-center justify-center w-5 h-5 text-xs font-medium rounded-full bg-orange-900/60">
-					3
-				</span>
+				{lastMessage?.date && (
+					<span className="text-xs opacity-80">
+						{format(lastMessage.date, "h:m a")}
+					</span>
+				)}
+				{unSeen !== 0 && (
+					<span className="flex items-center justify-center w-5 h-5 text-xs font-medium rounded-full bg-orange-900/60">
+						{unSeen}
+					</span>
+				)}
 			</div>
 		</Link>
 	);
