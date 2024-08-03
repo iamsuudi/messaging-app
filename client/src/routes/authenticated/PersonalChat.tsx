@@ -15,7 +15,25 @@ import {
 	SendIcon,
 } from "lucide-react";
 
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import {
+	Drawer,
+	DrawerClose,
+	DrawerContent,
+	DrawerDescription,
+	DrawerFooter,
+	DrawerHeader,
+	DrawerTitle,
+	DrawerTrigger,
+} from "@/components/ui/drawer";
+
+import {
+	Fragment,
+	ReactNode,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import Chats from "./Chats";
@@ -26,6 +44,7 @@ import {
 } from "@/components/ui/resizable";
 import HomeSideBar from "./SideBar";
 import { socket } from "@/socket";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 type MessagePropType = {
 	msg: MessageType;
@@ -185,11 +204,11 @@ export default function PersonalChat() {
 	if (chat && user) {
 		return (
 			<>
-				{window.innerWidth > 1280 ? (
+				<div className="hidden w-full h-full xl:block">
 					<ResizablePanelGroup
 						direction="horizontal"
 						className="flex w-full h-full bg-rose-900/5">
-						<ResizablePanel defaultSize={30} className="h-full ">
+						<ResizablePanel defaultSize={25} className="h-full">
 							<div>
 								<p className="p-3 text-lg font-bold text-center">
 									Personal Chats
@@ -198,12 +217,10 @@ export default function PersonalChat() {
 							</div>
 						</ResizablePanel>
 						<ResizableHandle className="hover:cursor-grab" />
-						<ResizablePanel
-							defaultSize={70}
-							className="h-full bg-yellow-300">
+						<ResizablePanel defaultSize={50} className="h-full">
 							<div
 								id="personalChatPage"
-								className="relative h-full flex flex-col  overflow-hidden dark:bg-gradient-to-tr dark:from-[#09203f] dark:to-[#5c323f] bg-background bg-fixed">
+								className="relative h-full flex flex-col overflow-hidden dark:bg-gradient-to-tr dark:from-[#09203f] dark:to-[#5c323f] bg-background bg-fixed">
 								<nav className="flex items-center justify-between gap-2 px-2 py-3 bg-black/5 dark:bg-white/5 backdrop-blur-sm">
 									<button
 										onClick={() => navigate("/home")}
@@ -226,35 +243,67 @@ export default function PersonalChat() {
 								<InputComponent chatId={chatId as string} />
 							</div>
 						</ResizablePanel>
+						<ResizableHandle className="hover:cursor-grab" />
+						<ResizablePanel
+							defaultSize={25}
+							className="h-full">
+							<div className="relative flex h-full gap-5 p-5 shadow">
+								<div className="flex flex-col items-center gap-2">
+									<Avatar className="rounded-full size-32">
+										<AvatarImage
+											src={
+												chat.receiver?.picture
+													? `http://localhost:3001/${chat.receiver.picture}`
+													: "https://github.com/shadcn.png"
+											}
+										/>
+									</Avatar>
+									<span className="text-sm opacity-70">
+										@{chat.receiver.username}
+									</span>
+								</div>
+								<div className="flex flex-col items-start gap-1 p-2">
+									<span className="font-bold">
+										{chat.receiver.name}
+									</span>
+									<span className="mb-3 text-xs">
+										{chat.receiver.email}
+									</span>
+									<span className="text-sm">
+										{
+											"GET https://registry.npmjs.org/busboy error (ECONNRESET). Will retry in 10 seconds. 2 retries left."
+										}
+									</span>
+								</div>
+							</div>
+						</ResizablePanel>
 					</ResizablePanelGroup>
-				) : (
-					<div
-						id="personalChatPage"
-						className="relative w-full h-full flex flex-col xl:hidden overflow-hidden dark:bg-gradient-to-tr dark:from-[#09203f] dark:to-[#5c323f] bg-background bg-fixed">
-						<nav className="flex items-center justify-between gap-2 px-2 py-3 bg-black/5 dark:bg-white/5 backdrop-blur-sm">
-							<button
-								onClick={() => navigate("/home")}
-								className="xl:invisible">
-								<ChevronLeft />
-							</button>
-							<div className="flex font-bold tracking-wide max-w-[70%] overflow-hidden whitespace-nowrap text-ellipsis">
+				</div>
+				<div
+					id="personalChatPage"
+					className="relative w-full h-full flex flex-col xl:hidden overflow-hidden dark:bg-gradient-to-tr dark:from-[#09203f] dark:to-[#5c323f] bg-background bg-fixed">
+					<nav className="flex items-center justify-between gap-2 px-2 py-3 bg-black/5 dark:bg-white/5 backdrop-blur-sm">
+						<button
+							onClick={() => navigate("/home")}
+							className="xl:invisible">
+							<ChevronLeft />
+						</button>
+						<ReceiverComponent user={chat.receiver}>
+							<div className="flex overflow-hidden font-bold tracking-wide whitespace-nowrap text-ellipsis">
 								{chat?.receiver.name}
 							</div>
-							<button className="mr-2">
-								<PhoneIcon
-									fill="currentColor"
-									strokeWidth={0}
-								/>
-							</button>
-						</nav>
+						</ReceiverComponent>
+						<button className="mr-2">
+							<PhoneIcon fill="currentColor" strokeWidth={0} />
+						</button>
+					</nav>
 
-						<Messages user={user} />
+					<Messages user={user} />
 
-						<InputComponent chatId={chatId as string} />
+					<InputComponent chatId={chatId as string} />
 
-						<HomeSideBar />
-					</div>
-				)}
+					<HomeSideBar />
+				</div>
 			</>
 		);
 	}
@@ -346,5 +395,48 @@ function NoChatHistoryComponent() {
 			<MessageCircle className="size-24" strokeWidth={0.5} />
 			<p className="text-lg font-medium">No Chat History</p>
 		</div>
+	);
+}
+
+type ReceiverComponentProps = {
+	children: ReactNode;
+	user: UserType;
+};
+
+function ReceiverComponent({ children, user }: ReceiverComponentProps) {
+	return (
+		<Drawer>
+			<DrawerTrigger>{children}</DrawerTrigger>
+			<DrawerContent className="p-5 bg-white dark:bg-black/5 backdrop-blur-sm">
+				<DrawerHeader>
+					<DrawerTitle className="flex gap-5 mb-5">
+						<div className="flex flex-col">
+							<Avatar className="rounded-full size-20">
+								<AvatarImage
+									src={
+										user?.picture
+											? `http://localhost:3001/${user.picture}`
+											: "https://github.com/shadcn.png"
+									}
+								/>
+							</Avatar>
+							<span className="text-sm opacity-70">
+								@{user.username}
+							</span>
+						</div>
+						<div className="flex flex-col items-start gap-2 p-2">
+							<span className="">{user.name}</span>
+							<span className="text-xs">{user.email}</span>
+						</div>
+					</DrawerTitle>
+					<DrawerDescription>{user.bio}</DrawerDescription>
+				</DrawerHeader>
+				<DrawerFooter>
+					<DrawerClose>
+						<Button variant="outline">Cancel</Button>
+					</DrawerClose>
+				</DrawerFooter>
+			</DrawerContent>
+		</Drawer>
 	);
 }
