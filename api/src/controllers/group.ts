@@ -82,6 +82,8 @@ export const createGroupChat = async (
 
 	const parsedGroup = group ? await groupParser(group?.toJSON()) : null;
 
+	io.emit("newGroup", parsedGroup);
+
 	return res.status(201).json(parsedGroup);
 };
 

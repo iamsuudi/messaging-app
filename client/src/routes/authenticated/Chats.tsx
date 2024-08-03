@@ -97,10 +97,6 @@ function ChatRow({ chat }: ChatPropType) {
 }
 
 export function Chats() {
-	const user = useUserStore.getState().user;
-	const fetchUser = useUserStore.getState().fetchUser;
-	const navigate = useNavigate();
-
 	const [chats, setChats] = useState<ChatType[]>([]);
 	const { data, isLoading } = useQuery({
 		queryKey: ["chats"],
@@ -115,12 +111,6 @@ export function Chats() {
 	}, [data]);
 
 	useEffect(() => {
-		if (!user) {
-			fetchUser().catch(() => {
-				navigate("/auth2");
-			});
-		}
-
 		const addChat = (newChat: ChatType) => {
 			setChats(chats.concat(newChat));
 		};
@@ -130,7 +120,7 @@ export function Chats() {
 		return () => {
 			socket.off("newChat", addChat);
 		};
-	}, [chats, fetchUser, user, navigate]);
+	}, [chats]);
 
 	return (
 		<div className="flex flex-col h-full" id="chatsPage">
@@ -163,6 +153,17 @@ export function Chats() {
 }
 
 export default function ChatsPage() {
+	const { user, fetchUser } = useUserStore();
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (!user) {
+			fetchUser().catch(() => {
+				navigate("/auth2");
+			});
+		}
+	}, [user, fetchUser, navigate]);
+
 	return (
 		<div className="h-full pb-14 sm:pl-20 sm:pb-1">
 			<Chats />
