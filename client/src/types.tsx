@@ -38,9 +38,27 @@ export interface ChatType {
 	messages: MessageType[];
 }
 
+export interface GroupType {
+	id: string;
+	name: string;
+	picture: string;
+	owner: UserType;
+	users: UserType[];
+	messages: GroupMessageType[];
+}
+
 export interface MessageType {
 	id: string;
 	sender: string;
+	content: string;
+	date: Date;
+	seen: boolean;
+	chatId: string;
+}
+
+export interface GroupMessageType {
+	id: string;
+	sender: UserType;
 	content: string;
 	date: Date;
 	seen: boolean;

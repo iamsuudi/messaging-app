@@ -36,7 +36,7 @@ import {
 } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import Chats from "./Chats";
+import { Chats } from "./Chats";
 import {
 	ResizableHandle,
 	ResizablePanel,
@@ -204,7 +204,7 @@ export default function PersonalChat() {
 	if (chat && user) {
 		return (
 			<>
-				<div className="hidden w-full h-full xl:block">
+				<div className="hidden w-full h-full xl:block pb-14 sm:pl-20 sm:pb-0">
 					<ResizablePanelGroup
 						direction="horizontal"
 						className="flex w-full h-full bg-rose-900/5">
@@ -224,7 +224,7 @@ export default function PersonalChat() {
 								<nav className="flex items-center justify-between gap-2 px-2 py-3 bg-black/5 dark:bg-white/5 backdrop-blur-sm">
 									<button
 										onClick={() => navigate("/home")}
-										className="xl:invisible">
+										className="">
 										<ChevronLeft />
 									</button>
 									<div className="flex font-bold tracking-wide max-w-[70%] overflow-hidden whitespace-nowrap text-ellipsis">
@@ -244,9 +244,7 @@ export default function PersonalChat() {
 							</div>
 						</ResizablePanel>
 						<ResizableHandle className="hover:cursor-grab" />
-						<ResizablePanel
-							defaultSize={25}
-							className="h-full">
+						<ResizablePanel defaultSize={25} className="h-full">
 							<div className="relative flex h-full gap-5 p-5 shadow">
 								<div className="flex flex-col items-center gap-2">
 									<Avatar className="rounded-full size-32">
@@ -278,10 +276,11 @@ export default function PersonalChat() {
 							</div>
 						</ResizablePanel>
 					</ResizablePanelGroup>
+					<HomeSideBar />
 				</div>
 				<div
 					id="personalChatPage"
-					className="relative w-full h-full flex flex-col xl:hidden overflow-hidden dark:bg-gradient-to-tr dark:from-[#09203f] dark:to-[#5c323f] bg-background bg-fixed">
+					className="relative w-full h-full flex flex-col xl:hidden overflow-hidden dark:bg-gradient-to-tr dark:from-[#09203f] dark:to-[#5c323f] bg-background pb-14 sm:pl-20 sm:pb-1 bg-fixed">
 					<nav className="flex items-center justify-between gap-2 px-2 py-3 bg-black/5 dark:bg-white/5 backdrop-blur-sm">
 						<button
 							onClick={() => navigate("/home")}
@@ -407,7 +406,7 @@ function ReceiverComponent({ children, user }: ReceiverComponentProps) {
 	return (
 		<Drawer>
 			<DrawerTrigger>{children}</DrawerTrigger>
-			<DrawerContent className="p-5 bg-white dark:bg-black/5 backdrop-blur-sm">
+			<DrawerContent className="p-5 bg-white dark:bg-gradient-to-tr dark:from-[#0e093f] dark:to-[#5c323f] bg-background bg-fixed backdrop-blur-sm">
 				<DrawerHeader>
 					<DrawerTitle className="flex gap-5 mb-5">
 						<div className="flex flex-col">
@@ -433,7 +432,7 @@ function ReceiverComponent({ children, user }: ReceiverComponentProps) {
 				</DrawerHeader>
 				<DrawerFooter>
 					<DrawerClose>
-						<Button variant="outline">Cancel</Button>
+						<Button variant="outline" className="dark:bg-transparent">Cancel</Button>
 					</DrawerClose>
 				</DrawerFooter>
 			</DrawerContent>

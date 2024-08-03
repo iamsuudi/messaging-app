@@ -103,7 +103,7 @@ export default function SearchDrawer({ children }: SearchPropType) {
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogDescription></DialogDescription>
 			<DialogTrigger>{children}</DialogTrigger>
-			<DialogContent className="flex flex-col gap-3 pt-10 max-w-[90%] dark:bg-white/5 rounded-xl w-96 border-none">
+			<DialogContent className="flex flex-col gap-3 pt-10 max-w-[90%] dark:bg-gradient-to-tr dark:from-[#0e093f] dark:to-[#5c323f] bg-background bg-fixed rounded-xl w-96 border-none">
 				<DialogHeader>
 					<DialogTitle className="mb-5 text-center">
 						Search contacts

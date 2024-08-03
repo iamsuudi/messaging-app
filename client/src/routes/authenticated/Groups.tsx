@@ -28,30 +28,36 @@ function GroupRow() {
 	);
 }
 
-export default function Groups() {
+export default function GroupsPage() {
 	return (
-		<div className="relative flex flex-col h-full">
+		<div className="relative flex flex-col h-full pb-14 sm:pl-20 sm:pb-1">
 			<HomeSideBar />
-			<div className="flex flex-col py-1 sm:px-5 app">
-				<GroupRow />
-				<GroupRow />
-				<GroupRow />
-				<GroupRow />
-				<GroupRow />
-				<GroupRow />
-				<GroupRow />
-				<GroupRow />
-				<GroupRow />
-				<GroupRow />
-				<GroupRow />
-				<GroupRow />
-				<GroupRow />
-				<GroupRow />
-				<GroupRow />
-				<GroupRow />
-				<GroupRow />
-				<GroupRow />
-			</div>
+			<Groups />
+		</div>
+	);
+}
+
+export function Groups() {
+	return (
+		<div className="flex flex-col py-1 sm:px-5 app">
+			<GroupRow />
+			<GroupRow />
+			<GroupRow />
+			<GroupRow />
+			<GroupRow />
+			<GroupRow />
+			<GroupRow />
+			<GroupRow />
+			<GroupRow />
+			<GroupRow />
+			<GroupRow />
+			<GroupRow />
+			<GroupRow />
+			<GroupRow />
+			<GroupRow />
+			<GroupRow />
+			<GroupRow />
+			<GroupRow />
 		</div>
 	);
 }

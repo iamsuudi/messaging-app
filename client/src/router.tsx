@@ -5,8 +5,8 @@ import Signin from "./routes/Signin";
 import Home from "./routes/Home";
 import HomeIn from "./routes/authenticated/Home";
 import Profile from "./routes/authenticated/Profile";
-import Chats from "./routes/authenticated/Chats";
-import Groups from "./routes/authenticated/Groups";
+import ChatsPage from "./routes/authenticated/Chats";
+import GroupsPage from "./routes/authenticated/Groups";
 import PersonalChat from "./routes/authenticated/PersonalChat";
 
 export default function Router() {
@@ -32,7 +32,7 @@ export default function Router() {
 			children: [
 				{
 					index: true,
-					element: <Chats />,
+					element: <ChatsPage />,
 				},
 				{
 					path: "profile",
@@ -40,7 +40,7 @@ export default function Router() {
 				},
 				{
 					path: "groups",
-					element: <Groups />,
+					element: <GroupsPage />,
 				},
 				{
 					path: "chats/:chatId",

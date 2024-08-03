@@ -78,139 +78,145 @@ export default function Profile() {
 	};
 
 	return (
-		<div className="flex flex-col items-center justify-center w-screen h-screen px-5">
-			{error && (
-				<div className="fixed z-10 w-full px-5 max-w-96 h-fit top-24">
-					<Alert
-						variant="destructive"
-						className="w-full font-bold bg-gray-50">
-						<AlertCircle className="w-4 h-4" />
-						<AlertTitle className="font-bold">Error</AlertTitle>
-						<AlertDescription>{error}</AlertDescription>
-					</Alert>
-				</div>
-			)}
+		<div className="h-full app">
+			<div className="flex flex-col items-center justify-center w-screen px-5 py-20 h-fit">
+				{error && (
+					<div className="fixed z-10 w-full px-5 max-w-96 h-fit top-24">
+						<Alert
+							variant="destructive"
+							className="w-full font-bold bg-gray-50">
+							<AlertCircle className="w-4 h-4" />
+							<AlertTitle className="font-bold">Error</AlertTitle>
+							<AlertDescription>{error}</AlertDescription>
+						</Alert>
+					</div>
+				)}
 
-			<h1 className="text-2xl font-bold">Update your info</h1>
+				<h1 className="text-2xl font-bold">Update your info</h1>
 
-			<form className="flex flex-col items-center w-full max-w-md gap-3 px-10 py-2">
-				<Avatar className="bg-rose-300 size-32">
-					<AvatarImage src={url ?? "https://github.com/shadcn.png"} />
-				</Avatar>
-				<Input
-					type="file"
-					name="profile"
-					onChange={({ target }) => {
-						if (target?.files) {
-							const image = target.files[0];
-
-							const x = URL.createObjectURL(image);
-							setUrl(x);
-
-							const data = new FormData();
-							data.append("picture", image);
-							setPicFormData(data);
-						}
-					}}
-					accept="image/,.jpg,.png,.jpeg"
-					className="bg-transparent dark:border-none hover:bg-black/5 hover:cursor-pointer dark:bg-white/5 max-w-32"
-				/>
-			</form>
-
-			<Form {...form}>
-				<form
-					onSubmit={form.handleSubmit(onSubmit)}
-					className="w-full max-w-md p-10 space-y-8 rounded-lg shadow">
-					<FormField
-						control={form.control}
-						name="email"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Email</FormLabel>
-								<FormControl>
-									<Input
-										placeholder="username@domain.com"
-										type="email"
-										spellCheck="false"
-										className="dark:border-none dark:bg-white/5"
-										{...field}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="username"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Username</FormLabel>
-								<FormControl>
-									<Input
-										placeholder="iamsuudi"
-										type="text"
-										spellCheck="false"
-										className="dark:border-none dark:bg-white/5"
-										{...field}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="name"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Full Name</FormLabel>
-								<FormControl>
-									<Input
-										placeholder="Full Name"
-										type="text"
-										spellCheck="false"
-										className="dark:border-none dark:bg-white/5"
-										{...field}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="bio"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Your Bio</FormLabel>
-								<FormControl>
-									<Textarea
-										placeholder="Your bio"
-										spellCheck="false"
-										className="dark:border-none dark:bg-white/5"
-										{...field}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					<Button
-						type="submit"
-						className="w-full"
-						disabled={form.formState.isSubmitting}>
-						{form.formState.isSubmitting ? "Updating..." : "Update"}
-					</Button>
-
-					{form.formState.errors.root && (
-						<FormMessage
-							children={form.formState.errors.root.message}
+				<form className="flex flex-col items-center w-full max-w-md gap-3 px-10 py-2">
+					<Avatar className="bg-rose-300 size-32">
+						<AvatarImage
+							src={url ?? "https://github.com/shadcn.png"}
 						/>
-					)}
+					</Avatar>
+					<Input
+						type="file"
+						name="picture"
+						onChange={({ target }) => {
+							if (target?.files) {
+								const image = target.files[0];
+
+								const x = URL.createObjectURL(image);
+								setUrl(x);
+
+								const data = new FormData();
+								data.append("picture", image);
+								setPicFormData(data);
+							}
+						}}
+						accept="image/,.jpg,.png,.jpeg"
+						className="bg-transparent dark:border-none hover:bg-black/5 hover:cursor-pointer dark:bg-white/5 max-w-32"
+					/>
 				</form>
-			</Form>
+
+				<Form {...form}>
+					<form
+						onSubmit={form.handleSubmit(onSubmit)}
+						className="w-full max-w-md p-10 space-y-8 rounded-lg shadow">
+						<FormField
+							control={form.control}
+							name="email"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Email</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="username@domain.com"
+											type="email"
+											spellCheck="false"
+											className="dark:border-none dark:bg-white/5"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="username"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Username</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="iamsuudi"
+											type="text"
+											spellCheck="false"
+											className="dark:border-none dark:bg-white/5"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="name"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Full Name</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="Full Name"
+											type="text"
+											spellCheck="false"
+											className="dark:border-none dark:bg-white/5"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="bio"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Your Bio</FormLabel>
+									<FormControl>
+										<Textarea
+											placeholder="Your bio"
+											spellCheck="false"
+											className="dark:border-none dark:bg-white/5"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<Button
+							type="submit"
+							className="w-full"
+							disabled={form.formState.isSubmitting}>
+							{form.formState.isSubmitting
+								? "Updating..."
+								: "Update"}
+						</Button>
+
+						{form.formState.errors.root && (
+							<FormMessage
+								children={form.formState.errors.root.message}
+							/>
+						)}
+					</form>
+				</Form>
+			</div>
 		</div>
 	);
 }

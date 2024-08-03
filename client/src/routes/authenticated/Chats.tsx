@@ -96,7 +96,7 @@ function ChatRow({ chat }: ChatPropType) {
 	);
 }
 
-export default function Chats() {
+export function Chats() {
 	const user = useUserStore.getState().user;
 	const fetchUser = useUserStore.getState().fetchUser;
 	const navigate = useNavigate();
@@ -108,8 +108,6 @@ export default function Chats() {
 			const response = await getPersonalChats();
 			return response;
 		},
-		refetchOnMount: true,
-		refetchOnWindowFocus: true,
 	});
 
 	useEffect(() => {
@@ -122,11 +120,11 @@ export default function Chats() {
 				navigate("/auth2");
 			});
 		}
-		
+
 		const addChat = (newChat: ChatType) => {
 			setChats(chats.concat(newChat));
 		};
-		
+
 		socket.on("newChat", addChat);
 
 		return () => {
@@ -136,8 +134,6 @@ export default function Chats() {
 
 	return (
 		<div className="flex flex-col h-full" id="chatsPage">
-			<HomeSideBar />
-
 			{isLoading && (
 				<>
 					<LoadingSkeleton />
@@ -149,7 +145,7 @@ export default function Chats() {
 			)}
 
 			{!isLoading && chats && chats.length > 0 && (
-				<div className="flex flex-col py-1 sm:px-5">
+				<div className="flex flex-col py-1 sm:px-5 app">
 					{chats?.map((chat) => {
 						return <ChatRow key={chat.id} chat={chat} />;
 					})}
@@ -162,6 +158,15 @@ export default function Chats() {
 					<p className="text-lg font-medium">No Chat History</p>
 				</div>
 			)}
+		</div>
+	);
+}
+
+export default function ChatsPage() {
+	return (
+		<div className="h-full pb-14 sm:pl-20 sm:pb-1">
+			<Chats />
+			<HomeSideBar />
 		</div>
 	);
 }
