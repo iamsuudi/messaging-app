@@ -81,7 +81,9 @@ export const createIndividualChat = async (
 	const myId = req.user?.id as string;
 
 	if (myId !== otherPersonId) {
-		const chat = await Chat.findOne({ users: [otherPersonId, myId] });
+		const chat = await Chat.findOne({
+			users: { $all: [otherPersonId, myId] },
+		});
 
 		if (!chat) {
 			const newChat = await Chat.create({
