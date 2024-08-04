@@ -7,6 +7,7 @@ import {
 	getGroupChat,
 	getGroupChats,
 	makeGroupChat,
+	removeUser,
 } from "../controllers/group";
 import { authenticated } from "../middlewares/authenticated";
 import { upload } from "../middlewares/profileUpload";
@@ -20,6 +21,7 @@ groupRouter.get("/chat/group/:groupId", authenticated, getGroupChat);
 groupRouter.get("/chat/group", authenticated, getGroupChats);
 groupRouter.put("/chat/group/:groupId", authenticated, editGroupChat);
 groupRouter.delete("/chat/group/:groupId", authenticated, deleteGroupChat);
+groupRouter.delete("/chat/group/:groupId/user", authenticated, removeUser);
 groupRouter.delete(
 	"/chat/group/:groupId/message",
 	authenticated,

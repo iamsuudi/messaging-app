@@ -36,7 +36,7 @@ export default function Profile() {
 	useEffect(() => {
 		if (!user) {
 			fetchUser().catch(() => {
-				navigate("/auth/signin");
+				navigate("/auth2");
 			});
 		} else {
 			//

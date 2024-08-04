@@ -37,7 +37,7 @@ export const makeGroupChat = async (
 
 export const createGroup = async (
 	name: string,
-	users: string[],
+	users: string[]
 ): Promise<GroupType> => {
 	const response = await axios({
 		method: "post",
@@ -60,6 +60,33 @@ export const updateGroupProfilePic = async (
 		baseURL,
 		url: `/chat/group/${groupId}/updateProfilePic`,
 		data,
+	});
+	return response.data;
+};
+
+export const updateGroup = async (
+	groupId: string,
+	name: string,
+	bio: string
+): Promise<GroupType> => {
+	const response = await axios({
+		method: "put",
+		baseURL,
+		url: `/chat/group/${groupId}`,
+		data: { name, bio },
+	});
+	return response.data;
+};
+
+export const removeGroupMember = async (
+	groupId: string,
+	userId: string
+): Promise<GroupType> => {
+	const response = await axios({
+		method: "delete",
+		baseURL,
+		url: `/chat/group/${groupId}/user`,
+		data: { userId },
 	});
 	return response.data;
 };

@@ -62,7 +62,18 @@ export const makeGroupChat = async (
 	res.status(201).json(message);
 };
 
-export const editGroupChat = async (req: Request, res: Response) => {};
+export const editGroupChat = async (
+	req: Request<{ groupId: string }, {}, { name: string; bio: string }>,
+	res: Response
+) => {
+	const group = await Group.findByIdAndUpdate(
+		req.params.groupId,
+		{ ...req.body },
+		{ new: true }
+	);
+
+	res.status(204).json(group);
+};
 
 export const deleteGroupChat = async (req: Request, res: Response) => {};
 
@@ -86,6 +97,20 @@ export const createGroupChat = async (
 	return res.status(201).json(parsedGroup);
 };
 
-export const removeUser = async (req: Request, res: Response) => {};
+export const removeUser = async (
+	req: Request<{ groupId: string }, {}, { userId: string }>,
+	res: Response
+) => {
+	const group = await Group.findById(req.params.groupId);
+
+	if (group?.users)
+		group.users = group.users.filter(
+			(user) => user._id.toString() !== req.body.userId
+		);
+
+	await group?.save();
+
+	res.status(204).json(group);
+};
 
 export const deleteMessage = async (req: Request, res: Response) => {};

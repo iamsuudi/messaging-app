@@ -268,11 +268,11 @@ export default function GroupChat() {
 							className="xl:invisible">
 							<ChevronLeft />
 						</button>
-						<ReceiverComponent group={group}>
+						<GroupInfo group={group}>
 							<div className="flex overflow-hidden font-bold tracking-wide whitespace-nowrap text-ellipsis">
 								{group?.name}
 							</div>
-						</ReceiverComponent>
+						</GroupInfo>
 						<button className="mr-2">
 							<PhoneIcon fill="currentColor" strokeWidth={0} />
 						</button>
@@ -378,19 +378,23 @@ function NoChatHistoryComponent() {
 	);
 }
 
-type ReceiverComponentProps = {
+type GroupInfoProps = {
 	children: ReactNode;
 	group: GroupType;
 };
 
-function ReceiverComponent({ children, group }: ReceiverComponentProps) {
+function GroupInfo({ children, group }: GroupInfoProps) {
+	const { user } = useUserStore();
+	const navigate = useNavigate();
+	const { groupId } = useParams();
+
 	return (
 		<Drawer>
 			<DrawerTrigger>{children}</DrawerTrigger>
-			<DrawerContent className="p-5 bg-white dark:bg-gradient-to-tr dark:from-[#0e093f] dark:to-[#5c323f] bg-background bg-fixed backdrop-blur-sm">
-				<DrawerHeader>
+			<DrawerContent className="p-5 bg-white dark:bg-gradient-to-tr dark:from-[#0e093f] dark:to-[#5c323f] bg-fixed backdrop-blur-sm">
+				<DrawerHeader className="relative">
 					<DrawerTitle className="flex gap-5 mb-5">
-						<div className="flex flex-col">
+						<div className="flex flex-col items-center">
 							<Avatar className="rounded-full size-20">
 								<AvatarImage
 									src={`http://localhost:3001/${group.picture}`}
@@ -402,10 +406,19 @@ function ReceiverComponent({ children, group }: ReceiverComponentProps) {
 						</div>
 						<div className="flex flex-col items-start gap-2 p-2">
 							<span className="">{group.name}</span>
-							<span className="text-xs">{group.name}</span>
+							<span className="text-xs">{group.bio}</span>
 						</div>
 					</DrawerTitle>
-					<DrawerDescription>{group.name}</DrawerDescription>
+					{user?.id === group.owner.id && (
+						<Button
+							className="absolute top-0 right-0 px-5"
+							onClick={() =>
+								navigate(`/home/groups/${groupId}/edit`)
+							}>
+							Edit
+						</Button>
+					)}
+					<DrawerDescription></DrawerDescription>
 				</DrawerHeader>
 				<div className="flex flex-col gap-2 h-72">
 					<p className="font-bold">Members</p>
