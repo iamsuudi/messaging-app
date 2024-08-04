@@ -42,6 +42,7 @@ export interface GroupType {
 	id: string;
 	name: string;
 	picture: string;
+	bio: string;
 	owner: UserType;
 	users: UserType[];
 	messages: GroupMessageType[];

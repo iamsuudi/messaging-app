@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 
 import { Input } from "@/components/ui/input";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getPersonalChats } from "@/services/chat.api";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
@@ -80,7 +80,7 @@ function CreateGroupDialog() {
 				);
 				return navigate(`/home/groups/${response.id}`);
 			}
-			// return navigate(`/home/groups/${group.id}`);
+			return navigate(`/home/groups/${group.id}`);
 			console.log({ group });
 		},
 		mutationKey: ["createGroup"],

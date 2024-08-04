@@ -170,7 +170,7 @@ function Messages({ user }: UserPropType) {
 				);
 			})}
 
-			{messages.length === 0 && <NoChatHistoryComponent />}
+			{messages.length === 0 && !isLoading && <NoChatHistoryComponent />}
 		</div>
 	);
 }

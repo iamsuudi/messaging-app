@@ -3,9 +3,7 @@ import passport from "passport";
 import { register, searchUsers, updateProfile } from "../controllers/user";
 import { authenticated } from "../middlewares/authenticated";
 import { upload } from "../middlewares/profileUpload";
-import path from "path";
 import User from "../models/user";
-// import { setupSocket } from "../socket";
 
 const userRouter = express.Router();
 
@@ -23,7 +21,6 @@ userRouter.post(
 	register,
 	passport.authenticate("local"),
 	(req, res) => {
-		// if (req.user) setupSocket(req.user.id);
 		res.status(201).json(req.user);
 	}
 );
@@ -44,13 +41,10 @@ userRouter.post(
 	authenticated,
 	upload,
 	async (req: Request, res: Response) => {
-		console.log(req.file);
-
-		const fileExtension = path.extname(req.file?.originalname as string);
 		const user = await User.findByIdAndUpdate(
 			req.user?.id,
 			{
-				picture: `${req.user?.id}${fileExtension}`,
+				picture: req.file?.filename,
 			},
 			{ new: true }
 		);

@@ -6,6 +6,7 @@ const groupSchema = new mongoose.Schema({
 	messages: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
 	picture: String,
 	name: String,
+	bio: String,
 });
 
 /* eslint no-param-reassign: 0, no-underscore-dangle: 0 */

@@ -10,7 +10,7 @@ import {
 export async function groupParser(
 	group: GroupType
 ): Promise<GroupChatFormatted> {
-	const { id, picture, name } = group;
+	const { id, picture, name, bio } = group;
 
 	const owner = await User.findById(group.owner);
 
@@ -38,6 +38,7 @@ export async function groupParser(
 		owner: owner?.toJSON(),
 		messages,
 		users,
+		bio
 	};
 }
 

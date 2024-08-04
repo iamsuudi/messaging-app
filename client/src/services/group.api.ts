@@ -63,3 +63,18 @@ export const updateGroupProfilePic = async (
 	});
 	return response.data;
 };
+
+export const sendGroupMessage = async (
+	groupId: string,
+	content: string
+): Promise<GroupMessageType> => {
+	const response = await axios({
+		method: "post",
+		baseURL,
+		url: `/chat/group/${groupId}`,
+		data: {
+			content,
+		},
+	});
+	return response.data;
+};

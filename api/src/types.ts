@@ -13,6 +13,7 @@ export interface GroupChatFormatted {
 	users?: Express.User[];
 	messages?: GroupMessageFormat[];
 	picture: string;
+	bio: string;
 }
 
 export interface MessageFormat {
@@ -46,4 +47,5 @@ export interface GroupType {
 	owner: mongoose.Schema.Types.ObjectId;
 	picture: string;
 	name: string;
+	bio: string;
 }

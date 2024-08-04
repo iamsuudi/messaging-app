@@ -3,7 +3,6 @@ import Group from "../models/group";
 import { GroupChatFormatted } from "../types";
 import { groupParser } from "../utils/groupParser";
 import Message from "../models/message";
-import Chat from "../models/chat";
 import { io } from "../app";
 
 export const getGroupChats = async (req: Request, res: Response) => {
