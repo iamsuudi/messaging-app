@@ -101,7 +101,7 @@ export default function EditGroup() {
 				)}
 
 				<ArrowBigLeft
-					className="absolute left-0 rounded-full top-20 hover:cursor-pointer dark:bg-black/5 lg:hidden"
+					className="absolute left-0 rounded-full top-20 hover:cursor-pointer dark:bg-black/5"
 					onClick={() => navigate(`/home/groups/${groupId}`)}
 				/>
 

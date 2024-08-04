@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
+export interface ContactType {
+	id: string;
+	contact?: Express.User | null;
+}
+
 export interface PersonalChatFormatted {
 	id: string;
 	receiver?: Express.User | null;

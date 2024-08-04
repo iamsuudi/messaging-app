@@ -5,6 +5,7 @@ import {
 	deleteMessage,
 	getIndividualChat,
 	getIndividualChats,
+	getMyContacts,
 	makeIndividualChat,
 	seeMessage,
 } from "../controllers/chat";
@@ -28,5 +29,6 @@ chatRouter.delete(
 	authenticated,
 	deleteMessage
 );
+chatRouter.get("/contacts", authenticated, getMyContacts);
 
 export default chatRouter;

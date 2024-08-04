@@ -1,7 +1,7 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getPersonalChats } from "@/services/chat.api";
+import { getMyContacts } from "@/services/chat.api";
 import { UserType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -15,7 +15,9 @@ function Contact({ user, onClick, disabled }: ContactPropsType) {
 				if (!disabled) setChecked(!checked);
 				if (!disabled && onClick) onClick(!checked);
 			}}
-			className={`flex items-center h-16 gap-3 sm:gap-5 ${disabled && 'opacity-70'}`}>
+			className={`flex items-center h-16 gap-3 sm:gap-5 ${
+				disabled && "opacity-70"
+			}`}>
 			<Avatar className="bg-blue-700 rounded-full size-12">
 				<AvatarImage src={`http://localhost:3001/${user.picture}`} />
 			</Avatar>
@@ -58,10 +60,10 @@ export default function Contacts({
 	setMembers,
 	hidden,
 }: ContactsPropsType) {
-	const { data: chats, isLoading: contactsLoading } = useQuery({
+	const { data: contacts, isLoading: contactsLoading } = useQuery({
 		queryKey: ["chats"],
 		queryFn: async () => {
-			const response = await getPersonalChats();
+			const response = await getMyContacts();
 			return response;
 		},
 	});
@@ -76,26 +78,26 @@ export default function Contacts({
 				</>
 			)}
 
-			{chats &&
-				chats.length > 0 &&
-				chats.map((chat) => {
+			{contacts &&
+				contacts.length > 0 &&
+				contacts.map((chat) => {
 					return (
 						<Contact
 							key={chat.id}
-							user={chat.receiver}
-							disabled={hidden?.includes(chat.receiver.id)}
+							user={chat.contact}
+							disabled={hidden?.includes(chat.contact?.id)}
 							onClick={(checked: boolean) => {
 								if (checked) {
 									if (setMembers && members)
 										setMembers(
-											members.concat(chat.receiver.id)
+											members.concat(chat.contact?.id)
 										);
 								} else {
 									if (setMembers && members)
 										setMembers(
 											members.filter(
 												(member) =>
-													member !== chat.receiver.id
+													member !== chat.contact.id
 											)
 										);
 								}

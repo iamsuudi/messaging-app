@@ -1,9 +1,26 @@
 import { Request, Response } from "express";
 import Chat from "../models/chat";
 import Message from "../models/message";
-import { PersonalChatFormatted } from "../types";
+import { ContactType, PersonalChatFormatted } from "../types";
 import chatsParser from "../utils/chatsParser";
 import { io } from "../app";
+import contactsParser from "../utils/contactsParser";
+
+export const getMyContacts = async (req: Request, res: Response) => {
+	const myId = req.user?.id as string;
+
+	const chats = await Chat.find({ users: myId });
+
+	const contacts: ContactType[] = [];
+
+	for await (let chat of chats) {
+		const parsedChat = await contactsParser(myId, chat.toJSON());
+
+		contacts.push(parsedChat);
+	}
+
+	return res.status(200).json(contacts);
+};
 
 export const getIndividualChats = async (req: Request, res: Response) => {
 	const myId = req.user?.id as string;

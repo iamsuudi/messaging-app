@@ -32,6 +32,11 @@ export const profileSchema = z.object({
 	name: z.string().optional(),
 });
 
+export interface ContactType {
+	id: string;
+	contact: UserType;
+}
+
 export interface ChatType {
 	id: string;
 	receiver: UserType;
