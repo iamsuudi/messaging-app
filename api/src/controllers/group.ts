@@ -4,6 +4,7 @@ import { GroupChatFormatted } from "../types";
 import { groupParser } from "../utils/groupParser";
 import Message from "../models/message";
 import { io } from "../app";
+import User from "../models/user";
 
 export const getGroupChats = async (req: Request, res: Response) => {
 	const myId = req.user?.id as string;
@@ -111,6 +112,22 @@ export const removeUser = async (
 	await group?.save();
 
 	res.status(204).json(group);
+};
+
+export const addUser = async (
+	req: Request<{ groupId: string }, {}, { userId: string }>,
+	res: Response
+) => {
+	const group = await Group.findById(req.params.groupId);
+	const user = await User.findById(req.body.userId);
+	console.log('new member ', user);
+	
+
+	if (group?.users && user) group.users = group.users.concat(user._id);
+
+	await group?.save();
+
+	res.status(201).json(user);
 };
 
 export const deleteMessage = async (req: Request, res: Response) => {};

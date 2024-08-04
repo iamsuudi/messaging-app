@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GroupMessageType, GroupType } from "@/types";
+import { GroupMessageType, GroupType, UserType } from "@/types";
 axios.defaults.withCredentials = true;
 
 const baseURL = "http://localhost:3001/api";
@@ -84,6 +84,19 @@ export const removeGroupMember = async (
 ): Promise<GroupType> => {
 	const response = await axios({
 		method: "delete",
+		baseURL,
+		url: `/chat/group/${groupId}/user`,
+		data: { userId },
+	});
+	return response.data;
+};
+
+export const addGroupMember = async (
+	groupId: string,
+	userId: string
+): Promise<UserType> => {
+	const response = await axios({
+		method: "post",
 		baseURL,
 		url: `/chat/group/${groupId}/user`,
 		data: { userId },

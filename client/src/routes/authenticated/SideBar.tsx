@@ -11,14 +11,11 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { getPersonalChats } from "@/services/chat.api";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { UserType } from "@/types";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import { createGroup, updateGroupProfilePic } from "@/services/group.api";
+import Contacts from "./contacts";
 
 export default function HomeSideBar() {
 	return (
@@ -61,14 +58,6 @@ function CreateGroupDialog() {
 	const [url, setUrl] = useState(``);
 	const [picFormData, setPicFormData] = useState<FormData>();
 	const navigate = useNavigate();
-
-	const { data: chats, isLoading: usersLoading } = useQuery({
-		queryKey: ["chats"],
-		queryFn: async () => {
-			const response = await getPersonalChats();
-			return response;
-		},
-	});
 
 	const { mutateAsync, isPending } = useMutation({
 		mutationFn: async () => {
@@ -132,39 +121,7 @@ function CreateGroupDialog() {
 				<div className="flex flex-col gap-2 h-72">
 					<p>Add members</p>
 					<div className="flex flex-col h-full gap-3 overflow-y-scroll app">
-						{usersLoading && (
-							<>
-								<LoadingSkeleton />
-								<LoadingSkeleton />
-								<LoadingSkeleton />
-							</>
-						)}
-						{chats &&
-							chats.map((chat) => {
-								return (
-									<UserRow
-										key={chat.id}
-										user={chat.receiver}
-										onClick={(checked: boolean) => {
-											if (checked) {
-												setMembers(
-													members.concat(
-														chat.receiver.id
-													)
-												);
-											} else {
-												setMembers(
-													members.filter(
-														(member) =>
-															member !==
-															chat.receiver.id
-													)
-												);
-											}
-										}}
-									/>
-								);
-							})}
+						<Contacts setMembers={setMembers} members={members} />
 					</div>
 				</div>
 
@@ -177,62 +134,5 @@ function CreateGroupDialog() {
 				</Button>
 			</DialogContent>
 		</Dialog>
-	);
-}
-
-interface UserPropType {
-	user: UserType;
-	onClick: (checked: boolean) => void;
-}
-
-function UserRow({ user, onClick }: UserPropType) {
-	const [checked, setChecked] = useState(false);
-
-	return (
-		<div
-			onClick={() => {
-				onClick(!checked);
-				setChecked(!checked);
-			}}
-			className="flex items-center h-16 gap-3 sm:gap-5">
-			<Avatar className="bg-blue-300 rounded-full size-12">
-				<AvatarImage
-					src={
-						user?.picture
-							? `http://localhost:3001/${user.picture}`
-							: ""
-					}
-				/>
-			</Avatar>
-			<div className="flex flex-col gap-0">
-				<p className="overflow-hidden font-medium text-md whitespace-nowrap text-ellipsis">
-					{user.name ?? "No Name"}
-				</p>
-				<p className="max-w-full overflow-hidden text-xs font-medium text-start opacity-60 whitespace-nowrap text-ellipsis">
-					@{user.username}
-				</p>
-			</div>
-
-			<Checkbox
-				className="ml-auto size-5"
-				checked={checked}
-				onClick={() => {
-					onClick(!checked);
-					setChecked(!checked);
-				}}
-			/>
-		</div>
-	);
-}
-
-function LoadingSkeleton() {
-	return (
-		<div className="flex items-center w-full p-2 pr-5 my-2 space-x-4">
-			<Skeleton className="rounded-full min-h-14 min-w-14" />
-			<div className="w-full space-y-2">
-				<Skeleton className="w-full h-5" />
-				<Skeleton className="w-full h-5" />
-			</div>
-		</div>
 	);
 }

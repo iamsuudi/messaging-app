@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import {
+	addUser,
 	createGroupChat,
 	deleteGroupChat,
 	deleteMessage,
@@ -22,6 +23,7 @@ groupRouter.get("/chat/group", authenticated, getGroupChats);
 groupRouter.put("/chat/group/:groupId", authenticated, editGroupChat);
 groupRouter.delete("/chat/group/:groupId", authenticated, deleteGroupChat);
 groupRouter.delete("/chat/group/:groupId/user", authenticated, removeUser);
+groupRouter.post("/chat/group/:groupId/user", authenticated, addUser);
 groupRouter.delete(
 	"/chat/group/:groupId/message",
 	authenticated,

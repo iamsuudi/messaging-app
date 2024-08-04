@@ -5,7 +5,11 @@ import {
 } from "@/components/ui/resizable";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import { getGroupChat, sendGroupMessage } from "@/services/group.api";
+import {
+	addGroupMember,
+	getGroupChat,
+	sendGroupMessage,
+} from "@/services/group.api";
 import { socket } from "@/socket";
 import { userErrorStore, useUserStore } from "@/store";
 import { GroupMessageType, GroupType, UserType } from "@/types";
@@ -35,7 +39,6 @@ import { Button } from "@/components/ui/button";
 import { Groups } from "./Groups";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import {
-	DrawerClose,
 	DrawerContent,
 	DrawerDescription,
 	DrawerFooter,
@@ -45,6 +48,8 @@ import {
 	Drawer,
 } from "@/components/ui/drawer";
 import { startPersonalChatWithSomeone } from "@/services/chat.api";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Contacts from "./contacts";
 
 type MessagePropType = {
 	msg: GroupMessageType;
@@ -141,6 +146,42 @@ export default function GroupChat() {
 	const navigate = useNavigate();
 	const { groupId } = useParams();
 
+	const [contactsToAdd, setContactsToAdd] = useState<string[]>([]);
+	const [members, setMembers] = useState<UserType[]>([]);
+	const [contactsJoined, setContactsJoined] = useState<string[]>([]);
+
+	const { data: group } = useQuery({
+		queryKey: ["group", groupId],
+		queryFn: async () => {
+			const response = await getGroupChat(groupId as string);
+			setContactsJoined(response.users.map((user) => user.id));
+			setMembers(response.users);
+			return response;
+		},
+		refetchOnMount: true,
+		refetchOnWindowFocus: true,
+		refetchOnReconnect: true,
+	});
+
+	const { mutateAsync: add, isPending: isAdding } = useMutation({
+		mutationKey: ["addMember", groupId],
+		mutationFn: async () => {
+			const newMembers = [];
+			for await (const contact of contactsToAdd) {
+				const response = await addGroupMember(
+					groupId as string,
+					contact
+				);
+				newMembers.push(response);
+			}
+			setMembers(members.concat(newMembers));
+			setContactsJoined([
+				...contactsJoined,
+				...newMembers.map((member) => member.id),
+			]);
+		},
+	});
+
 	useEffect(() => {
 		if (!user) {
 			fetchUser().catch(() => {
@@ -151,16 +192,6 @@ export default function GroupChat() {
 		}
 		socket.emit("joinChat", groupId);
 	}, [user, fetchUser, navigate, groupId]);
-
-	const { data: group } = useQuery({
-		queryKey: ["group", groupId],
-		queryFn: async () => {
-			const response = await getGroupChat(groupId as string);
-			console.log({ response });
-
-			return response;
-		},
-	});
 
 	if (group && user) {
 		return (
@@ -222,38 +253,76 @@ export default function GroupChat() {
 										<span className="font-bold">
 											{group?.name}
 										</span>
-										<span className="mb-3 text-xs">
-											{group?.name}
-										</span>
 										<span className="text-sm">
-											{
-												"GET https://registry.npmjs.org/busboy error (ECONNRESET). Will retry in 10 seconds. 2 retries left."
-											}
+											{group?.bio}
 										</span>
 									</div>
+									{user?.id === group.owner.id && (
+										<Button
+											className="absolute top-0 right-0 h-8 px-5"
+											onClick={() =>
+												navigate(
+													`/home/groups/${groupId}/edit`
+												)
+											}>
+											Edit
+										</Button>
+									)}
 								</div>
-								<div className="flex flex-col gap-2 h-72">
-									<p className="font-bold">Members</p>
-									<div className="flex flex-col h-full gap-3 px-3 overflow-y-scroll app">
-										{group &&
-											group.users.map((member) => {
-												return (
-													<div className="flex items-center justify-between">
-														<UserRow
-															key={member.id}
-															user={member}
-														/>
-														{member.id ===
-															group.owner.id && (
-															<span className="text-sm">
-																Owner
-															</span>
-														)}
-													</div>
-												);
-											})}
-									</div>
-								</div>
+								<Tabs
+									defaultValue="members"
+									className="w-full h-80">
+									<TabsList className="relative w-full dark:bg-black/15">
+										<TabsTrigger
+											value="members"
+											className="font-bold">
+											Members
+										</TabsTrigger>
+										<TabsTrigger
+											value="contacts"
+											className="mr-auto">
+											Add from contacts
+										</TabsTrigger>
+										<Button
+											className="absolute right-0 h-8 px-5"
+											disabled={isAdding}
+											onClick={async () => await add()}>
+											{isAdding ? "Adding..." : "Add"}
+										</Button>
+									</TabsList>
+									<TabsContent value="members">
+										<div className="flex flex-col h-full gap-3 px-3 overflow-y-scroll app">
+											{group &&
+												members.map((member) => {
+													return (
+														<div
+															className="flex items-center justify-between"
+															key={member.id}>
+															<UserRow
+																user={member}
+															/>
+															{member.id ===
+																group.owner
+																	.id && (
+																<span className="text-sm">
+																	Owner
+																</span>
+															)}
+														</div>
+													);
+												})}
+										</div>
+									</TabsContent>
+									<TabsContent
+										value="contacts"
+										className="overflow-y-scroll h-72 app">
+										<Contacts
+											setMembers={setContactsToAdd}
+											members={contactsToAdd}
+											hidden={contactsJoined}
+										/>
+									</TabsContent>
+								</Tabs>
 							</div>
 						</ResizablePanel>
 					</ResizablePanelGroup>
@@ -387,6 +456,27 @@ function GroupInfo({ children, group }: GroupInfoProps) {
 	const { user } = useUserStore();
 	const navigate = useNavigate();
 	const { groupId } = useParams();
+	const [contactsToAdd, setContactsToAdd] = useState<string[]>([]);
+	const [members, setMembers] = useState(group.users);
+	const [contactsJoined, setContactsJoined] = useState<string[]>(
+		group.users.map((user) => user.id)
+	);
+
+	const { mutateAsync: add, isPending: isAdding } = useMutation({
+		mutationKey: ["addMember", groupId],
+		mutationFn: async () => {
+			const newMembers = [];
+			for await (const contact of contactsToAdd) {
+				const response = await addGroupMember(group.id, contact);
+				newMembers.push(response);
+			}
+			setMembers(members.concat(newMembers));
+			setContactsJoined([
+				...contactsJoined,
+				...newMembers.map((member) => member.id),
+			]);
+		},
+	});
 
 	return (
 		<Drawer>
@@ -411,7 +501,7 @@ function GroupInfo({ children, group }: GroupInfoProps) {
 					</DrawerTitle>
 					{user?.id === group.owner.id && (
 						<Button
-							className="absolute top-0 right-0 px-5"
+							className="absolute h-8 px-5 top-3 right-5"
 							onClick={() =>
 								navigate(`/home/groups/${groupId}/edit`)
 							}>
@@ -420,35 +510,52 @@ function GroupInfo({ children, group }: GroupInfoProps) {
 					)}
 					<DrawerDescription></DrawerDescription>
 				</DrawerHeader>
-				<div className="flex flex-col gap-2 h-72">
-					<p className="font-bold">Members</p>
-					<div className="flex flex-col h-full gap-3 px-3 overflow-y-scroll app">
-						{group &&
-							group.users.map((member) => {
-								return (
-									<div className="flex items-center justify-between">
-										<UserRow
-											key={member.id}
-											user={member}
-										/>
-										{member.id === group.owner.id && (
-											<span className="text-sm">
-												Owner
-											</span>
-										)}
-									</div>
-								);
-							})}
-					</div>
-				</div>
 				<DrawerFooter>
-					<DrawerClose>
-						<Button
-							variant="outline"
-							className="dark:bg-transparent">
-							Cancel
-						</Button>
-					</DrawerClose>
+					<Tabs defaultValue="members" className="w-full h-80">
+						<TabsList className="relative w-full dark:bg-black/15">
+							<TabsTrigger value="members" className="font-bold">
+								Members
+							</TabsTrigger>
+							<TabsTrigger value="contacts" className="mr-auto">
+								Add from contacts
+							</TabsTrigger>
+							<Button
+								className="absolute right-0 h-8 px-5"
+								disabled={isAdding}
+								onClick={async () => await add()}>
+								{isAdding ? "Adding..." : "Add"}
+							</Button>
+						</TabsList>
+						<TabsContent value="members">
+							<div className="flex flex-col h-full gap-3 px-3 overflow-y-scroll app">
+								{group &&
+									members.map((member) => {
+										return (
+											<div
+												className="flex items-center justify-between"
+												key={member.id}>
+												<UserRow user={member} />
+												{member.id ===
+													group.owner.id && (
+													<span className="text-sm">
+														Owner
+													</span>
+												)}
+											</div>
+										);
+									})}
+							</div>
+						</TabsContent>
+						<TabsContent
+							value="contacts"
+							className="overflow-y-scroll h-72 app">
+							<Contacts
+								setMembers={setContactsToAdd}
+								members={contactsToAdd}
+								hidden={contactsJoined}
+							/>
+						</TabsContent>
+					</Tabs>
 				</DrawerFooter>
 			</DrawerContent>
 		</Drawer>
@@ -488,14 +595,8 @@ function UserRow({ user }: UserPropType) {
 		<button
 			onClick={async () => mutateAsync()}
 			className="flex items-center h-16 gap-3 sm:gap-5">
-			<Avatar className="rounded-full size-12">
-				<AvatarImage
-					src={
-						user?.picture
-							? `http://localhost:3001/${user.picture}`
-							: "https://github.com/shadcn.png"
-					}
-				/>
+			<Avatar className="bg-green-700 rounded-full size-12">
+				<AvatarImage src={`http://localhost:3001/${user.picture}`} />
 			</Avatar>
 			<div className="flex flex-col gap-0">
 				<p className="overflow-hidden font-medium text-md whitespace-nowrap text-ellipsis">

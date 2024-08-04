@@ -101,7 +101,7 @@ export default function EditGroup() {
 				)}
 
 				<ArrowBigLeft
-					className="absolute left-0 rounded-full top-20 hover:cursor-pointer dark:bg-black/5"
+					className="absolute left-0 rounded-full top-20 hover:cursor-pointer dark:bg-black/5 lg:hidden"
 					onClick={() => navigate(`/home/groups/${groupId}`)}
 				/>
 
@@ -137,6 +137,7 @@ export default function EditGroup() {
 						<Input
 							value={name}
 							onChange={({ target }) => setName(target.value)}
+							className="dark:bg-white/5"
 						/>
 					</label>
 					<label>
@@ -144,6 +145,7 @@ export default function EditGroup() {
 						<Textarea
 							value={bio}
 							onChange={({ target }) => setBio(target.value)}
+							className="dark:bg-white/5"
 						/>
 					</label>
 					<Button
@@ -153,17 +155,16 @@ export default function EditGroup() {
 					</Button>
 				</div>
 
-				<div className="flex flex-col w-full gap-2 mt-10 border">
+				<div className="flex flex-col w-full gap-2 mt-10">
 					<p className="font-bold">Members</p>
 					<div className="flex flex-col h-full gap-3">
 						{group &&
 							members?.map((member) => {
 								return (
-									<div className="flex items-center justify-between">
-										<UserRow
-											key={member.id}
-											user={member}
-										/>
+									<div
+										className="flex items-center justify-between"
+										key={member.id}>
+										<UserRow user={member} />
 										{member.id === group.owner.id ? (
 											<span className="text-sm font-bold">
 												Owner
