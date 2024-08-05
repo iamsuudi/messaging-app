@@ -21,7 +21,7 @@ import { userErrorStore, useUserStore } from "@/store";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
-import { AxiosError } from "axios";
+import axios from "axios";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 type FormFields = z.infer<typeof profileSchema>;
@@ -72,8 +72,13 @@ export default function Profile() {
 			}
 			navigate("/home");
 		} catch (error) {
-			const e = error as AxiosError;
-			setError(e.response?.data.message ?? e.message);
+			if (axios.isAxiosError(error)) {
+				setError(
+					error?.response?.data.message ??
+						"Something is wrong"
+				);
+			}
+			setError("Something is wrong");
 		}
 	};
 

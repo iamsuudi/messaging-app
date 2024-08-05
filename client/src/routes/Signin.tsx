@@ -20,7 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 
 import { userErrorStore, useUserStore } from "@/store";
-import { AxiosError } from "axios";
+import axios from "axios";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
@@ -73,7 +73,12 @@ export default function Signin() {
 			setUser(response);
 			navigate("/home");
 		} catch (error) {
-			setError("Incorrect credentials");
+			if (axios.isAxiosError(error)) {
+				setError(
+					error?.response?.data.message ?? "Incorrect credentials"
+				);
+			}
+			setError("Something is wrong");
 		}
 	};
 
@@ -83,8 +88,12 @@ export default function Signin() {
 			setUser(response);
 			navigate("/home");
 		} catch (error) {
-			const e = error as unknown as AxiosError;
-			setError(e?.response?.data.message ?? "Incorrect credentials");
+			if (axios.isAxiosError(error)) {
+				setError(
+					error?.response?.data.message ?? "Incorrect credentials"
+				);
+			}
+			setError("Something is wrong");
 		}
 	};
 

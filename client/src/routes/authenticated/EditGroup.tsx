@@ -13,7 +13,7 @@ import {
 import { userErrorStore, useUserStore } from "@/store";
 import { UserType } from "@/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { AxiosError } from "axios";
+import axios from "axios";
 import { AlertCircle, ArrowBigLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -71,8 +71,13 @@ export default function EditGroup() {
 					await updateGroupProfilePic(groupId as string, picFormData);
 				}
 			} catch (error) {
-				const e = error as AxiosError;
-				setError(e.response?.data.message ?? e.message);
+				if (axios.isAxiosError(error)) {
+					setError(
+						error?.response?.data.message ??
+							"Something is wrong"
+					);
+				}
+				setError("Something is wrong");
 			}
 		},
 	});

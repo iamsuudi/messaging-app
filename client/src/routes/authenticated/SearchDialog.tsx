@@ -15,7 +15,7 @@ import { searchUsers } from "@/services/user.api";
 import { userErrorStore, useUserStore } from "@/store";
 import { UserType } from "@/types";
 import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
+import axios from "axios";
 import { AlertCircle, BanIcon, UserSearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -65,7 +65,13 @@ function UserRow({ user, setOpen }: UserPropType) {
 			onClick={async () => mutateAsync()}
 			className="flex items-center h-16 gap-3 sm:gap-5">
 			<Avatar className="rounded-full size-12">
-				<AvatarImage src={user?.picture ? `http://localhost:3001/${user.picture}` : "https://github.com/shadcn.png"} />
+				<AvatarImage
+					src={
+						user?.picture
+							? `http://localhost:3001/${user.picture}`
+							: "https://github.com/shadcn.png"
+					}
+				/>
 			</Avatar>
 			<div className="flex flex-col gap-0">
 				<p className="overflow-hidden font-medium text-md whitespace-nowrap text-ellipsis">
@@ -121,12 +127,13 @@ export default function SearchDrawer({ children }: SearchPropType) {
 								try {
 									await mutateAsync(target.value);
 								} catch (error) {
-									const e = error as AxiosError;
-									// console.log(e.message);
-									setError(
-										e.response?.data.message ??
-											"Check your internet connection."
-									);
+									if (axios.isAxiosError(error)) {
+										setError(
+											error?.response?.data.message ??
+												"Check your internet connection."
+										);
+									}
+									setError("Something is wrong");
 								}
 							}
 							if (target.value.length > 2) setSearching(true);
