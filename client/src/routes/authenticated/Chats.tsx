@@ -78,7 +78,11 @@ function ChatRow({ chat }: ChatPropType) {
 						: "Deleted Account"}
 				</p>
 				<p className="max-w-full overflow-hidden text-xs font-bold tracking-tighter opacity-50 whitespace-nowrap text-ellipsis">
-					{lastMessage?.content ?? "No chat history"}
+					{lastMessage?.content
+						? lastMessage.content
+						: chat.messages.length === 0
+						? "No chat history"
+						: "Last message deleted"}
 				</p>
 			</div>
 			<div className="flex flex-col items-center gap-1 ml-auto min-w-16">
