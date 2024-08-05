@@ -1,7 +1,7 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcrypt";
-import User from "../models/user";
+import UserModel from "../models/user";
 
 passport.serializeUser((user: Express.User, done) => {
 	done(null, user?.id);
@@ -9,7 +9,7 @@ passport.serializeUser((user: Express.User, done) => {
 
 passport.deserializeUser(async (id, done) => {
 	try {
-		const user = await User.findById(id);
+		const user = await UserModel.findById(id);
 		const parsed = user?.toJSON() as Express.User;
 		done(null, parsed);
 	} catch (error) {
@@ -22,7 +22,7 @@ passport.use(
 		{ usernameField: "email" },
 		async (email: string, password: string, done: Function) => {
 			try {
-				const user = await User.findOne({ email });
+				const user = await UserModel.findOne({ email });
 				if (!user) throw new Error("User doesn't exist");
 
 				const passwordCorrect = user.passwordHash
