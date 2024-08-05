@@ -19,7 +19,7 @@ function Contact({ user, onClick, disabled }: ContactPropsType) {
 				disabled && "opacity-70"
 			}`}>
 			<Avatar className="bg-blue-700 rounded-full size-12">
-				<AvatarImage src={`http://localhost:3001/${user.picture}`} />
+				<AvatarImage src={`http://localhost:3001/${user?.picture}`} />
 			</Avatar>
 			<div className="flex flex-col gap-0">
 				<p className="overflow-hidden font-medium text-md whitespace-nowrap text-ellipsis">

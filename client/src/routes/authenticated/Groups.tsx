@@ -29,12 +29,14 @@ function GroupRow({ group }: GroupPropType) {
 
 	useEffect(() => {
 		const changeLastSeen = (msg: GroupMessageType) => {
+			console.log({msg});
+			
 			if (msg.chatId === group.id) setLastMessage(msg);
 		};
-		socket.on("lastMessage", changeLastSeen);
+		socket.on("lastGroupMessage", changeLastSeen);
 
 		return () => {
-			socket.off("lastMessage", changeLastSeen);
+			socket.off("lastGroupMessage", changeLastSeen);
 		};
 	}, [group, user]);
 
@@ -58,6 +60,7 @@ function GroupRow({ group }: GroupPropType) {
 					)}
 					{lastMessage && (
 						<span className="tracking-tighter opacity-60">
+							{"  :  "}
 							{lastMessage.content}
 						</span>
 					)}
@@ -67,8 +70,8 @@ function GroupRow({ group }: GroupPropType) {
 				</p>
 			</div>
 			<div className="flex flex-col items-center gap-1 ml-auto min-w-16">
-				<span className="text-xs text-gray-700">
-					{format(lastMessage?.date ?? new Date(), "h:m a")}
+				<span className="text-xs opacity-80">
+					{format(lastMessage?.date ?? new Date(), "hh:mm a")}
 				</span>
 			</div>
 		</Link>
@@ -113,7 +116,7 @@ export function Groups() {
 		const addGroup = (newroup: GroupType) => {
 			setGroups(groups.concat(newroup));
 		};
-
+		
 		socket.on("newGroup", addGroup);
 
 		return () => {

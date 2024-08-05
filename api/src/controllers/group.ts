@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Group from "../models/group";
 import { GroupChatFormatted } from "../types";
-import { groupParser } from "../utils/groupParser";
+import { groupParser, messageParser } from "../utils/groupParser";
 import Message from "../models/message";
 import { io } from "../app";
 import User from "../models/user";
@@ -44,7 +44,7 @@ export const makeGroupChat = async (
 
 	const message = await Message.create({
 		content,
-		groupId,
+		chatId: groupId,
 		date: new Date(),
 		sender,
 		seen: true,
@@ -54,11 +54,13 @@ export const makeGroupChat = async (
 	if (group?.messages) group.messages = group.messages.concat(message._id);
 	await group?.save();
 
-	// now send message to the users in the group
-	io.to(groupId).emit("groupMessage", message);
+	const parsed = await messageParser(message.toJSON());
 
-	// and to home page to refresh last message shown
-	io.emit("groupLastMessage", message);
+	// now send message to the users in the group
+	io.to(groupId).emit("groupMessage", parsed);
+
+	// and to groups page to refresh last message shown
+	io.emit("lastGroupMessage", parsed);
 
 	res.status(201).json(message);
 };
@@ -120,8 +122,7 @@ export const addUser = async (
 ) => {
 	const group = await Group.findById(req.params.groupId);
 	const user = await User.findById(req.body.userId);
-	console.log('new member ', user);
-	
+	console.log("new member ", user);
 
 	if (group?.users && user) group.users = group.users.concat(user._id);
 

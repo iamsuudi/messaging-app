@@ -59,7 +59,7 @@ type UserPropType = {
 
 function MyMessage({ msg }: MessagePropType) {
 	return (
-		<div className="flex flex-wrap gap-2 items-start p-2 ml-auto bg-pink-200 dark:bg-rose-900/40 rounded-2xl rounded-br-none w-fit max-w-[70%]">
+		<div className="flex flex-wrap gap-1 items-start p-2 ml-auto bg-pink-200 dark:bg-rose-900/40 rounded-2xl rounded-br-none w-fit max-w-[70%]">
 			<span className="px-2 tracking-wider">{msg.content}</span>
 			<span className="flex items-end justify-between mt-auto ml-auto text-xs min-w-20">
 				{format(msg.date, "hh:mm a")}{" "}
@@ -75,8 +75,22 @@ function MyMessage({ msg }: MessagePropType) {
 
 function OthersMessage({ msg }: MessagePropType) {
 	return (
-		<div className="flex flex-wrap gap-2 justify-between items-start p-2 mr-auto bg-gray-200 dark:bg-black/20 rounded-2xl rounded-bl-none w-fit max-w-[70%]">
-			<span className="px-2 tracking-wider">{msg.content}</span>
+		<div className="flex gap-3 items-start p-2 mr-auto bg-gray-200 dark:bg-black/20 rounded-2xl rounded-tl-none w-fit max-w-[70%]">
+			<Avatar className="bg-purple-700 rounded-full size-10">
+				<AvatarImage
+					src={`http://localhost:3001/${msg.sender.picture}`}
+				/>
+			</Avatar>
+			<div className="flex flex-col items-start gap-1 overflow-hidden">
+				<p className="font-black tracking-[1px] text-sm overflow-hidden whitespace-nowrap text-ellipsis">
+					{msg.sender
+						? msg.sender.name ?? "No Name Yet"
+						: "Deleted Account"}
+				</p>
+				<p className="max-w-full text-sm font-bold tracking-wider opacity-80">
+					{msg.content}
+				</p>
+			</div>
 			<span className="flex items-end justify-between mt-auto ml-auto text-xs min-w-14">
 				{format(msg.date, "hh:mm a")}
 			</span>
@@ -380,7 +394,7 @@ function UserRow({ user }: UserPropType) {
 	return (
 		<button
 			onClick={async () => mutateAsync()}
-			className="flex items-center h-16 gap-3 sm:gap-5">
+			className="flex items-center h-16 max-w-full gap-3 overflow-hidden sm:gap-5 whitespace-nowrap text-ellipsis">
 			<Avatar className="bg-green-700 rounded-full size-12">
 				<AvatarImage src={`http://localhost:3001/${user.picture}`} />
 			</Avatar>
