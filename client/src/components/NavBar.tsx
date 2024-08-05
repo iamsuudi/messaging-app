@@ -45,7 +45,7 @@ export default function NavBar() {
 	return (
 		<div
 			ref={nav}
-			className="fixed top-0 z-20 flex items-center justify-between w-full px-1 sm:p-3 backdrop-blur-sm sm:backdrop-blur-none">
+			className="fixed top-0 z-20 flex items-center justify-between w-full px-1 sm:p-3 sm:backdrop-blur-none">
 			<NavLink
 				to={"/"}
 				className={

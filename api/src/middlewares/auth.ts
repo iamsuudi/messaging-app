@@ -3,7 +3,7 @@ import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcrypt";
 import User from "../models/user";
 
-passport.serializeUser((user, done) => {
+passport.serializeUser((user: Express.User, done) => {
 	done(null, user?.id);
 });
 
