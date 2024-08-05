@@ -29,8 +29,8 @@ function GroupRow({ group }: GroupPropType) {
 
 	useEffect(() => {
 		const changeLastSeen = (msg: GroupMessageType) => {
-			console.log({msg});
-			
+			console.log({ msg });
+
 			if (msg.chatId === group.id) setLastMessage(msg);
 		};
 		socket.on("lastGroupMessage", changeLastSeen);
@@ -99,6 +99,7 @@ export default function GroupsPage() {
 }
 
 export function Groups() {
+	const { user } = useUserStore();
 	const [groups, setGroups] = useState<GroupType[]>([]);
 	const { data, isLoading } = useQuery({
 		queryKey: ["groups"],
@@ -113,16 +114,21 @@ export function Groups() {
 	}, [data]);
 
 	useEffect(() => {
-		const addGroup = (newroup: GroupType) => {
-			setGroups(groups.concat(newroup));
+		const addGroup = (newGroup: GroupType) => {
+			if (
+				user &&
+				newGroup.users.map((i) => i.id).includes(user.id) &&
+				newGroup.owner.id !== user.id
+			)
+				setGroups(groups.concat(newGroup));
 		};
-		
+
 		socket.on("newGroup", addGroup);
 
 		return () => {
 			socket.off("newGroup", addGroup);
 		};
-	}, [groups]);
+	}, [groups, user]);
 
 	return (
 		<div className="flex flex-col h-full" id="chatsPage">

@@ -122,9 +122,12 @@ export const addUser = async (
 ) => {
 	const group = await Group.findById(req.params.groupId);
 	const user = await User.findById(req.body.userId);
-	console.log("new member ", user);
 
-	if (group?.users && user) group.users = group.users.concat(user._id);
+	if (group?.users && user) {
+		group.users = group.users.concat(user._id);
+		const parsed = await groupParser(group.toJSON());
+		io.emit("newGroup", parsed);
+	}
 
 	await group?.save();
 
