@@ -48,7 +48,7 @@ export const updateProfile = async (
 ) => {
 	const updatedData = req.body;
 
-	const updatedUser = await User.findByIdAndUpdate(req.user?.id, updatedData);
+	const updatedUser = req.user ? await User.findByIdAndUpdate(req.user.id, updatedData) : null;
 
 	return res.status(202).json(updatedUser);
 };
