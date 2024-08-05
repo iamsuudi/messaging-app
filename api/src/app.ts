@@ -5,7 +5,7 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import mongoose from "mongoose";
 import morgan from "morgan";
-import { MONGODB_URI, SECRET } from "./utils/config";
+import { clientURL, MONGODB_URI, SECRET } from "./utils/config";
 import "express-async-errors";
 import "./middlewares/auth";
 
@@ -37,7 +37,7 @@ const app = express();
 
 app.use(
 	cors({
-		origin: "https://dalochat.vercel.app",
+		origin: clientURL,
 		credentials: true,
 	})
 );
@@ -45,7 +45,7 @@ app.use(
 const httpServer = createServer(app);
 
 export const io = new Server(httpServer, {
-	cors: { origin: "https://dalochat.vercel.app" },
+	cors: { origin: clientURL },
 	connectionStateRecovery: {},
 });
 
