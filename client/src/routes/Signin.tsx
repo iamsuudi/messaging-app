@@ -74,7 +74,6 @@ export default function Signin() {
 			navigate("/home");
 		} catch (error) {
 			const e = error as unknown as AxiosError;
-			console.log(e?.response?.data.message);
 			setError(e?.response?.data.message ?? "Incorrect credentials");
 		}
 	};
@@ -86,7 +85,6 @@ export default function Signin() {
 			navigate("/home");
 		} catch (error) {
 			const e = error as unknown as AxiosError;
-			console.log(e?.response?.data.message);
 			setError(e?.response?.data.message ?? "Incorrect credentials");
 		}
 	};
