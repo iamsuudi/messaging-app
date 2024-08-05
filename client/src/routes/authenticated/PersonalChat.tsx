@@ -1,6 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getPersonalChat, seeMessage, sendMessage } from "@/services/chat.api";
+import {
+	deleteMessage,
+	getPersonalChat,
+	seeMessage,
+	sendMessage,
+} from "@/services/chat.api";
 import { useUserStore } from "@/store";
 import { MessageType, UserType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
@@ -46,6 +51,13 @@ import HomeSideBar from "./SideBar";
 import { socket } from "@/socket";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
+import {
+	ContextMenu,
+	ContextMenuContent,
+	ContextMenuItem,
+	ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+
 type MessagePropType = {
 	msg: MessageType;
 };
@@ -55,18 +67,46 @@ type UserPropType = {
 };
 
 function MyMessage({ msg }: MessagePropType) {
+	const [deleted, setDeleted] = useState(false);
+	const { chatId } = useParams();
+
+	if (deleted) return null;
+
 	return (
-		<div className="flex flex-wrap gap-2 items-start p-2 ml-auto bg-pink-200 dark:bg-rose-900/40 rounded-2xl rounded-br-none w-fit max-w-[70%]">
-			<span className="px-2 tracking-wider">{msg.content}</span>
-			<span className="flex items-end justify-between mt-auto ml-auto text-xs min-w-20">
-				{format(msg.date, "hh:mm a")}{" "}
-				{msg.seen ? (
-					<CheckCheckIcon className="opacity-80 size-4" />
-				) : (
-					<CheckIcon className="opacity-80 size-4" />
-				)}
-			</span>
-		</div>
+		<ContextMenu>
+			<ContextMenuTrigger>
+				<div className="flex flex-wrap gap-2 items-start p-2 ml-auto bg-pink-200 dark:bg-rose-900/40 rounded-2xl rounded-br-none w-fit max-w-[70%]">
+					<span className="px-2 tracking-wider">{msg.content}</span>
+					<span className="flex items-end justify-between mt-auto ml-auto text-xs min-w-20">
+						{format(msg.date, "hh:mm a")}{" "}
+						{msg.seen ? (
+							<CheckCheckIcon className="opacity-80 size-4" />
+						) : (
+							<CheckIcon className="opacity-80 size-4" />
+						)}
+					</span>
+				</div>
+			</ContextMenuTrigger>
+			<ContextMenuContent>
+				<ContextMenuItem
+					onClick={async () => {
+						try {
+							if (chatId) await deleteMessage(chatId, msg.id);
+							setDeleted(true);
+						} catch (error) {
+							// if (axios.isAxiosError(error)) {
+							// 	setError(
+							// 		error?.response?.data.message ??
+							// 			"Something is wrong"
+							// 	);
+							// }
+							// setError("Something is wrong");
+						}
+					}}>
+					Delete
+				</ContextMenuItem>
+			</ContextMenuContent>
+		</ContextMenu>
 	);
 }
 
@@ -138,11 +178,17 @@ function Messages({ user }: UserPropType) {
 			);
 		};
 
+		const handleDelete = (messageId: string) => {
+			setMessages(messages.filter((msg) => msg.id !== messageId));
+		};
+
 		socket?.on("message", handleIncomingMessage);
 
 		socket?.on("messagesAreSeen", messagesAreSeen);
 
 		socket?.on("AMessageSeen", AMessageSeen);
+
+		socket?.on("chatMessageDeleted", handleDelete);
 
 		if (ref.current) ref.current.scrollTop = ref.current.scrollHeight;
 
@@ -150,6 +196,7 @@ function Messages({ user }: UserPropType) {
 			socket.off("message", handleIncomingMessage);
 			socket.off("messagesAreSeen", messagesAreSeen);
 			socket.off("AMessageSeen", AMessageSeen);
+			socket?.off("chatMessageDeleted", handleDelete);
 		};
 	}, [chat, messages, user.id, chatId]);
 
@@ -432,7 +479,11 @@ function ReceiverComponent({ children, user }: ReceiverComponentProps) {
 				</DrawerHeader>
 				<DrawerFooter>
 					<DrawerClose>
-						<Button variant="outline" className="dark:bg-transparent">Cancel</Button>
+						<Button
+							variant="outline"
+							className="dark:bg-transparent">
+							Cancel
+						</Button>
 					</DrawerClose>
 				</DrawerFooter>
 			</DrawerContent>

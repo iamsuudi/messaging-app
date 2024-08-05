@@ -60,6 +60,21 @@ export const sendMessage = async (
 	return response.data;
 };
 
+export const deleteMessage = async (
+	chatId: string,
+	messageId: string
+): Promise<MessageType> => {
+	const response = await axios({
+		method: "delete",
+		baseURL,
+		url: `/chat/individual/${chatId}/message`,
+		data: {
+			messageId,
+		},
+	});
+	return response.data;
+};
+
 export const seeMessage = async (
 	chatId: string,
 	messageId: string

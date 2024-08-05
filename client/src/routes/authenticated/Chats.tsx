@@ -32,7 +32,7 @@ function calculateUnSeenMessages(user: UserType, messages: MessageType[]) {
 function ChatRow({ chat }: ChatPropType) {
 	const user = useUserStore.getState().user;
 	const { receiver } = chat;
-	const [lastMessage, setLastMessage] = useState(
+	const [lastMessage, setLastMessage] = useState<MessageType | null>(
 		sortMessages(chat.messages)[chat.messages.length - 1]
 	);
 	const [unSeen, setUnSeen] = useState<number>(
@@ -47,26 +47,27 @@ function ChatRow({ chat }: ChatPropType) {
 		const changeLastSeen = (msg: MessageType) => {
 			if (msg.chatId === chat.id) setLastMessage(msg);
 		};
+		const handleDelete = (messageId: string) => {
+			if (messageId === lastMessage?.id) setLastMessage(null);
+		};
 		socket.on("addUnSeen", addUnSeen);
 		socket.on("lastMessage", changeLastSeen);
+		socket.on("chatMessageDeleted", handleDelete);
 
 		return () => {
 			socket.off("addUnSeen", addUnSeen);
 			socket.off("lastMessage", changeLastSeen);
+			socket.off("chatMessageDeleted", handleDelete);
 		};
-	}, [chat, unSeen, user]);
+	}, [chat, unSeen, user, lastMessage?.id]);
 
 	return (
 		<Link
 			to={`/home/chats/${chat.id}`}
 			className="flex items-center h-20 gap-3 p-3 sm:gap-5">
-			<Avatar className="rounded-full size-12">
+			<Avatar className="bg-purple-700 rounded-full size-12">
 				<AvatarImage
-					src={
-						receiver?.picture
-							? `http://localhost:3001/${receiver.picture}`
-							: "https://github.com/shadcn.png"
-					}
+					src={`http://localhost:3001/${receiver.picture}`}
 				/>
 				<AvatarFallback></AvatarFallback>
 			</Avatar>

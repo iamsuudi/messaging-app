@@ -122,7 +122,28 @@ export const createIndividualChat = async (
 	res.sendStatus(200);
 };
 
-export const deleteMessage = async (req: Request, res: Response) => {};
+export const deleteMessage = async (
+	req: Request<{ chatId: string }, {}, { messageId: string }>,
+	res: Response
+) => {
+	const { chatId } = req.params;
+	const { messageId } = req.body;
+
+	await Message.findByIdAndDelete(messageId);
+
+	const chat = await Chat.findById(chatId);
+
+	if (chat?.messages)
+		chat.messages = chat.messages.filter(
+			(msg) => msg.toString() !== messageId
+		);
+
+	await chat?.save();
+
+	io.emit("chatMessageDeleted", messageId);
+
+	res.status(204).json(chat);
+};
 
 export const seeMessage = async (
 	req: Request<{ chatId: string }, {}, { messageId: string }>,
