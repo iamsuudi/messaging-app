@@ -54,12 +54,3 @@ export interface GroupType {
 	name: string;
 	bio: string;
 }
-
-export interface UserType {
-	name?: string;
-	email?: string;
-	id?: string;
-	bio?: string;
-	username?: string;
-	picture?: string;
-}
