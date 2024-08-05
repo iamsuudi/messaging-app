@@ -32,7 +32,7 @@ export default function HomeNav() {
 				style={{ fontFamily: "Caveat Brush" }}>
 				DaloChat
 			</NavLink>
-			<div className="flex items-end ml-5 mr-auto">
+			<div className="flex items-end ml-auto mr-5">
 				<SearchDrawer>
 					<SearchIcon className="size-4" />
 				</SearchDrawer>

@@ -107,12 +107,16 @@ export const createIndividualChat = async (
 				users: [otherPersonId, req.user?.id],
 			});
 
+			const parsedChat = await chatsParser(myId, newChat.toJSON());
+
 			io.emit("newChat", await chatsParser(myId, newChat.toJSON(), true));
 
-			return res.status(201).send(newChat);
+			return res.status(201).send(parsedChat);
 		}
 
-		return res.status(200).send(chat);
+		const parsedChat = await chatsParser(myId, chat.toJSON());
+
+		return res.status(200).send(parsedChat);
 	}
 
 	res.sendStatus(200);

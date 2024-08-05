@@ -109,7 +109,7 @@ export default function SearchDrawer({ children }: SearchPropType) {
 						Search contacts
 					</DialogTitle>
 					<Input
-						placeholder="Type here..."
+						placeholder="Type here minimum 3 characters..."
 						autoCorrect="false"
 						autoComplete="false"
 						autoCapitalize="false"
@@ -117,7 +117,7 @@ export default function SearchDrawer({ children }: SearchPropType) {
 						autoFocus
 						className=" dark:bg-transparent"
 						onChange={async ({ target }) => {
-							if (target.value.length > 3 && !isPending) {
+							if (target.value.length > 2 && !isPending) {
 								try {
 									await mutateAsync(target.value);
 								} catch (error) {
@@ -129,7 +129,7 @@ export default function SearchDrawer({ children }: SearchPropType) {
 									);
 								}
 							}
-							if (target.value.length > 3) setSearching(true);
+							if (target.value.length > 2) setSearching(true);
 							else setSearching(false);
 						}}
 					/>
