@@ -73,8 +73,7 @@ export default function Signin() {
 			setUser(response);
 			navigate("/home");
 		} catch (error) {
-			const e = error as unknown as AxiosError;
-			setError(e?.response?.data.message ?? "Incorrect credentials");
+			setError("Incorrect credentials");
 		}
 	};
 

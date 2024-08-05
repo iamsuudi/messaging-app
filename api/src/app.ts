@@ -37,7 +37,7 @@ const app = express();
 
 app.use(
 	cors({
-		origin: "http://localhost:5173",
+		origin: "https://dalochat.vercel.app",
 		credentials: true,
 	})
 );
@@ -45,7 +45,7 @@ app.use(
 const httpServer = createServer(app);
 
 export const io = new Server(httpServer, {
-	cors: { origin: "http://localhost:5173" },
+	cors: { origin: "https://dalochat.vercel.app" },
 	connectionStateRecovery: {},
 });
 
