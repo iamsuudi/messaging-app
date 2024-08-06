@@ -65,6 +65,7 @@ app.use(
 		cookie: {
 			maxAge: 1000 * 60 * 60,
 			sameSite: "none",
+			secure: process.env.NODE_ENV === "production",
 		},
 		store: MongoStore.create({
 			client: mongoose.connection.getClient(),
