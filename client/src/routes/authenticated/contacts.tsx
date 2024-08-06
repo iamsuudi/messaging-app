@@ -23,10 +23,10 @@ function Contact({ user, onClick, disabled }: ContactPropsType) {
 			</Avatar>
 			<div className="flex flex-col gap-0">
 				<p className="overflow-hidden font-medium text-md whitespace-nowrap text-ellipsis">
-					{user.name ?? "No Name"}
+					{user?.name ?? "No Name"}
 				</p>
 				<p className="max-w-full overflow-hidden text-xs font-medium text-start opacity-60 whitespace-nowrap text-ellipsis">
-					@{user.username}
+					@{user?.username}
 				</p>
 			</div>
 

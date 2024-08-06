@@ -23,9 +23,11 @@ function sortMessages(messages: MessageType[]) {
 
 function calculateUnSeenMessages(user: UserType, messages: MessageType[]) {
 	let sum = 0;
-	for (const msg of messages) {
-		if (msg.sender !== user.id && !msg.seen) sum++;
-	}
+
+	if (messages)
+		for (const msg of messages) {
+			if (msg.sender !== user.id && !msg.seen) sum++;
+		}
 	return sum;
 }
 
@@ -33,7 +35,7 @@ function ChatRow({ chat }: ChatPropType) {
 	const user = useUserStore.getState().user;
 	const { receiver } = chat;
 	const [lastMessage, setLastMessage] = useState<MessageType | null>(
-		sortMessages(chat.messages)[chat.messages.length - 1]
+		sortMessages(chat.messages)[chat.messages?.length - 1]
 	);
 	const [unSeen, setUnSeen] = useState<number>(
 		calculateUnSeenMessages(user as UserType, chat.messages)
@@ -67,20 +69,20 @@ function ChatRow({ chat }: ChatPropType) {
 			className="flex items-center h-20 gap-3 p-3 sm:gap-5">
 			<Avatar className="bg-purple-700 rounded-full size-12">
 				<AvatarImage
-					src={`http://localhost:3001/${receiver.picture}`}
+					src={`http://localhost:3001/${receiver?.picture}`}
 				/>
 				<AvatarFallback></AvatarFallback>
 			</Avatar>
 			<div className="flex flex-col max-w-[50%]">
 				<p className="font-black tracking-[1px] text-md overflow-hidden whitespace-nowrap text-ellipsis opacity-80">
 					{receiver
-						? receiver.name ?? "No Name Yet"
+						? receiver?.name ?? "No Name Yet"
 						: "Deleted Account"}
 				</p>
 				<p className="max-w-full overflow-hidden text-xs font-bold tracking-tighter opacity-50 whitespace-nowrap text-ellipsis">
 					{lastMessage?.content
 						? lastMessage.content
-						: chat.messages.length === 0
+						: chat.messages?.length === 0
 						? "No chat history"
 						: "Last message deleted"}
 				</p>

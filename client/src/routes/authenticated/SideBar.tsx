@@ -19,7 +19,7 @@ import Contacts from "./contacts";
 
 export default function HomeSideBar() {
 	return (
-		<aside className="fixed bottom-0 z-20 flex justify-around w-full gap-3 p-2 shadow-inner backdrop-blur-lg sm:py-6 sm:px-5 sm:left-0 sm:top-[60px] sm:h-full sm:w-fit sm:flex-col h-fit sm:justify-start gap-y-5 dark:bg-black/15">
+		<aside className="fixed bottom-0 z-20 flex justify-around items-center w-full gap-3 p-2 shadow-inner backdrop-blur-lg sm:py-6 sm:px-5 sm:left-0 sm:top-[60px] sm:h-full sm:w-fit sm:flex-col h-fit sm:justify-start gap-y-5 dark:bg-black/15">
 			<NavLink to={"/home"} className="p-2 rounded-full">
 				<MessageCircleMoreIcon />
 			</NavLink>
@@ -64,8 +64,8 @@ function CreateGroupDialog() {
 
 	return (
 		<Dialog>
-			<DialogTrigger className="text-white">
-				<PlusIcon className="p-2 bg-black rounded-full size-9" />
+			<DialogTrigger className="text-white dark:text-black">
+				<PlusIcon className="p-2 bg-black rounded-full dark:bg-white size-8" />
 			</DialogTrigger>
 			<DialogDescription></DialogDescription>
 			<DialogContent className="flex flex-col gap-5 py-5  max-w-[90%] dark:bg-gradient-to-tr dark:from-[#0e093f] dark:to-[#5c323f] bg-background bg-fixed rounded w-96">
