@@ -1,11 +1,7 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcrypt";
-<<<<<<< HEAD
-import UserModel from "../models/user";
-=======
 import UserModel, { UserType } from "../models/user";
->>>>>>> 95abc5f (fix: Add user type on the serialize function)
 
 passport.serializeUser((user: UserType, done) => {
 	done(null, user.id);
@@ -14,11 +10,7 @@ passport.serializeUser((user: UserType, done) => {
 passport.deserializeUser(async (id, done) => {
 	try {
 		const user = await UserModel.findById(id);
-<<<<<<< HEAD
-		const parsed = user?.toJSON() as Express.User;
-=======
 		const parsed = user?.toJSON() as UserType;
->>>>>>> 95abc5f (fix: Add user type on the serialize function)
 		done(null, parsed);
 	} catch (error) {
 		done(error);
