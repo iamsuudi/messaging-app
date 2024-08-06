@@ -65,13 +65,7 @@ function UserRow({ user, setOpen }: UserPropType) {
 			onClick={async () => mutateAsync()}
 			className="flex items-center h-16 gap-3 sm:gap-5">
 			<Avatar className="rounded-full size-12">
-				<AvatarImage
-					src={
-						user?.picture
-							? `http://localhost:3001/${user.picture}`
-							: "https://github.com/shadcn.png"
-					}
-				/>
+				<AvatarImage src={user?.picture} />
 			</Avatar>
 			<div className="flex flex-col gap-0">
 				<p className="overflow-hidden font-medium text-md whitespace-nowrap text-ellipsis">

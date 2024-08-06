@@ -296,11 +296,7 @@ export default function PersonalChat() {
 								<div className="flex flex-col items-center gap-2">
 									<Avatar className="rounded-full size-32">
 										<AvatarImage
-											src={
-												chat.receiver?.picture
-													? `http://localhost:3001/${chat.receiver.picture}`
-													: "https://github.com/shadcn.png"
-											}
+											src={chat.receiver?.picture}
 										/>
 									</Avatar>
 									<span className="text-sm opacity-70">
@@ -458,13 +454,7 @@ function ReceiverComponent({ children, user }: ReceiverComponentProps) {
 					<DrawerTitle className="flex gap-5 mb-5">
 						<div className="flex flex-col">
 							<Avatar className="rounded-full size-20">
-								<AvatarImage
-									src={
-										user?.picture
-											? `http://localhost:3001/${user.picture}`
-											: "https://github.com/shadcn.png"
-									}
-								/>
+								<AvatarImage src={user?.picture} />
 							</Avatar>
 							<span className="text-sm opacity-70">
 								@{user.username}

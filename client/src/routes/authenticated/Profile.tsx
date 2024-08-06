@@ -30,7 +30,8 @@ export default function Profile() {
 	const navigate = useNavigate();
 	const { setUser, fetchUser, user } = useUserStore((state) => state);
 	const { error, setError, removeError } = userErrorStore((state) => state);
-	const [url, setUrl] = useState(`http://localhost:3001/${user?.picture}`);
+	// const [url, setUrl] = useState(`http://localhost:3001/${user?.picture}`);
+	const [url, setUrl] = useState(user?.picture);
 	const [picFormData, setPicFormData] = useState<FormData>();
 
 	useEffect(() => {
@@ -100,9 +101,9 @@ export default function Profile() {
 				<h1 className="text-2xl font-bold">Update your info</h1>
 
 				<form className="flex flex-col items-center w-full max-w-md gap-3 px-10 py-2">
-					<Avatar className="bg-rose-300 size-32">
+					<Avatar className="bg-pink-600 size-32">
 						<AvatarImage
-							src={url ?? "https://github.com/shadcn.png"}
+							src={url}
 						/>
 					</Avatar>
 					<Input

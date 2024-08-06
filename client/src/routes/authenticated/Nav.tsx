@@ -85,7 +85,7 @@ function MenuComponent() {
 						className="flex items-center gap-2 hover:cursor-pointer"
 						onClick={() => navigate("/home/profile")}>
 						<Avatar>
-							<AvatarImage src={user?.picture ? `http://localhost:3001/${user.picture}` : "https://github.com/shadcn.png"} />
+							<AvatarImage src={user?.picture} />
 							<AvatarFallback>P</AvatarFallback>
 						</Avatar>
 						<div className="flex flex-col">
@@ -121,7 +121,9 @@ function MenuComponent() {
 					</MenubarItem>
 
 					<MenubarItem className="">
-						<button onClick={() => navigate("")} className={"flex items-center gap-2 w-full py-1"}>
+						<button
+							onClick={() => navigate("")}
+							className={"flex items-center gap-2 w-full py-1"}>
 							<Settings className="size-4" /> Settings
 						</button>
 					</MenubarItem>

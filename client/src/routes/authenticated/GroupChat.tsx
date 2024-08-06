@@ -78,7 +78,7 @@ function OthersMessage({ msg }: MessagePropType) {
 		<div className="flex gap-3 items-start p-2 mr-auto bg-gray-200 dark:bg-black/20 rounded-2xl rounded-tl-none w-fit max-w-[70%]">
 			<Avatar className="bg-purple-700 rounded-full size-10">
 				<AvatarImage
-					src={`http://localhost:3001/${msg.sender.picture}`}
+					src={msg.sender.picture}
 				/>
 			</Avatar>
 			<div className="flex flex-col items-start gap-1 overflow-hidden">
@@ -396,7 +396,7 @@ function UserRow({ user }: UserPropType) {
 			onClick={async () => mutateAsync()}
 			className="flex items-center h-16 max-w-full gap-3 overflow-hidden sm:gap-5 whitespace-nowrap text-ellipsis">
 			<Avatar className="bg-green-700 rounded-full size-12">
-				<AvatarImage src={`http://localhost:3001/${user.picture}`} />
+				<AvatarImage src={user?.picture} />
 			</Avatar>
 			<div className="flex flex-col gap-0">
 				<p className="overflow-hidden font-medium text-md whitespace-nowrap text-ellipsis">
@@ -463,7 +463,7 @@ function GroupInfo() {
 					<div className="flex flex-col items-center gap-2">
 						<Avatar className="rounded-full bg-cyan-700 size-32">
 							<AvatarImage
-								src={`http://localhost:3001/${group.picture}`}
+								src={group.picture}
 							/>
 						</Avatar>
 						<span className="text-sm opacity-70">

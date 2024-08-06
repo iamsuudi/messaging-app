@@ -44,7 +44,8 @@ userRouter.post(
 		const user = await User.findByIdAndUpdate(
 			req.user?.id,
 			{
-				picture: req.file?.filename,
+				// picture: req.file?.filename,
+				picture: req.file?.path,
 			},
 			{ new: true }
 		);

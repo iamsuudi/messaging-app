@@ -45,7 +45,7 @@ function GroupRow({ group }: GroupPropType) {
 			to={`/home/groups/${group.id}`}
 			className="flex items-center w-full h-20 gap-4 p-3 overflow-hidden">
 			<Avatar className="rounded-full size-14 bg-sky-700">
-				<AvatarImage src={`http://localhost:3001/${group.picture}`} />
+				<AvatarImage src={group.picture} />
 				<AvatarFallback></AvatarFallback>
 			</Avatar>
 			<div className="inline-flex flex-col max-w-[50%]">

@@ -62,12 +62,10 @@ function ChatRow({ chat }: ChatPropType) {
 			to={`/home/chats/${chat.id}`}
 			className="flex items-center h-20 gap-3 p-3 sm:gap-5">
 			<Avatar className="bg-purple-700 rounded-full size-12">
-				<AvatarImage
-					src={`http://localhost:3001/${receiver?.picture}`}
-				/>
+				<AvatarImage src={receiver?.picture} />
 				<AvatarFallback></AvatarFallback>
 			</Avatar>
-			
+
 			<div className="flex flex-col max-w-[50%]">
 				<p className="font-black tracking-[1px] text-md overflow-hidden whitespace-nowrap text-ellipsis opacity-80">
 					{receiver

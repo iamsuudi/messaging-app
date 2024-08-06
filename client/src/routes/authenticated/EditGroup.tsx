@@ -58,7 +58,7 @@ export default function EditGroup() {
 	useEffect(() => {
 		if (group) {
 			setMembers(group.users);
-			setUrl(`http://localhost:3001/${group.picture}`);
+			setUrl(group.picture);
 		}
 	}, [group]);
 
@@ -73,8 +73,7 @@ export default function EditGroup() {
 			} catch (error) {
 				if (axios.isAxiosError(error)) {
 					setError(
-						error?.response?.data.message ??
-							"Something is wrong"
+						error?.response?.data.message ?? "Something is wrong"
 					);
 				}
 				setError("Something is wrong");
@@ -229,14 +228,14 @@ function UserRow({ user }: { user: UserType }) {
 			onClick={async () => mutateAsync()}
 			className="flex items-center w-full h-16 gap-3 sm:gap-5">
 			<Avatar className="bg-green-700 rounded-full size-12">
-				<AvatarImage src={`http://localhost:3001/${user.picture}`} />
+				<AvatarImage src={user?.picture} />
 			</Avatar>
 			<div className="flex flex-col gap-0">
 				<p className="overflow-hidden font-medium text-md whitespace-nowrap text-ellipsis">
-					{user.name ?? "No Name"}
+					{user?.name ?? "No Name"}
 				</p>
 				<p className="max-w-full overflow-hidden text-xs font-medium text-start opacity-60 whitespace-nowrap text-ellipsis">
-					@{user.username}
+					@{user?.username}
 				</p>
 			</div>
 		</button>
