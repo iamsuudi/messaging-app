@@ -5,7 +5,7 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import mongoose from "mongoose";
 import morgan from "morgan";
-import { clientURL, MONGODB_URI, SECRET } from "./utils/config";
+import { clientURL, MONGODB_URI, SECRET, SECURE } from "./utils/config";
 import "express-async-errors";
 import "./middlewares/auth";
 
@@ -65,7 +65,7 @@ app.use(
 		cookie: {
 			maxAge: 1000 * 60 * 60,
 			sameSite: "none",
-			secure: process.env.NODE_ENV === "production",
+			secure: SECURE,
 		},
 		store: MongoStore.create({
 			client: mongoose.connection.getClient(),
