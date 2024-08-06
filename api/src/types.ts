@@ -1,21 +1,22 @@
 import mongoose from "mongoose";
+import { UserType } from "./models/user";
 
 export interface ContactType {
 	id: string;
-	contact?: Express.User | null;
+	contact?: UserType | null;
 }
 
 export interface PersonalChatFormatted {
 	id: string;
-	receiver?: Express.User | null;
+	receiver?: UserType | null;
 	messages?: MessageFormat[];
 }
 
 export interface GroupChatFormatted {
 	id: string;
-	owner?: Express.User | null;
+	owner?: UserType | null;
 	name?: string;
-	users?: Express.User[];
+	users?: UserType[];
 	messages?: GroupMessageFormat[];
 	picture: string;
 	bio: string;
@@ -32,7 +33,7 @@ export interface MessageFormat {
 
 export interface GroupMessageFormat {
 	id: string;
-	sender?: Express.User;
+	sender?: UserType;
 	content: string;
 	date: Date;
 	seen: string;

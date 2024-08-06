@@ -1,5 +1,5 @@
 import Message from "../models/message";
-import User from "../models/user";
+import User, { UserType } from "../models/user";
 import {
 	GroupChatFormatted,
 	GroupMessageFormat,
@@ -24,7 +24,7 @@ export async function groupParser(
 		}
 	}
 
-	const users: Express.User[] = [];
+	const users: UserType[] = [];
 
 	for await (let userid of group.users) {
 		const detail = await User.findById(userid);
