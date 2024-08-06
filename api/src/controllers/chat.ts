@@ -7,14 +7,14 @@ import { io } from "../app";
 import contactsParser from "../utils/contactsParser";
 
 export const getMyContacts = async (req: Request, res: Response) => {
-	const myId = req.user?.id as string;
+	const myId = req.user && Object.getOwnPropertyNames(req.user).includes('id') ? req.user.id : null;
 
 	const chats = await Chat.find({ users: myId });
 
 	const contacts: ContactType[] = [];
 
 	for await (let chat of chats) {
-		const parsedChat = await contactsParser(myId, chat.toJSON());
+		const parsedChat = await contactsParser(myId as string, chat.toJSON());
 
 		contacts.push(parsedChat);
 	}
