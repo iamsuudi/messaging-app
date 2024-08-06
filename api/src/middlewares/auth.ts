@@ -4,6 +4,9 @@ import bcrypt from "bcrypt";
 import UserModel, { UserType } from "../models/user";
 
 passport.serializeUser((user: UserType, done) => {
+	console.log("Serializing..");
+	console.log(user);
+
 	done(null, user.id);
 });
 
