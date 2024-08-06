@@ -3,7 +3,7 @@ import axios from "axios";
 import { signinFormSchema, signupFormSchema, UserType } from "@/types";
 axios.defaults.withCredentials = true;
 
-const baseURL = "http://localhost:3001/api";
+import { baseURL } from "../utils/config";
 
 export const signin = async (data: z.infer<typeof signinFormSchema>) => {
 	const response = await axios({

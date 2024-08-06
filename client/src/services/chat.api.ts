@@ -1,8 +1,7 @@
 import axios from "axios";
 import { ChatType, ContactType, MessageType } from "@/types";
 axios.defaults.withCredentials = true;
-
-const baseURL = "http://localhost:3001/api";
+import { baseURL } from "../utils/config";
 
 export const getMyContacts = async (): Promise<ContactType[]> => {
 	const response = await axios({

@@ -2,7 +2,7 @@ import axios from "axios";
 import { GroupMessageType, GroupType, UserType } from "@/types";
 axios.defaults.withCredentials = true;
 
-const baseURL = "http://localhost:3001/api";
+import { baseURL } from "../utils/config";
 
 export const getGroupChats = async (): Promise<GroupType[]> => {
 	const response = await axios({

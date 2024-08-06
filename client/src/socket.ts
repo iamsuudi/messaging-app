@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
+import { baseURL } from "./utils/config";
 
-const url = "http://localhost:3001";
+const url = baseURL.split("/api")[0];
 const options = {
 	// retries: 3,
 };
