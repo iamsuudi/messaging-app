@@ -15,6 +15,17 @@ export default async function chatsParser(
 	const receiverData = await User.findById(receiverId);
 
 	const messages: MessageFormat[] = [];
+	// const unseen: MessageFormat[] = [];
+
+	function appendMessage(message: MessageFormat) {
+		for (let i = 0; i < messages.length; i += 1) {
+			if (new Date(messages[i].date) > new Date(message.date)) {
+				messages.splice(i, 0, message);
+				return i;
+			}
+		}
+		messages.push(message);
+	}
 
 	for await (let messageid of chat?.messages) {
 		switch (read) {
@@ -30,12 +41,12 @@ export default async function chatsParser(
 						{ new: true }
 					);
 				}
-				if (detail) messages.push(detail.toJSON());
+				if (detail) appendMessage(detail.toJSON());
 				break;
 			}
 			default: {
 				const detail = await Message.findById(messageid);
-				if (detail) messages.push(detail.toJSON());
+				if (detail) appendMessage(detail.toJSON());
 				break;
 			}
 		}

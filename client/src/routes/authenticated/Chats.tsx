@@ -6,7 +6,7 @@ import { getPersonalChats } from "@/services/chat.api";
 import { ChatType, MessageType, UserType } from "@/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FrownIcon } from "lucide-react";
-import { compareAsc, format } from "date-fns";
+import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { socket } from "@/socket";
 import { useUserStore } from "@/store";
@@ -14,12 +14,6 @@ import { useUserStore } from "@/store";
 type ChatPropType = {
 	chat: ChatType;
 };
-
-function sortMessages(messages: MessageType[]) {
-	const sorted =
-		messages?.sort((m1, m2) => compareAsc(m1.date, m2.date)) ?? [];
-	return sorted;
-}
 
 function calculateUnSeenMessages(user: UserType, messages: MessageType[]) {
 	let sum = 0;
@@ -35,7 +29,7 @@ function ChatRow({ chat }: ChatPropType) {
 	const user = useUserStore.getState().user;
 	const { receiver } = chat;
 	const [lastMessage, setLastMessage] = useState<MessageType | null>(
-		sortMessages(chat.messages)[chat.messages?.length - 1]
+		chat?.messages[chat.messages?.length - 1]
 	);
 	const [unSeen, setUnSeen] = useState<number>(
 		calculateUnSeenMessages(user as UserType, chat.messages)
@@ -73,6 +67,7 @@ function ChatRow({ chat }: ChatPropType) {
 				/>
 				<AvatarFallback></AvatarFallback>
 			</Avatar>
+			
 			<div className="flex flex-col max-w-[50%]">
 				<p className="font-black tracking-[1px] text-md overflow-hidden whitespace-nowrap text-ellipsis opacity-80">
 					{receiver
