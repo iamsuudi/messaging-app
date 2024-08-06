@@ -8,6 +8,9 @@ passport.serializeUser((user: UserType, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
+	console.log("Deserializing..");
+	console.log({ id });
+
 	try {
 		const user = await UserModel.findById(id);
 		const parsed = user?.toJSON() as UserType;
