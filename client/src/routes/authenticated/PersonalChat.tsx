@@ -95,12 +95,6 @@ function MyMessage({ msg }: MessagePropType) {
 							if (chatId) await deleteMessage(chatId, msg.id);
 							setDeleted(true);
 						} catch (error) {
-							// if (axios.isAxiosError(error)) {
-							// 	setError(
-							// 		error?.response?.data.message ??
-							// 			"Something is wrong"
-							// 	);
-							// }
 							// setError("Something is wrong");
 						}
 					}}>
