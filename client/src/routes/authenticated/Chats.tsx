@@ -111,14 +111,14 @@ export function Chats() {
 	}, [data]);
 
 	useEffect(() => {
-		const addChat = (newChat: ChatType) => {
-			setChats(chats.concat(newChat));
-		};
+		// const addChat = (newChat: ChatType) => {
+		// 	setChats(chats.concat(newChat));
+		// };
 
-		socket.on("newChat", addChat);
+		// socket.on("newChat", addChat);
 
 		return () => {
-			socket.off("newChat", addChat);
+			// socket.off("newChat", addChat);
 		};
 	}, [chats]);
 

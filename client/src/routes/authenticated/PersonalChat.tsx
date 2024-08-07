@@ -128,7 +128,7 @@ function Messages({ user }: UserPropType) {
 	const [messages, setMessages] = useState<MessageType[]>([]);
 
 	const { data: chat, isLoading } = useQuery({
-		queryKey: ["chat"],
+		queryKey: ["chat", chatId],
 		queryFn: async () => {
 			const response = await getPersonalChat(chatId as string);
 			return response;
@@ -240,7 +240,7 @@ export default function PersonalChat() {
 	}, [user, fetchUser, navigate, chatId]);
 
 	const { data: chat } = useQuery({
-		queryKey: ["chat"],
+		queryKey: ["chat", chatId],
 		queryFn: async () => {
 			const response = await getPersonalChat(chatId as string);
 
