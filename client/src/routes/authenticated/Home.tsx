@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import HomeNav from "./Nav";
 import { useUserStore } from "@/store";
 import { Outlet, useNavigate } from "react-router-dom";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -24,8 +23,7 @@ export default function HomeIn() {
 	return (
 		<ThemeProvider defaultTheme="dark" storageKey="dalochat-ui-theme">
 			<div className="flex flex-col w-screen min-h-screen overflow-x-hidden app dark:bg-gradient-to-tr dark:from-[#0e093f] dark:to-[#5c323f] bg-background bg-fixed">
-				<HomeNav />
-				<div className="flex flex-col-reverse w-full h-screen pt-[60px]">
+				<div className="flex flex-col-reverse w-full h-screen">
 					<Outlet />
 				</div>
 			</div>

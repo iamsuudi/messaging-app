@@ -23,6 +23,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import axios from "axios";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import HomeNav from "./Nav";
 
 type FormFields = z.infer<typeof profileSchema>;
 
@@ -84,7 +85,8 @@ export default function Profile() {
 	};
 
 	return (
-		<div className="h-full app">
+		<div className="h-full app pt-[60px]">
+			<HomeNav />
 			<div className="flex flex-col items-center justify-center w-screen px-5 py-20 h-fit">
 				{error && (
 					<div className="fixed z-10 w-full px-5 max-w-96 h-fit top-24">

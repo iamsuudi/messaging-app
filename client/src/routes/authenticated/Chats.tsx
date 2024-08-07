@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { socket } from "@/socket";
 import { useUserStore } from "@/store";
+import HomeNav from "./Nav";
 
 type ChatPropType = {
 	chat: ChatType;
@@ -167,7 +168,8 @@ export default function ChatsPage() {
 	}, [user, fetchUser, navigate]);
 
 	return (
-		<div className="h-full pb-14 sm:pl-20 sm:pb-1">
+		<div className="h-full pb-14 sm:pl-20 sm:pb-1 pt-[60px]">
+			<HomeNav />
 			<Chats />
 			<HomeSideBar />
 		</div>

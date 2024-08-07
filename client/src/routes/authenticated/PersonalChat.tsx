@@ -57,6 +57,7 @@ import {
 	ContextMenuItem,
 	ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import HomeNav from "./Nav";
 
 type MessagePropType = {
 	msg: MessageType;
@@ -251,7 +252,8 @@ export default function PersonalChat() {
 	if (chat && user) {
 		return (
 			<>
-				<div className="hidden w-full h-full xl:block pb-14 sm:pl-20 sm:pb-0">
+				<div className="hidden w-full h-full xl:block pb-14 sm:pl-20 sm:pb-0 pt-[60px]">
+					<HomeNav />
 					<ResizablePanelGroup
 						direction="horizontal"
 						className="flex w-full h-full bg-rose-900/5">
@@ -343,6 +345,10 @@ export default function PersonalChat() {
 					<Messages user={user} />
 
 					<InputComponent chatId={chatId as string} />
+
+					<div className="hidden sm:block">
+						<HomeSideBar />
+					</div>
 				</div>
 			</>
 		);

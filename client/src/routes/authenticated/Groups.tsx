@@ -10,6 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { FrownIcon } from "lucide-react";
 import { socket } from "@/socket";
 import { compareAsc, format } from "date-fns";
+import HomeNav from "./Nav";
 
 type GroupPropType = {
 	group: GroupType;
@@ -91,9 +92,10 @@ export default function GroupsPage() {
 	}, [user, fetchUser, navigate]);
 
 	return (
-		<div className="relative flex flex-col h-full pb-14 sm:pl-20 sm:pb-1">
-			<HomeSideBar />
+		<div className="relative flex flex-col h-full pb-14 sm:pl-20 sm:pb-1 pt-[60px]">
+			<HomeNav />
 			<Groups />
+			<HomeSideBar />
 		</div>
 	);
 }

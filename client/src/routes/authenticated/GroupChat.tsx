@@ -48,16 +48,9 @@ import {
 import { startPersonalChatWithSomeone } from "@/services/chat.api";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Contacts from "./contacts";
+import HomeNav from "./Nav";
 
-type MessagePropType = {
-	msg: GroupMessageType;
-};
-
-type UserPropType = {
-	user: UserType;
-};
-
-function MyMessage({ msg }: MessagePropType) {
+function MyMessage({ msg }: { msg: GroupMessageType }) {
 	return (
 		<div className="flex flex-wrap gap-1 items-start p-2 ml-auto bg-pink-200 dark:bg-rose-900/40 rounded-2xl rounded-br-none w-fit max-w-[70%]">
 			<span className="px-2 tracking-wider">{msg.content}</span>
@@ -73,7 +66,7 @@ function MyMessage({ msg }: MessagePropType) {
 	);
 }
 
-function OthersMessage({ msg }: MessagePropType) {
+function OthersMessage({ msg }: { msg: GroupMessageType }) {
 	return (
 		<div className="flex gap-3 items-start p-2 mr-auto bg-gray-200 dark:bg-black/20 rounded-2xl rounded-tl-none w-fit max-w-[70%]">
 			<Avatar className="bg-purple-700 rounded-full size-10">
@@ -96,7 +89,7 @@ function OthersMessage({ msg }: MessagePropType) {
 	);
 }
 
-function Messages({ user }: UserPropType) {
+function Messages({ user }: { user: UserType }) {
 	const { groupId } = useParams();
 	const ref = useRef<HTMLDivElement>(null);
 	const days: string[] = [];
@@ -181,7 +174,8 @@ export default function GroupChat() {
 	if (group && user) {
 		return (
 			<>
-				<div className="hidden w-full h-full xl:block pb-14 sm:pl-20 sm:pb-0">
+				<div className="hidden w-full h-full xl:block pb-14 sm:pl-20 sm:pb-0 pt-[60px]">
+					<HomeNav />
 					<ResizablePanelGroup
 						direction="horizontal"
 						className="flex w-full h-full bg-rose-900/5">
@@ -250,17 +244,17 @@ export default function GroupChat() {
 					<Messages user={user} />
 
 					<InputComponent groupId={groupId as string} />
+
+					<div className="hidden sm:block">
+						<HomeSideBar />
+					</div>
 				</div>
 			</>
 		);
 	}
 }
 
-type InputComponentProps = {
-	groupId: string;
-};
-
-function InputComponent({ groupId }: InputComponentProps) {
+function InputComponent({ groupId }: { groupId: string }) {
 	const [message, setMessage] = useState("");
 	const ref = useRef<HTMLInputElement>(null);
 
@@ -359,7 +353,7 @@ function GroupInfoDrawer({ children }: { children: ReactNode }) {
 	);
 }
 
-function UserRow({ user }: UserPropType) {
+function UserRow({ user }: { user: UserType }) {
 	const me = useUserStore.getState().user;
 	const { error, setError, removeError } = userErrorStore((state) => state);
 
@@ -459,7 +453,7 @@ function GroupInfo() {
 				<div className="relative flex h-full gap-5">
 					<div className="flex flex-col items-center gap-2">
 						<Avatar className="rounded-full bg-cyan-700 size-32">
-							<AvatarImage src={group.picture} />
+							<AvatarImage src={group?.picture} />
 						</Avatar>
 						<span className="text-sm opacity-70">
 							@{group?.name}
@@ -469,7 +463,7 @@ function GroupInfo() {
 						<span className="font-bold">{group?.name}</span>
 						<span className="text-sm">{group?.bio}</span>
 					</div>
-					{user?.id === group.owner.id && (
+					{user?.id === group?.owner?.id && (
 						<Button
 							className="absolute top-0 right-0 h-8 px-5"
 							onClick={() =>
@@ -504,7 +498,7 @@ function GroupInfo() {
 											className="flex items-center justify-between"
 											key={member.id}>
 											<UserRow user={member} />
-											{member.id === group.owner.id && (
+											{member.id === group?.owner?.id && (
 												<span className="text-sm">
 													Owner
 												</span>
