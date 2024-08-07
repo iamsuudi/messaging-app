@@ -382,6 +382,7 @@ function InputComponent({ chatId }: InputComponentProps) {
 			/>
 			<Button
 				type="button"
+				disabled={!message}
 				onClick={onSubmit}
 				className="rounded-lg dark:bg-gradient-to-tr dark:from-[#8b5185] dark:to-[#8a3f57] bg-fixed">
 				<SendIcon className="" />

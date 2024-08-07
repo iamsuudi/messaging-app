@@ -77,9 +77,7 @@ function OthersMessage({ msg }: MessagePropType) {
 	return (
 		<div className="flex gap-3 items-start p-2 mr-auto bg-gray-200 dark:bg-black/20 rounded-2xl rounded-tl-none w-fit max-w-[70%]">
 			<Avatar className="bg-purple-700 rounded-full size-10">
-				<AvatarImage
-					src={msg.sender.picture}
-				/>
+				<AvatarImage src={msg.sender.picture} />
 			</Avatar>
 			<div className="flex flex-col items-start gap-1 overflow-hidden">
 				<p className="font-black tracking-[1px] text-sm overflow-hidden whitespace-nowrap text-ellipsis">
@@ -291,6 +289,7 @@ function InputComponent({ groupId }: InputComponentProps) {
 			/>
 			<Button
 				type="button"
+				disabled={!message}
 				onClick={onSubmit}
 				className="rounded-lg dark:bg-gradient-to-tr dark:from-[#8b5185] dark:to-[#8a3f57] bg-fixed">
 				<SendIcon className="" />
@@ -462,9 +461,7 @@ function GroupInfo() {
 				<div className="relative flex h-full gap-5">
 					<div className="flex flex-col items-center gap-2">
 						<Avatar className="rounded-full bg-cyan-700 size-32">
-							<AvatarImage
-								src={group.picture}
-							/>
+							<AvatarImage src={group.picture} />
 						</Avatar>
 						<span className="text-sm opacity-70">
 							@{group?.name}
