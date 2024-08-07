@@ -15,7 +15,7 @@ export default function Page5() {
 				<div
 					className="relative flex flex-col w-64 gap-2 p-4 text-white h-[25rem] rounded-3xl img-div"
 					style={{
-						backgroundImage: "Url('pic1.jpg')",
+						backgroundImage: "Url('https://images.pexels.com/photos/3783522/pexels-photo-3783522.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')",
 						backgroundSize: "cover",
 						backgroundPosition: "center",
 					}}>
