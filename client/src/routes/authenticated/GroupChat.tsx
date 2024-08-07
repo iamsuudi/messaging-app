@@ -230,7 +230,7 @@ export default function GroupChat() {
 
 				<div
 					id="personalChatPage"
-					className="relative w-full h-full flex flex-col xl:hidden overflow-hidden dark:bg-gradient-to-tr dark:from-[#09203f] dark:to-[#5c323f] bg-background pb-14 sm:pl-20 sm:pb-1 bg-fixed">
+					className="relative w-full h-full flex flex-col xl:hidden overflow-hidden dark:bg-gradient-to-tr dark:from-[#09203f] dark:to-[#5c323f] bg-background sm:pl-20 pb-1 bg-fixed">
 					<nav className="flex items-center justify-between gap-2 px-2 py-3 bg-black/5 dark:bg-white/5 backdrop-blur-sm">
 						<button
 							onClick={() => navigate("/home/groups")}
@@ -250,8 +250,6 @@ export default function GroupChat() {
 					<Messages user={user} />
 
 					<InputComponent groupId={groupId as string} />
-
-					<HomeSideBar />
 				</div>
 			</>
 		);
