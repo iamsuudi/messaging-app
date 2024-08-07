@@ -97,6 +97,7 @@ function ChatRow({ chat }: ChatPropType) {
 }
 
 export function Chats() {
+	const { user } = useUserStore();
 	const [chats, setChats] = useState<ChatType[]>([]);
 	const { data, isLoading } = useQuery({
 		queryKey: ["chats"],
@@ -111,16 +112,17 @@ export function Chats() {
 	}, [data]);
 
 	useEffect(() => {
-		// const addChat = (newChat: ChatType) => {
-		// 	setChats(chats.concat(newChat));
-		// };
+		const addChat = (newChat: ChatType) => {
+			if (newChat?.receiver?.id === user?.id)
+				setChats(chats.concat(newChat));
+		};
 
-		// socket.on("newChat", addChat);
+		socket.on("newChat", addChat);
 
 		return () => {
-			// socket.off("newChat", addChat);
+			socket.off("newChat", addChat);
 		};
-	}, [chats]);
+	}, [chats, user?.id]);
 
 	return (
 		<div className="flex flex-col h-full" id="chatsPage">
