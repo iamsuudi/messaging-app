@@ -5,7 +5,7 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import mongoose from "mongoose";
 import morgan from "morgan";
-import { clientURL, MONGODB_URI, SECRET, SECURE } from "./utils/config";
+import { clientURL, MONGODB_URI, SECRET } from "./utils/config";
 import "express-async-errors";
 import "./middlewares/auth";
 
@@ -53,7 +53,7 @@ setupSocket("someone");
 
 app.use(express.json());
 
-app.use(express.static("public"));
+app.use(express.static("dist"));
 
 app.use(morgan("dev"));
 
@@ -64,8 +64,6 @@ app.use(
 		saveUninitialized: true,
 		cookie: {
 			maxAge: 1000 * 60 * 60,
-			sameSite: "none",
-			secure: "auto",
 		},
 		store: MongoStore.create({
 			client: mongoose.connection.getClient(),

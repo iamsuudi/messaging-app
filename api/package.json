@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "NODE_ENV=development tsc --noEmit && tsx watch ./src/index.ts",
-    "start": "NODE_ENV=production node ./dist/index.js",
-    "build": "babel src --out-dir dist --extensions \".ts,.tsx\"",
+    "start": "NODE_ENV=production node ./prod/index.js",
+    "build": "pnpm run build:ui && babel src --out-dir prod --extensions \".ts,.tsx\"",
+    "build:ui": "rm -rf dist && cd ../client/ && pnpm build && cp -r dist ../api",
     "lint": "eslint --ext .ts ."
   },
   "keywords": [],
