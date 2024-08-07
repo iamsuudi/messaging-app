@@ -61,52 +61,54 @@ export default function Contacts({
 	hidden,
 }: ContactsPropsType) {
 	const { data: contacts, isLoading: contactsLoading } = useQuery({
-		queryKey: ["chats"],
+		queryKey: ["contacts"],
 		queryFn: async () => {
 			const response = await getMyContacts();
 			return response;
 		},
 	});
 
-	return (
-		<>
-			{contactsLoading && (
-				<>
-					<LoadingSkeleton />
-					<LoadingSkeleton />
-					<LoadingSkeleton />
-				</>
-			)}
+	if (contactsLoading)
+		return (
+			<>
+				<LoadingSkeleton />
+				<LoadingSkeleton />
+				<LoadingSkeleton />
+			</>
+		);
 
-			{contacts &&
-				contacts.length > 0 &&
-				contacts.map((chat) => {
-					return (
-						<Contact
-							key={chat.id}
-							user={chat.contact}
-							disabled={hidden?.includes(chat.contact?.id)}
-							onClick={(checked: boolean) => {
-								if (checked) {
-									if (setMembers && members)
-										setMembers(
-											members.concat(chat.contact?.id)
-										);
-								} else {
-									if (setMembers && members)
-										setMembers(
-											members.filter(
-												(member) =>
-													member !== chat.contact.id
-											)
-										);
-								}
-							}}
-						/>
-					);
-				})}
-		</>
-	);
+	if (contacts)
+		return (
+			<>
+				{contacts.length > 0 &&
+					contacts.map((chat) => {
+						return (
+							<Contact
+								key={chat.id}
+								user={chat.contact}
+								disabled={hidden?.includes(chat.contact?.id)}
+								onClick={(checked: boolean) => {
+									if (checked) {
+										if (setMembers && members)
+											setMembers(
+												members.concat(chat.contact?.id)
+											);
+									} else {
+										if (setMembers && members)
+											setMembers(
+												members.filter(
+													(member) =>
+														member !==
+														chat.contact.id
+												)
+											);
+									}
+								}}
+							/>
+						);
+					})}
+			</>
+		);
 }
 
 function LoadingSkeleton() {
