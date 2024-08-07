@@ -103,3 +103,21 @@ export const unSeenMessage = async (
 	});
 	return response.data;
 };
+
+export const deleteChat = async (chatId: string): Promise<ChatType> => {
+	const response = await axios({
+		method: "delete",
+		baseURL,
+		url: `/chat/individual/${chatId}`,
+	});
+	return response.data;
+};
+
+export const clearChat = async (chatId: string): Promise<ChatType> => {
+	const response = await axios({
+		method: "delete",
+		baseURL,
+		url: `/chat/individual/${chatId}/clear`,
+	});
+	return response.data;
+};

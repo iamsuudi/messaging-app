@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import HomeSideBar from "./SideBar";
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { getPersonalChats } from "@/services/chat.api";
+import { clearChat, deleteChat, getPersonalChats } from "@/services/chat.api";
 import { ChatType, MessageType, UserType } from "@/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FrownIcon } from "lucide-react";
@@ -11,6 +11,12 @@ import { useEffect, useState } from "react";
 import { socket } from "@/socket";
 import { useUserStore } from "@/store";
 import HomeNav from "./Nav";
+import {
+	ContextMenu,
+	ContextMenuContent,
+	ContextMenuItem,
+	ContextMenuTrigger,
+} from "@/components/ui/context-menu";
 
 type ChatPropType = {
 	chat: ChatType;
@@ -35,6 +41,9 @@ function ChatRow({ chat }: ChatPropType) {
 	const [unSeen, setUnSeen] = useState<number>(
 		calculateUnSeenMessages(user as UserType, chat.messages)
 	);
+	const [deleted, setDeleted] = useState(false);
+
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const addUnSeen = (msg: MessageType) => {
@@ -58,42 +67,74 @@ function ChatRow({ chat }: ChatPropType) {
 		};
 	}, [chat, unSeen, user, lastMessage?.id]);
 
-	return (
-		<Link
-			to={`/home/chats/${chat.id}`}
-			className="flex items-center h-20 gap-3 p-3 sm:gap-5">
-			<Avatar className="bg-purple-700 rounded-full size-12">
-				<AvatarImage src={receiver?.picture} />
-				<AvatarFallback></AvatarFallback>
-			</Avatar>
+	if (deleted) return null;
 
-			<div className="flex flex-col max-w-[50%]">
-				<p className="font-black tracking-[1px] text-md overflow-hidden whitespace-nowrap text-ellipsis opacity-80">
-					{receiver
-						? receiver?.name ?? "No Name Yet"
-						: "Deleted Account"}
-				</p>
-				<p className="max-w-full overflow-hidden text-xs font-bold tracking-tighter opacity-50 whitespace-nowrap text-ellipsis">
-					{lastMessage?.content
-						? lastMessage.content
-						: chat.messages?.length === 0
-						? "No chat history"
-						: "Last message deleted"}
-				</p>
-			</div>
-			<div className="flex flex-col items-center gap-1 ml-auto min-w-16">
-				{lastMessage?.date && (
-					<span className="text-xs opacity-80">
-						{format(lastMessage.date, "h:m a")}
-					</span>
-				)}
-				{unSeen !== 0 && (
-					<span className="flex items-center justify-center w-5 h-5 text-xs font-medium rounded-full bg-orange-900/60">
-						{unSeen}
-					</span>
-				)}
-			</div>
-		</Link>
+	return (
+		<ContextMenu>
+			<ContextMenuTrigger>
+				<Link
+					to={`/home/chats/${chat.id}`}
+					className="flex items-center h-20 gap-3 p-3 sm:gap-5">
+					<Avatar className="bg-purple-700 rounded-full size-12">
+						<AvatarImage src={receiver?.picture} />
+						<AvatarFallback></AvatarFallback>
+					</Avatar>
+
+					<div className="flex flex-col max-w-[50%]">
+						<p className="font-black tracking-[1px] text-md overflow-hidden whitespace-nowrap text-ellipsis opacity-80">
+							{receiver
+								? receiver?.name ?? "No Name Yet"
+								: "Deleted Account"}
+						</p>
+						<p className="max-w-full overflow-hidden text-xs font-bold tracking-tighter opacity-50 whitespace-nowrap text-ellipsis">
+							{lastMessage?.content
+								? lastMessage.content
+								: chat.messages?.length === 0
+								? "No chat history"
+								: "Last message deleted"}
+						</p>
+					</div>
+					<div className="flex flex-col items-center gap-1 ml-auto min-w-16">
+						{lastMessage?.date && (
+							<span className="text-xs opacity-80">
+								{format(lastMessage.date, "h:m a")}
+							</span>
+						)}
+						{unSeen !== 0 && (
+							<span className="flex items-center justify-center w-5 h-5 text-xs font-medium rounded-full bg-orange-900/60">
+								{unSeen}
+							</span>
+						)}
+					</div>
+				</Link>
+			</ContextMenuTrigger>
+			<ContextMenuContent className="dark:bg-gradient-to-tr dark:from-[#703557] dark:to-[#5c323f] bg-background bg-fixed px-2 py-5">
+				<ContextMenuItem
+					onClick={async () => {
+						try {
+							await clearChat(chat.id);
+							setLastMessage(null);
+							navigate('/home')
+						} catch (error) {
+							//
+						}
+					}}>
+					Clear History
+				</ContextMenuItem>
+				<ContextMenuItem
+					onClick={async () => {
+						try {
+							await deleteChat(chat.id);
+							setDeleted(true);
+							navigate('/home')
+						} catch (error) {
+							//
+						}
+					}}>
+					Delete Chat
+				</ContextMenuItem>
+			</ContextMenuContent>
+		</ContextMenu>
 	);
 }
 

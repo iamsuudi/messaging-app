@@ -1,5 +1,6 @@
 import express from "express";
 import {
+	clearIndividualChat,
 	createIndividualChat,
 	deleteIndividualChat,
 	deleteMessage,
@@ -23,6 +24,11 @@ chatRouter.delete(
 	"/chat/individual/:chatId",
 	authenticated,
 	deleteIndividualChat
+);
+chatRouter.delete(
+	"/chat/individual/:chatId/clear",
+	authenticated,
+	clearIndividualChat
 );
 chatRouter.delete(
 	"/chat/individual/:chatId/message",

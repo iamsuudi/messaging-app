@@ -88,7 +88,41 @@ export const makeIndividualChat = async (
 	return res.status(200).json(newMessage);
 };
 
-export const deleteIndividualChat = async (req: Request, res: Response) => {};
+export const deleteIndividualChat = async (
+	req: Request<{ chatId: string }>,
+	res: Response
+) => {
+	const { chatId } = req.params;
+
+	const chat = await Chat.findById(chatId);
+	if (
+		chat?.users
+			.map((user) => user.toString())
+			.includes(req.user?.id as string)
+	)
+		await Chat.findByIdAndDelete(chatId);
+
+	res.status(204).json(chat);
+};
+
+export const clearIndividualChat = async (
+	req: Request<{ chatId: string }>,
+	res: Response
+) => {
+	const { chatId } = req.params;
+
+	const chat = await Chat.findById(chatId);
+
+	if (
+		chat?.users
+			.map((user) => user.toString())
+			.includes(req.user?.id as string)
+	)
+		chat.messages = [];
+	await chat?.save();
+
+	res.status(204).json(chat);
+};
 
 export const createIndividualChat = async (
 	req: Request<{}, {}, { otherPersonId: string }>,
