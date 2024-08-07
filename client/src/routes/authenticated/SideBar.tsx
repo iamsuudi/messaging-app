@@ -113,7 +113,7 @@ function CreateGroupDialog() {
 				</div>
 
 				<Button
-					disabled={!name || members.length === 0 || isPending}
+					disabled={!name || isPending}
 					onClick={async () => {
 						mutateAsync();
 					}}>
