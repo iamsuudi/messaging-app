@@ -12,6 +12,7 @@ import Page5 from "@/components/Page5";
 import Page6 from "@/components/page6";
 import Page7 from "@/components/page7";
 import { useTheme } from "@/components/theme-provider";
+import { Link } from "react-router-dom";
 
 function Home() {
 	const pages = useRef(null);
@@ -172,11 +173,12 @@ function Home() {
 			</div>
 			<Page6 />
 			<Page7 />
-			<p className="w-screen bg-red-300 h-96">footer</p>
-			<p className="w-screen bg-blue-300 h-96">footer</p>
-			<p className="w-screen bg-green-300 h-96">footer</p>
-			<p className="w-screen bg-yellow-300 h-96">footer</p>
-			<p className="w-screen bg-purple-300 h-96">footer</p>
+			<div className="flex justify-center w-screen py-5 text-xs">
+				Developed by
+				<Link to={"https://linkedin.com/in/iamsuudi"} className="px-1 underline">
+					Abdulfetah Suudi
+				</Link>
+			</div>
 		</div>
 	);
 }
