@@ -6,6 +6,7 @@ const url = baseURL.split("/api")[0];
 const options = {
 	// retries: 3,
 };
+// const url = 'http://localhost:3001';
 
 export const socket: Socket = io(url, options);
 

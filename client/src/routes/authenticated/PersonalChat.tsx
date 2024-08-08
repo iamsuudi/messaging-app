@@ -8,7 +8,7 @@ import {
 } from "@/services/chat.api";
 import { useUserStore } from "@/store";
 import { MessageType, UserType } from "@/types";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { differenceInCalendarMonths, format } from "date-fns";
 
 import {
@@ -222,6 +222,7 @@ export default function PersonalChat() {
 	const fetchUser = useUserStore.getState().fetchUser;
 	const navigate = useNavigate();
 	const { chatId } = useParams();
+	const queryClient = useQueryClient();
 
 	useEffect(() => {
 		if (!user) {
@@ -322,7 +323,12 @@ export default function PersonalChat() {
 					className="relative w-full h-full flex flex-col xl:hidden overflow-hidden dark:bg-gradient-to-tr dark:from-[#09203f] dark:to-[#5c323f] bg-background sm:pl-20 pb-1 bg-fixed">
 					<nav className="flex items-center justify-between gap-2 px-2 py-3 bg-black/5 dark:bg-white/5 backdrop-blur-sm">
 						<button
-							onClick={() => navigate("/home")}
+							onClick={() => {
+								queryClient.invalidateQueries({
+									queryKey: ["chats"],
+								});
+								navigate("/home");
+							}}
 							className="xl:invisible">
 							<ChevronLeft />
 						</button>

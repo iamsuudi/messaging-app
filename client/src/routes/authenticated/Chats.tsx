@@ -23,7 +23,7 @@ function calculateUnSeenMessages(user: UserType, messages: MessageType[]) {
 
 	if (messages)
 		for (const msg of messages) {
-			if (msg.sender !== user.id && !msg.seen) sum++;
+			if (msg.sender !== user?.id && !msg.seen) sum++;
 		}
 	return sum;
 }
@@ -143,6 +143,9 @@ export function Chats() {
 			const response = await getPersonalChats();
 			return response;
 		},
+		refetchOnMount: true,
+		refetchOnWindowFocus: true,
+		staleTime: 0,
 	});
 
 	useEffect(() => {

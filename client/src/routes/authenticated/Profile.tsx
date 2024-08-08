@@ -124,7 +124,7 @@ export default function Profile() {
 							}
 						}}
 						accept="image/,.jpg,.png,.jpeg"
-						className="bg-transparent dark:border-none hover:bg-black/5 hover:cursor-pointer dark:bg-white/5 max-w-32"
+						className="bg-transparent dark:border-none hover:bg-black/5 hover:cursor-pointer dark:bg-white/5"
 					/>
 				</form>
 

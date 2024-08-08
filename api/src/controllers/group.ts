@@ -81,15 +81,16 @@ export const editGroupChat = async (
 export const deleteGroupChat = async (req: Request, res: Response) => {};
 
 export const createGroupChat = async (
-	req: Request<{}, {}, { name: string; users: string[] }>,
+	req: Request<{}, {}, { name: string; bio: string; users: string[] }>,
 	res: Response
 ) => {
 	const owner = req.user?.id;
-	const { name, users } = req.body;
+	const { name, bio, users } = req.body;
 
 	const group = await Group.create({
 		owner,
 		name,
+		bio,
 		users: [...users, owner],
 	});
 

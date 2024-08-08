@@ -1,13 +1,5 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { startPersonalChatWithSomeone } from "@/services/chat.api";
@@ -16,20 +8,12 @@ import { userErrorStore, useUserStore } from "@/store";
 import { UserType } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { AlertCircle, BanIcon, UserSearchIcon } from "lucide-react";
+import { AlertCircle, ArrowBigLeft, BanIcon, UserSearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import HomeNav from "./Nav";
 
-interface SearchPropType {
-	children: JSX.Element;
-}
-
-interface UserPropType {
-	user: UserType;
-	setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-function UserRow({ user, setOpen }: UserPropType) {
+function UserRow({ user }: { user: UserType }) {
 	const me = useUserStore.getState().user;
 	const { error, setError, removeError } = userErrorStore((state) => state);
 
@@ -41,10 +25,8 @@ function UserRow({ user, setOpen }: UserPropType) {
 			try {
 				const chatId = await startPersonalChatWithSomeone(user.id);
 				if (me?.id === user.id) {
-					setOpen(false);
 					return navigate("/home/profile");
 				}
-				setOpen(false);
 				return navigate(`/home/chats/${chatId}`);
 			} catch (error) {
 				setError("Check your internet connection.");
@@ -79,8 +61,7 @@ function UserRow({ user, setOpen }: UserPropType) {
 	);
 }
 
-export default function SearchDrawer({ children }: SearchPropType) {
-	const [open, setOpen] = useState(false);
+export default function AddContact() {
 	const { error, setError, removeError } = userErrorStore((state) => state);
 	const [searching, setSearching] = useState(false);
 	const { isPending, data, mutateAsync } = useMutation({
@@ -90,6 +71,7 @@ export default function SearchDrawer({ children }: SearchPropType) {
 			return result;
 		},
 	});
+    const navigate = useNavigate();
 
 	useEffect(() => {
 		const timer = setTimeout(() => {
@@ -100,14 +82,18 @@ export default function SearchDrawer({ children }: SearchPropType) {
 	}, [error, removeError]);
 
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogDescription></DialogDescription>
-			<DialogTrigger>{children}</DialogTrigger>
-			<DialogContent className="flex flex-col gap-3 pt-10 max-w-[90%] dark:bg-gradient-to-tr dark:from-[#0e093f] dark:to-[#5c323f] bg-background bg-fixed rounded-xl w-96 border-none">
-				<DialogHeader>
-					<DialogTitle className="mb-5 text-center">
+		<div className="h-full app pt-[60px] pb-10">
+			<HomeNav />
+			<div className="relative flex flex-col gap-3 pt-10 dark:bg-gradient-to-tr dark:from-[#0e093f] dark:to-[#5c323f] bg-background bg-fixed rounded-xl w-96 mx-auto">
+				<ArrowBigLeft
+					className="absolute left-0 rounded-full top-10 hover:cursor-pointer dark:bg-black/5"
+					onClick={() => navigate(-1)}
+				/>
+
+				<div>
+					<h2 className="mb-10 text-2xl font-black text-center">
 						Find contacts
-					</DialogTitle>
+					</h2>
 					<Input
 						placeholder="Type here minimum 3 characters..."
 						autoCorrect="false"
@@ -115,7 +101,7 @@ export default function SearchDrawer({ children }: SearchPropType) {
 						autoCapitalize="false"
 						spellCheck="false"
 						autoFocus
-						className=" dark:bg-transparent"
+						className="bg-black/5 dark:bg-white/5"
 						onChange={async ({ target }) => {
 							if (target.value.length > 2 && !isPending) {
 								try {
@@ -134,8 +120,9 @@ export default function SearchDrawer({ children }: SearchPropType) {
 							else setSearching(false);
 						}}
 					/>
-				</DialogHeader>
-				<div className="flex flex-col gap-2 overflow-scroll h-96 bg-background app dark:bg-transparent">
+				</div>
+
+				<div className="flex flex-col h-[50dvh] min-h-96 gap-2 overflow-scroll bg-background app dark:bg-transparent">
 					{isPending && searching && (
 						<>
 							<div className="flex items-center space-x-4">
@@ -166,13 +153,7 @@ export default function SearchDrawer({ children }: SearchPropType) {
 						data.length > 0 &&
 						searching &&
 						data.map((user) => {
-							return (
-								<UserRow
-									key={user.id}
-									user={user}
-									setOpen={setOpen}
-								/>
-							);
+							return <UserRow key={user.id} user={user} />;
 						})}
 
 					{data && data.length === 0 && searching && <NoUserFound />}
@@ -203,8 +184,8 @@ export default function SearchDrawer({ children }: SearchPropType) {
 						</div>
 					)}
 				</div>
-			</DialogContent>
-		</Dialog>
+			</div>
+		</div>
 	);
 }
 

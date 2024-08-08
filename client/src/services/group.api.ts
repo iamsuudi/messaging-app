@@ -37,6 +37,7 @@ export const makeGroupChat = async (
 
 export const createGroup = async (
 	name: string,
+	bio: string,
 	users: string[]
 ): Promise<GroupType> => {
 	const response = await axios({
@@ -46,6 +47,7 @@ export const createGroup = async (
 		data: {
 			name,
 			users,
+			bio,
 		},
 	});
 	return response.data;

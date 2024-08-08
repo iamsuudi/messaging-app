@@ -34,6 +34,8 @@ groupRouter.post(
 	authenticated,
 	upload,
 	async (req: Request<{ groupId: string }>, res: Response) => {
+		console.log(req?.file);
+		
 		const group = await Group.findByIdAndUpdate(
 			req.params.groupId,
 			{

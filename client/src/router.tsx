@@ -10,6 +10,8 @@ import GroupsPage from "./routes/authenticated/Groups";
 import PersonalChat from "./routes/authenticated/PersonalChat";
 import GroupChat from "./routes/authenticated/GroupChat";
 import EditGroup from "./routes/authenticated/EditGroup";
+import CreateGroup from "./routes/authenticated/CreateGroup";
+import AddContact from "./routes/authenticated/AddContactPage";
 
 export default function Router() {
 	const router = createBrowserRouter([
@@ -37,12 +39,20 @@ export default function Router() {
 					element: <ChatsPage />,
 				},
 				{
+					path: "chats/add",
+					element: <AddContact />,
+				},
+				{
 					path: "chats/:chatId",
 					element: <PersonalChat />,
 				},
 				{
 					path: "groups",
 					element: <GroupsPage />,
+				},
+				{
+					path: "groups/create",
+					element: <CreateGroup />,
 				},
 				{
 					path: "groups/:groupId",
