@@ -1,7 +1,9 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
+import {Strategy as GoogleStrategy} from 'passport-google-oauth2'
 import bcrypt from "bcrypt";
 import UserModel from "../models/user";
+import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from "../utils/config";
 
 passport.serializeUser((user: Express.User, done) => {
 	done(null, user.id);
@@ -37,4 +39,37 @@ passport.use(
 			}
 		}
 	)
+);
+
+/* eslint prefer-arrow-callback: 0 camelcase: 0 */
+passport.use(
+    new GoogleStrategy(
+        {
+            clientID: GOOGLE_CLIENT_ID as string,
+            clientSecret: GOOGLE_CLIENT_SECRET as string,
+            callbackURL: '/api/auth/google/redirect',
+        },
+        async function verify(accessToken, refreshToken, profile, done: Function) {
+            try {
+                // Get user's email from profile
+
+                const { email, name, picture } = profile;
+
+                let user = await UserModel.findOne({ email });
+
+                if (!user) {
+                    user = new UserModel({
+                        ...name,
+                        email,
+                        picture,
+                    });
+                    await user.save();
+                }
+
+                done(null, user.toJSON());
+            } catch (err) {
+                done(err, null);
+            }
+        },
+    ),
 );

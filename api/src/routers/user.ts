@@ -7,6 +7,23 @@ import User from "../models/user";
 
 const userRouter = express.Router();
 
+userRouter.get(
+	"/auth/google/redirect",
+	passport.authenticate("google", {
+		successRedirect: "http://localhost:5173/auth2",
+		failureRedirect: "http://localhost:5173/auth2",
+	}),
+	async (req, res) => {
+		console.log({ user: req.user });
+		return res.status(200).send("User is authenticated");
+	}
+);
+
+userRouter.get(
+	"/auth/google",
+	passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
 userRouter.post(
 	"/auth/login",
 	passport.authenticate("local"),

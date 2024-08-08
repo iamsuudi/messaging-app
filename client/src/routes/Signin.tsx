@@ -97,6 +97,10 @@ export default function Signin() {
 		}
 	};
 
+	const signWithGoogle = () => {
+        window.open(`http://localhost:3001/api/auth/signin/google`, "_self");
+    };
+
 	return (
 		<div className="flex flex-col items-center justify-center w-screen h-screen px-3">
 			{error && (
@@ -173,7 +177,7 @@ export default function Signin() {
 							<Separator orientation="horizontal" />
 
 							<Button
-								type="submit"
+								onClick={signWithGoogle}
 								className="flex items-center w-full gap-3"
 								disabled={signinForm.formState.isSubmitting}>
 								<Avatar className="size-6">
@@ -254,7 +258,7 @@ export default function Signin() {
 							<Separator orientation="horizontal" />
 
 							<Button
-								type="submit"
+								onClick={signWithGoogle}
 								className="flex items-center w-full gap-3"
 								disabled={signupForm.formState.isSubmitting}>
 								<Avatar className="size-6">
