@@ -18,10 +18,6 @@ import {
 	ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 
-type ChatPropType = {
-	chat: ChatType;
-};
-
 function calculateUnSeenMessages(user: UserType, messages: MessageType[]) {
 	let sum = 0;
 
@@ -32,7 +28,7 @@ function calculateUnSeenMessages(user: UserType, messages: MessageType[]) {
 	return sum;
 }
 
-function ChatRow({ chat }: ChatPropType) {
+function ChatRow({ chat }: { chat: ChatType }) {
 	const user = useUserStore.getState().user;
 	const { receiver } = chat;
 	const [lastMessage, setLastMessage] = useState<MessageType | null>(
@@ -97,7 +93,7 @@ function ChatRow({ chat }: ChatPropType) {
 					<div className="flex flex-col items-center gap-1 ml-auto min-w-16">
 						{lastMessage?.date && (
 							<span className="text-xs opacity-80">
-								{format(lastMessage.date, "h:m a")}
+								{format(lastMessage.date, "hh:mm a")}
 							</span>
 						)}
 						{unSeen !== 0 && (
@@ -114,7 +110,7 @@ function ChatRow({ chat }: ChatPropType) {
 						try {
 							await clearChat(chat.id);
 							setLastMessage(null);
-							navigate('/home')
+							navigate("/home");
 						} catch (error) {
 							//
 						}
@@ -126,7 +122,7 @@ function ChatRow({ chat }: ChatPropType) {
 						try {
 							await deleteChat(chat.id);
 							setDeleted(true);
-							navigate('/home')
+							navigate("/home");
 						} catch (error) {
 							//
 						}

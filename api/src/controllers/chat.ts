@@ -30,9 +30,11 @@ export const getIndividualChats = async (req: Request, res: Response) => {
 	const formattedChats: PersonalChatFormatted[] = [];
 
 	for await (let chat of chats) {
-		const parsedChat = await chatsParser(myId, chat.toJSON());
+		if (chat.messages.length > 0) {
+			let parsedChat = await chatsParser(myId, chat.toJSON());
 
-		formattedChats.push(parsedChat);
+			formattedChats.push(parsedChat);
+		}
 	}
 
 	return res.status(200).json(formattedChats);
