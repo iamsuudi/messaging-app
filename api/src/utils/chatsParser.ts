@@ -15,7 +15,6 @@ export default async function chatsParser(
 	const receiverData = await User.findById(receiverId);
 
 	const messages: MessageFormat[] = [];
-	// const unseen: MessageFormat[] = [];
 
 	function appendMessage(message: MessageFormat) {
 		for (let i = 0; i < messages.length; i += 1) {
@@ -30,16 +29,13 @@ export default async function chatsParser(
 	for await (let messageid of chat?.messages) {
 		switch (read) {
 			case true: {
-				let detail = await Message.findById(messageid);
+				const detail = await Message.findById(messageid);
+				const isNotMine =
+					detail?.sender?.toString() === receiverData?._id.toString();
 
-				if (
-					detail?.sender?.toString() === receiverData?._id.toString()
-				) {
-					detail = await Message.findByIdAndUpdate(
-						messageid,
-						{ seen: true },
-						{ new: true }
-					);
+				if (isNotMine && detail && !detail.seen) {
+					detail.seen = true;
+					await detail?.save();
 				}
 				if (detail) appendMessage(detail.toJSON());
 				break;
