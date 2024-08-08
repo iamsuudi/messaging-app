@@ -95,7 +95,7 @@ export default function AddContact() {
 						Find contacts
 					</h2>
 					<Input
-						placeholder="Type here minimum 3 characters..."
+						placeholder="Type username..."
 						autoCorrect="false"
 						autoComplete="false"
 						autoCapitalize="false"
