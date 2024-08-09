@@ -10,8 +10,8 @@ const userRouter = express.Router();
 userRouter.get(
 	"/auth/google/redirect",
 	passport.authenticate("google", {
-		successRedirect: "http://localhost:5173/auth2",
-		failureRedirect: "http://localhost:5173/auth2",
+		successRedirect: "/auth2",
+		failureRedirect: "/auth2",
 	}),
 	async (req, res) => {
 		console.log({ user: req.user });
