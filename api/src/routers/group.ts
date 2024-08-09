@@ -39,7 +39,7 @@ groupRouter.post(
 		const group = await Group.findByIdAndUpdate(
 			req.params.groupId,
 			{
-				picture: req.file?.filename,
+				picture: req.file?.path,
 			},
 			{ new: true }
 		);
