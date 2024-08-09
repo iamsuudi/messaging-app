@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import passport from "passport";
 import session from "express-session";
@@ -18,6 +18,7 @@ import groupRouter from "./routers/group";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { setupSocket } from "./socket";
+import path from "path";
 
 mongoose.set("strictQuery", false);
 
@@ -53,7 +54,7 @@ setupSocket("someone");
 
 app.use(express.json());
 
-app.use(express.static("dist"));
+app.use(express.static(path.join(__dirname, "..", "dist")));
 
 app.use(morgan("dev"));
 
@@ -84,6 +85,10 @@ app.get("/api/me", (req, res) => {
 	} else {
 		res.status(401).json({ message: "Not authenticated" });
 	}
+});
+
+app.get("*", (req: Request, res: Response) => {
+	res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
 });
 
 app.use(unKnowEndpointHandler);
