@@ -69,7 +69,9 @@ export default function Hero() {
 							to users chats
 						</p>
 						<div className="z-10 flex gap-5">
-							<button className="flex items-center gap-3 p-1 text-white bg-black rounded-full h-fit link">
+							<button
+								className="flex items-center gap-3 p-1 text-white bg-black rounded-full h-fit link"
+								onClick={() => navigate("/auth2")}>
 								<Link to={"/auth2"} className="pl-4 pr-3">
 									Join
 								</Link>
@@ -79,7 +81,6 @@ export default function Hero() {
 									viewBox="0 0 24 24"
 									strokeWidth={1.0}
 									stroke="black"
-									onClick={() => navigate("/auth2")}
 									className="p-2 bg-white rounded-full size-8">
 									<path
 										strokeLinecap="round"

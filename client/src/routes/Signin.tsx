@@ -98,8 +98,8 @@ export default function Signin() {
 	};
 
 	const signWithGoogle = () => {
-        window.open(`http://localhost:3001/api/auth/signin/google`, "_self");
-    };
+		window.open(`/api/auth/google`, "_self");
+	};
 
 	return (
 		<div className="flex flex-col items-center justify-center w-screen h-screen px-3">
@@ -126,11 +126,11 @@ export default function Signin() {
 						Signup
 					</TabsTrigger>
 				</TabsList>
-				<TabsContent value="signin" className="w-full max-w-96">
+				<TabsContent value="signin" className="w-full p-10 space-y-8 rounded-lg shadow-xl max-w-96">
 					<Form {...signinForm}>
 						<form
 							onSubmit={signinForm.handleSubmit(signinOnSubmit)}
-							className="w-full p-10 space-y-8 rounded-lg shadow-xl ">
+							className="flex flex-col gap-10">
 							<FormField
 								control={signinForm.control}
 								name="email"
@@ -175,26 +175,24 @@ export default function Signin() {
 							</Button>
 
 							<Separator orientation="horizontal" />
-
-							<Button
-								onClick={signWithGoogle}
-								className="flex items-center w-full gap-3"
-								disabled={signinForm.formState.isSubmitting}>
-								<Avatar className="size-6">
-									<AvatarImage src="google.png" />
-								</Avatar>
-								{signinForm.formState.isSubmitting
-									? "Wait..."
-									: "Signin with google"}
-							</Button>
 						</form>
+						<Button
+							onClick={signWithGoogle}
+							className="flex items-center w-full gap-3"
+							disabled={signinForm.formState.isSubmitting}>
+							<Avatar className="size-6">
+								<AvatarImage src="google.png" />
+							</Avatar>
+							{"Signin with google"}
+						</Button>
 					</Form>
 				</TabsContent>
-				<TabsContent value="signup" className="w-full max-w-96">
+				<TabsContent
+					value="signup"
+					className="w-full p-10 space-y-8 rounded-lg shadow-xl max-w-96">
 					<Form {...signupForm}>
 						<form
-							onSubmit={signupForm.handleSubmit(signupOnSubmit)}
-							className="w-full p-10 space-y-8 rounded-lg shadow-xl">
+							onSubmit={signupForm.handleSubmit(signupOnSubmit)} className="flex flex-col gap-10">
 							<FormField
 								control={signupForm.control}
 								name="email"
@@ -256,19 +254,16 @@ export default function Signin() {
 							</Button>
 
 							<Separator orientation="horizontal" />
-
-							<Button
-								onClick={signWithGoogle}
-								className="flex items-center w-full gap-3"
-								disabled={signupForm.formState.isSubmitting}>
-								<Avatar className="size-6">
-									<AvatarImage src="google.png" />
-								</Avatar>
-								{signupForm.formState.isSubmitting
-									? "Wait..."
-									: "Signup with google"}
-							</Button>
 						</form>
+						<Button
+							onClick={signWithGoogle}
+							className="flex items-center w-full gap-3"
+							disabled={signupForm.formState.isSubmitting}>
+							<Avatar className="size-6">
+								<AvatarImage src="google.png" />
+							</Avatar>
+							{"Signup with google"}
+						</Button>
 					</Form>
 				</TabsContent>
 			</Tabs>
