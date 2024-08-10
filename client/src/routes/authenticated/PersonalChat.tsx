@@ -320,8 +320,8 @@ export default function PersonalChat() {
 				</div>
 				<div
 					id="personalChatPage"
-					className="relative w-full h-full flex flex-col xl:hidden overflow-hidden dark:bg-gradient-to-tr dark:from-[#09203f] dark:to-[#5c323f] bg-background sm:pl-20 pb-1 bg-fixed">
-					<nav className="flex items-center justify-between gap-2 px-2 py-3 bg-black/5 dark:bg-white/5 backdrop-blur-sm">
+					className="relative w-full h-full py-12 flex flex-col xl:hidden overflow-hidden dark:bg-gradient-to-tr dark:from-[#09203f] dark:to-[#5c323f] bg-background sm:pl-20 pb-1 bg-fixed">
+					<nav className="fixed top-0 left-0 flex items-center justify-between w-screen gap-2 px-2 py-3 bg-black/5 dark:bg-white/5 backdrop-blur-sm">
 						<button
 							onClick={() => {
 								queryClient.invalidateQueries({
@@ -344,22 +344,20 @@ export default function PersonalChat() {
 
 					<Messages user={user} />
 
-					<InputComponent chatId={chatId as string} />
-
-					<div className="hidden sm:block">
-						<HomeSideBar />
+					<div className="fixed bottom-0 left-0 w-screen w-sreen">
+						<InputComponent chatId={chatId as string} />
 					</div>
+
+					{/* <div className="hidden sm:block">
+						<HomeSideBar />
+					</div> */}
 				</div>
 			</>
 		);
 	}
 }
 
-type InputComponentProps = {
-	chatId: string;
-};
-
-function InputComponent({ chatId }: InputComponentProps) {
+function InputComponent({ chatId }: { chatId: string }) {
 	const [message, setMessage] = useState("");
 	const ref = useRef<HTMLInputElement>(null);
 

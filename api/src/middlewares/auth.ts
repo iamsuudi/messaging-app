@@ -25,13 +25,13 @@ passport.use(
 		async (email: string, password: string, done: Function) => {
 			try {
 				const user = await UserModel.findOne({ email });
-				if (!user) throw new Error("User doesn't exist");
+				if (!user) return done(null, null);
 
 				const passwordCorrect = user.passwordHash
 					? await bcrypt.compare(password, user.passwordHash)
 					: false;
 
-				if (!passwordCorrect) throw new Error("Incorrect password");
+				if (!passwordCorrect) return done(null, null);
 
 				return done(null, user.toJSON());
 			} catch (error) {
@@ -47,7 +47,8 @@ passport.use(
 		{
 			clientID: GOOGLE_CLIENT_ID as string,
 			clientSecret: GOOGLE_CLIENT_SECRET as string,
-			callbackURL: "https://dalochat.onrender.com/api/auth/google/redirect",
+			callbackURL:
+				"https://dalochat.onrender.com/api/auth/google/redirect",
 		},
 		async function verify(
 			accessToken,

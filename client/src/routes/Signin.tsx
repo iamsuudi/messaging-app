@@ -75,10 +75,13 @@ export default function Signin() {
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
 				setError(
-					error?.response?.data.message ?? "Incorrect credentials"
+					error.response?.status === 401
+						? "Incorrect credentials"
+						: "Something is wrong"
 				);
+			} else {
+				setError("Something is wrong");
 			}
-			setError("Something is wrong");
 		}
 	};
 
@@ -126,7 +129,9 @@ export default function Signin() {
 						Signup
 					</TabsTrigger>
 				</TabsList>
-				<TabsContent value="signin" className="w-full p-10 space-y-8 rounded-lg shadow-xl max-w-96">
+				<TabsContent
+					value="signin"
+					className="w-full p-10 space-y-8 rounded-lg shadow-xl max-w-96">
 					<Form {...signinForm}>
 						<form
 							onSubmit={signinForm.handleSubmit(signinOnSubmit)}
@@ -192,7 +197,8 @@ export default function Signin() {
 					className="w-full p-10 space-y-8 rounded-lg shadow-xl max-w-96">
 					<Form {...signupForm}>
 						<form
-							onSubmit={signupForm.handleSubmit(signupOnSubmit)} className="flex flex-col gap-10">
+							onSubmit={signupForm.handleSubmit(signupOnSubmit)}
+							className="flex flex-col gap-10">
 							<FormField
 								control={signupForm.control}
 								name="email"
