@@ -98,7 +98,7 @@ export default function Signin() {
 	};
 
 	const signWithGoogle = () => {
-		window.open(`/api/auth/google`, "_self");
+		window.open(`https://dalochat.onrender.com/api/auth/google`, "_self");
 	};
 
 	return (
