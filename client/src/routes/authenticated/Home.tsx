@@ -23,7 +23,7 @@ export default function HomeIn() {
 	return (
 		<ThemeProvider defaultTheme="dark" storageKey="dalochat-ui-theme">
 			<div className="flex flex-col w-screen min-h-screen overflow-x-hidden app dark:bg-gradient-to-tr dark:from-[#0e093f] dark:to-[#5c323f] bg-background bg-fixed">
-				<div className="flex flex-col-reverse w-full h-screen">
+				<div className="flex flex-col-reverse w-full h-[100dvh]">
 					<Outlet />
 				</div>
 			</div>
