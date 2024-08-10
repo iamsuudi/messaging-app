@@ -47,7 +47,7 @@ passport.use(
 		{
 			clientID: GOOGLE_CLIENT_ID as string,
 			clientSecret: GOOGLE_CLIENT_SECRET as string,
-			callbackURL: "/api/auth/google/redirect",
+			callbackURL: "https://dalochat.onrender.com/api/auth/google/redirect",
 		},
 		async function verify(
 			accessToken,
