@@ -10,8 +10,8 @@ const userRouter = express.Router();
 userRouter.get(
 	"/auth/google/redirect",
 	passport.authenticate("google", {
-		successRedirect: "/auth2",
-		failureRedirect: "/auth2",
+		successRedirect: "https://dalochat.onrender.com/auth2",
+		failureRedirect: "https://dalochat.onrender.com/auth2",
 	}),
 	async (req, res) => {
 		console.log({ user: req.user });
