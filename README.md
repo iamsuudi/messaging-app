@@ -44,7 +44,7 @@ My goal was to create an application where users can chat in groups or individua
 
 ## What I learned
 
-It was my first time moving bundled client code to the backend and serve html from the server. It is very fast than hosting react code separately.
+It was my first time moving bundled client code to the backend and serve html from the server. It is very fast compared to hosting react code separately.
 
 I also learned that managing and scaling react-app gets more difficult as the app gets more complex. I have been using react-router for client side SPA routing and zustand for state management. Next.Js solves all the problems related to server components, SSR and built-in router. 
 
