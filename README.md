@@ -10,9 +10,9 @@ It's completely free, just login with a google account or signup with your email
 
 ## Tech Stack
 
-- **Front End:** React | TypeScript | TailwindCSS
-- **Back End:** Express | Node | MongoDB
-- **Other Libraries:** Shadcn UI | Zustand | TanStack
+-   **Front End:** React | TypeScript | TailwindCSS
+-   **Back End:** Express | Node | MongoDB
+-   **Other Libraries:** Shadcn UI | Zustand | TanStack
 
 ---
 
@@ -22,23 +22,23 @@ My goal was to create an application where users can chat in groups or individua
 
 ---
 
-## Key Features 
+## Key Features
 
-- Real-time update.
+-   Real-time update.
 
-- End-to-end individual chat.
+-   End-to-end individual chat.
 
-- Creating and managing groups.
+-   Creating and managing groups.
 
-- Profile update that supports image uploading.
+-   Profile update that supports image uploading.
 
-- Deleting the messages we sent.
+-   Deleting the messages we sent.
 
-- Adding contacts using their usernames and Deleting chats.
+-   Adding contacts using their usernames and Deleting chats.
 
-- User authentication using Auth2.
+-   User authentication using Auth2.
 
-- Interactive UI that is in sync with the database.
+-   Interactive UI that is in sync with the database.
 
 ---
 
@@ -48,7 +48,7 @@ It was my first time moving bundled client code to the backend and serve html fr
 
 I also learned that managing and scaling react-app gets more difficult as the app gets more complex. I have been using react-router for client side SPA routing and zustand for client state management.
 
-I used tanstack's react-query for server state managements which updates UI better than react's default useEffect. But it has a problem related to updating data in the background. 
+I used tanstack's react-query for server state managements which updates UI better than react's default useEffect. But it has a problem related to updating data in the background.
 
 I used Socket.io for real-time connections, which is much better than Web Browser's websocket and all the datas are saved to mongodb atlas.
 
@@ -76,7 +76,6 @@ Profile Page
 
 ![Language Select](./client/public/readme/profile.png "Language Select")
 
-
 ## Setup
 
 Installation:
@@ -84,6 +83,7 @@ Installation:
 ```bash
 git clone git@github.com:iamsuudi/messaging-app.gi
 ```
+
 ---
 
 Install Dependencies:
@@ -91,6 +91,26 @@ Install Dependencies:
 ```bash
 pnpm install
 ```
+
+---
+
+Set Up Environment Variables:
+
+ Create .env file at the root folder in the /api and add your own values to them
+
+```js
+PORT=3001
+SECRET=*****
+MONGODB_URI=mongodb://localhost:27017/messaging-app
+MONGODB_PROD_URI=********
+SALT=********
+CLOUDINARY_NAME=********
+CLOUDINARY_API_KEY=******
+CLOUDINARY_API_SECRET=******
+GOOGLE_CLIENT_ID=******
+GOOGLE_CLIENT_SECRET=******
+```
+
 ---
 
 Running Client Dev Server:
@@ -99,6 +119,7 @@ Running Client Dev Server:
 cd client
 pnpm dev
 ```
+
 ---
 
 Running Api Dev Server:
@@ -119,6 +140,7 @@ cd client
 pnpm build
 mv -f dist/ ../api/
 ```
+
 Then go to api directory and build it
 
 ```bash
