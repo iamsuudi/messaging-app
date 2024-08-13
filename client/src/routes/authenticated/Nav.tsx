@@ -23,7 +23,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 
 export default function HomeNav() {
 	return (
-		<div className="fixed top-0 left-0 z-10 flex items-center w-full px-3 py-2 shadow-sm backdrop-blur-lg h-[60px]">
+		<div className="fixed top-0 left-0 z-10 flex items-center w-full px-3 py-2 shadow-sm bg-black/5 backdrop-blur-lg h-[60px]">
 			<NavLink
 				to={"/"}
 				className={

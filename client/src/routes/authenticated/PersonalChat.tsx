@@ -370,7 +370,7 @@ function InputComponent({ chatId }: { chatId: string }) {
 	}, [chatId, message]);
 
 	return (
-		<div className="flex items-center gap-2 p-2 overflow-hidden h-fit max-h-20 bg-black/5 dark:bg-white/5">
+		<div className="flex items-center gap-2 p-2 overflow-hidden h-fit max-h-20 bg-black/5 dark:bg-white/5 backdrop-blur-lg">
 			<input
 				placeholder="Type your message..."
 				value={message}
