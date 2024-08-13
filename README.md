@@ -46,9 +46,11 @@ My goal was to create an application where users can chat in groups or individua
 
 It was my first time moving bundled client code to the backend and serve html from the server. It is very fast compared to hosting react code separately.
 
-I also learned that managing and scaling react-app gets more difficult as the app gets more complex. I have been using react-router for client side SPA routing and zustand for state management. Next.Js solves all the problems related to server components, SSR and built-in router. 
+I also learned that managing and scaling react-app gets more difficult as the app gets more complex. I have been using react-router for client side SPA routing and zustand for client state management.
 
-I used tanstack's react-query for server state managements which updates UI better than react's default useEffect. Socket.io for real-time connections is much better than Web Browser's websocket and all the datas are saved to mongodb atlas.
+I used tanstack's react-query for server state managements which updates UI better than react's default useEffect. But it has a problem related to updating data in the background. 
+
+I used Socket.io for real-time connections, which is much better than Web Browser's websocket and all the datas are saved to mongodb atlas.
 
 ---
 
