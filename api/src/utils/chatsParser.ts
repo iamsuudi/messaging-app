@@ -1,12 +1,51 @@
 import Message from "../models/message";
 import User from "../models/user";
-import { ChatType, MessageFormat, PersonalChatFormatted } from "../types";
+import {
+	ChatsFormatted,
+	ChatType,
+	MessageFormat,
+	PersonalChatFormatted,
+} from "../types";
 
 export default async function chatsParser(
 	myId: string,
 	chat: ChatType,
-	reverse = false,
-	read = false
+	reverse = false
+): Promise<ChatsFormatted> {
+	const receiverId = chat.users.find((chatter) =>
+		reverse ? chatter.toString() === myId : chatter.toString() !== myId
+	);
+
+	const receiverData = await User.findById(receiverId);
+
+	let unSeen = 0;
+
+	for await (let messageid of chat?.messages) {
+		const detail = await Message.findById(messageid);
+		const isNotMine =
+			detail?.sender?.toString() === receiverData?._id.toString();
+
+		if (isNotMine && detail && !detail.seen) {
+			unSeen += 1;
+		}
+	}
+
+	const lastMessage = chat?.messages
+		? await Message.findById(chat.messages.pop())
+		: null;
+
+	return {
+		id: chat?.id,
+		unSeen,
+		receiver: receiverData?.toJSON(),
+		lastMessage: lastMessage?.toJSON(),
+	};
+}
+
+export async function chatParser(
+	myId: string,
+	chat: ChatType,
+	reverse = false
 ): Promise<PersonalChatFormatted> {
 	const receiverId = chat.users.find((chatter) =>
 		reverse ? chatter.toString() === myId : chatter.toString() !== myId
@@ -27,25 +66,15 @@ export default async function chatsParser(
 	}
 
 	for await (let messageid of chat?.messages) {
-		switch (read) {
-			case true: {
-				const detail = await Message.findById(messageid);
-				const isNotMine =
-					detail?.sender?.toString() === receiverData?._id.toString();
+		const detail = await Message.findById(messageid);
+		const isNotMine =
+			detail?.sender?.toString() === receiverData?._id.toString();
 
-				if (isNotMine && detail && !detail.seen) {
-					detail.seen = true;
-					await detail?.save();
-				}
-				if (detail) appendMessage(detail.toJSON());
-				break;
-			}
-			default: {
-				const detail = await Message.findById(messageid);
-				if (detail) appendMessage(detail.toJSON());
-				break;
-			}
+		if (isNotMine && detail && !detail.seen) {
+			detail.seen = true;
+			await detail?.save();
 		}
+		if (detail) appendMessage(detail.toJSON());
 	}
 
 	return { id: chat?.id, receiver: receiverData?.toJSON(), messages };

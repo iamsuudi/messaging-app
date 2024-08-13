@@ -37,6 +37,13 @@ export interface ContactType {
 	contact: UserType;
 }
 
+export interface ChatsType {
+	id: string;
+	receiver: UserType;
+	lastMessage: MessageType;
+	unSeen: number;
+}
+
 export interface ChatType {
 	id: string;
 	receiver: UserType;

@@ -3,7 +3,7 @@ import HomeSideBar from "./SideBar";
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { clearChat, deleteChat, getPersonalChats } from "@/services/chat.api";
-import { ChatType, MessageType, UserType } from "@/types";
+import { ChatsType, MessageType } from "@/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FrownIcon } from "lucide-react";
 import { format } from "date-fns";
@@ -18,25 +18,13 @@ import {
 	ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 
-function calculateUnSeenMessages(user: UserType, messages: MessageType[]) {
-	let sum = 0;
-
-	if (messages)
-		for (const msg of messages) {
-			if (msg.sender !== user?.id && !msg.seen) sum++;
-		}
-	return sum;
-}
-
-function ChatRow({ chat }: { chat: ChatType }) {
+function ChatRow({ chat }: { chat: ChatsType }) {
 	const user = useUserStore.getState().user;
 	const { receiver } = chat;
 	const [lastMessage, setLastMessage] = useState<MessageType | null>(
-		chat?.messages[chat.messages?.length - 1]
+		chat?.lastMessage
 	);
-	const [unSeen, setUnSeen] = useState<number>(
-		calculateUnSeenMessages(user as UserType, chat.messages)
-	);
+	const [unSeen, setUnSeen] = useState(chat?.unSeen);
 	const [deleted, setDeleted] = useState(false);
 
 	const navigate = useNavigate();
@@ -85,9 +73,7 @@ function ChatRow({ chat }: { chat: ChatType }) {
 						<p className="max-w-full overflow-hidden text-xs font-bold tracking-tighter opacity-50 whitespace-nowrap text-ellipsis">
 							{lastMessage?.content
 								? lastMessage.content
-								: chat.messages?.length === 0
-								? "No chat history"
-								: "Last message deleted"}
+								: "...."}
 						</p>
 					</div>
 					<div className="flex flex-col items-center gap-1 ml-auto min-w-16">
@@ -97,7 +83,7 @@ function ChatRow({ chat }: { chat: ChatType }) {
 							</span>
 						)}
 						{unSeen !== 0 && (
-							<span className="flex items-center justify-center w-5 h-5 text-xs font-medium rounded-full bg-orange-900/60">
+							<span className="flex items-center justify-center w-5 h-5 p-1 text-[0.6rem] font-medium rounded-full bg-orange-900/60">
 								{unSeen}
 							</span>
 						)}
@@ -136,7 +122,7 @@ function ChatRow({ chat }: { chat: ChatType }) {
 
 export function Chats() {
 	const { user } = useUserStore();
-	const [chats, setChats] = useState<ChatType[]>([]);
+	const [chats, setChats] = useState<ChatsType[]>([]);
 	const { data, isLoading } = useQuery({
 		queryKey: ["chats"],
 		queryFn: async () => {
@@ -153,7 +139,7 @@ export function Chats() {
 	}, [data]);
 
 	useEffect(() => {
-		const addChat = (newChat: ChatType) => {
+		const addChat = (newChat: ChatsType) => {
 			if (newChat?.receiver?.id === user?.id)
 				setChats(chats.concat(newChat));
 		};

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ChatType, ContactType, MessageType } from "@/types";
+import { ChatsType, ChatType, ContactType, MessageType } from "@/types";
 axios.defaults.withCredentials = true;
 import { baseURL } from "../utils/config";
 
@@ -12,7 +12,7 @@ export const getMyContacts = async (): Promise<ContactType[]> => {
 	return response.data;
 };
 
-export const getPersonalChats = async (): Promise<ChatType[]> => {
+export const getPersonalChats = async (): Promise<ChatsType[]> => {
 	const response = await axios({
 		method: "get",
 		baseURL,

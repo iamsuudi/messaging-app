@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import Chat from "../models/chat";
 import Message from "../models/message";
 import { ContactType, PersonalChatFormatted } from "../types";
-import chatsParser from "../utils/chatsParser";
+import chatsParser, { chatParser } from "../utils/chatsParser";
 import { io } from "../app";
 import contactsParser from "../utils/contactsParser";
 
@@ -51,7 +51,7 @@ export const getIndividualChat = async (
 	const rawChat = await Chat.findById(chatId);
 
 	const parsedChat = rawChat
-		? await chatsParser(myId, rawChat.toJSON(), false, true)
+		? await chatParser(myId, rawChat.toJSON())
 		: null;
 
 	// inform the other chat member that all messages are now seen

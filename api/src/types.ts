@@ -6,6 +6,13 @@ export interface ContactType {
 	contact?: UserType | null;
 }
 
+export interface ChatsFormatted {
+	id: string;
+	receiver?: UserType | null;
+	lastMessage?: MessageFormat;
+	unSeen?: number;
+}
+
 export interface PersonalChatFormatted {
 	id: string;
 	receiver?: UserType | null;
