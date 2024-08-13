@@ -289,7 +289,7 @@ export default function PersonalChat() {
 						</ResizablePanel>
 						<ResizableHandle className="hover:cursor-grab" />
 						<ResizablePanel defaultSize={25} className="h-full">
-							<div className="relative flex h-full gap-5 p-5 shadow">
+							<div className="relative flex flex-col h-full gap-5 p-5 shadow">
 								<div className="flex flex-col items-center gap-2">
 									<Avatar className="rounded-full size-32">
 										<AvatarImage
@@ -300,7 +300,7 @@ export default function PersonalChat() {
 										@{chat.receiver.username}
 									</span>
 								</div>
-								<div className="flex flex-col items-start gap-1 p-2">
+								<div className="flex flex-col items-start gap-1 p-2 overflow-hidden whitespace-wrap text-ellipsis">
 									<span className="font-bold">
 										{chat.receiver.name}
 									</span>
@@ -308,9 +308,7 @@ export default function PersonalChat() {
 										{chat.receiver.email}
 									</span>
 									<span className="text-sm">
-										{
-											"GET https://registry.npmjs.org/busboy error (ECONNRESET). Will retry in 10 seconds. 2 retries left."
-										}
+										{chat.receiver.bio}
 									</span>
 								</div>
 							</div>

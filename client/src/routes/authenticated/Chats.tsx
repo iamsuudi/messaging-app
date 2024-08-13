@@ -30,6 +30,8 @@ function ChatRow({ chat }: { chat: ChatsType }) {
 	const navigate = useNavigate();
 
 	useEffect(() => {
+		console.log({ chat });
+
 		const addUnSeen = (msg: MessageType) => {
 			if (chat.id === msg.chatId && user?.id !== msg.sender)
 				setUnSeen(unSeen + 1);
